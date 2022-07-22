@@ -1,0 +1,23 @@
+
+<Login>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: "60dp"
+
+        MDLabel:
+            text: "Correo:"
+        MDTextField:
+            id: saludos
+
+        MDLabel:
+            text: "Contraseña:"
+        MDTextField:
+
+        MDIconButton:
+            icon: "python"
+            icon_size: "64sp"
+            text: "Apretame"
+
+            on_release: root.enviar_saludo()
+            
+    
