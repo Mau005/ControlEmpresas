@@ -25,7 +25,7 @@ class BaseDatos():
         self.__conectar()
         try: 
             self.cursor.execute(querys)
-            self.conect.commit()
+            self.conec.commit()
             return {"estado":True, "contenido": "Usuario registrado con exito"}
         except mysql.connector.errors.IntegrityError:
             return {"estado": False, "contenido": "Usuario o contraseña ya existe"}
@@ -38,9 +38,9 @@ class BaseDatos():
                 database = self.estructura.get("bd"),
                 port= self.estructura.get("port"),
                 host = self.estructura.get("host"),
-                
             )
             self.cursor = self.conec.cursor()
+            
         except mysql.connector.Error as error:
             print(error)
             input("Precione para continuar... ")

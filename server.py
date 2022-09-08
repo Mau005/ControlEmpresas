@@ -13,16 +13,13 @@ class Server():
         info = her.cargar_json("data/ConfiguracionServidor.json")
         self.bd = BaseDatos(info.get("Mysql"))
         self.querys = Querys(self.bd)
-        self.querys.registrar_usuario("admin", "12345")
-        print("Registrado el usuario")
-        time.sleep(5)
         self.socket = socket.socket()
         self.socket.bind((IP, PORT))
         self.socket.listen(0)
         
     def iniciar(self):
         print("[OK] Servidor Iniciado")
-        while False:
+        while True:
             cliente, direccion = self.socket.accept()
             objeto_cliente = ServidorNetwork(cliente, direccion)
             print(f"Se intenta conectar: {direccion}")
