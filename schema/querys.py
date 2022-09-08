@@ -11,5 +11,13 @@ class Querys():
     
     def registrar_usuario(self, correo, contraseña):
         querys = f'INSERT INTO USUARIOS(CORREO,CONTRASEÑA) VALUES("{correo}", SHA({contraseña}));'
-        return self.bd.insertar(querys)
+        condicion = self.bd.insertar(querys)
         
+        if condicion["estado"]:
+            return self.__registrar_accesos(correo)
+        
+        return condicion #retorna usuario existente un dic
+    
+    def __registrar_accesos(self, correo):
+        querys = f'INSERT INTO ACCESOS(CORREO) VALUES("{correo}")'
+        return self.bd.insertar(querys)

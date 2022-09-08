@@ -1,4 +1,4 @@
-import socket
+import socket, time
 from core.constantes import IP, PORT
 from network.servidornetwork import ServidorNetwork
 from schema.basedatos import BaseDatos
@@ -14,6 +14,8 @@ class Server():
         self.bd = BaseDatos(info.get("Mysql"))
         self.querys = Querys(self.bd)
         self.querys.registrar_usuario("admin", "12345")
+        print("Registrado el usuario")
+        time.sleep(5)
         self.socket = socket.socket()
         self.socket.bind((IP, PORT))
         self.socket.listen(0)

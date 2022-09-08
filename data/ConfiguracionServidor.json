@@ -2,8 +2,8 @@
     "Mysql":{
         "usuario": "root",
         "password": "",
-        "bd": "ControlEmpresas",
+        "bd": "ControlEmpresa",
         "host": "localhost",
-        "port": 3306
+        "port": 3307
     }
 }

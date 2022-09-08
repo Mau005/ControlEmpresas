@@ -1,0 +1,49 @@
+#:import MDCardPre ventanas.widgets_predefinidos
+
+<PreButton@Button>:
+    size_hint: None, None
+    size: "125dp", "45dp"
+
+<Servicios>:
+        
+    MDCardPre:
+        orientation: 'vertical'
+        elevation: 10
+        spacing: "20dp"
+        pos_hint: {"center_x": .5, "center_y": .5}
+        size_hint: .95,.95
+        MDGridLayout:
+            padding: "25dp"
+            cols: 2
+            MDLabel:
+                text: "ID Servicio:"
+            MDTextField:
+            MDLabel:
+                text: "Nombre:"
+            MDTextField:
+            MDLabel:
+                text: "Descripcion:"
+            MDTextField:
+                multiline: True
+            MDLabel:
+                text: "Correo:"
+            MDTextField:
+            MDLabel:
+                text: "Correo:"
+            MDTextField:
+            MDLabel:
+                text: "Correo:"
+            MDTextField:
+            
+        BoxLayout:
+            orientation: "horizontal"
+            padding: "45dp"
+            spacing: "100dp"
+            PreButton:
+                text: "Guardar"
+            PreButton:
+                text: "salir"
+            PreButton:
+                text: "Mama esta presa"
+
+                

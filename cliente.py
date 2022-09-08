@@ -6,6 +6,7 @@ from kivy.lang import Builder
 from network.clientenetwork import ClienteNetwork
 from ventanas.entrada import Entrada
 from ventanas.casa import Casa
+from ventanas.servicios import Servicios
 
 Builder.load_file("kvlengs/root.kv")
 
@@ -18,7 +19,8 @@ class ControlEmpresas(MDApp):
         self.network = ClienteNetwork()
         self.manejador = MDScreenManager()
         self.login = Entrada(self.network, self.manejador,"entrada", siguiente="casa")
-        #self.login = Casa(self.network, self.manejador, "casa")
+        self.login = Casa(self.network, self.manejador, "casa")
+        self.login = Servicios(self.network, self.manejador, "Servicios")
         
         self.__cargar_ventanas()
         
