@@ -1,0 +1,48 @@
+#:import MDCardPre ventanas.widgets_predefinidos
+
+<Entrada>:
+        
+    MDCardPre:
+        orientation: 'vertical'
+        elevation: 10
+        spacing: "20dp"
+        pos_hint: {"center_x": .5, "center_y": .5}
+        size_hint: .6,.9
+
+        FitImage:
+            source: "./data/logo.png"
+
+        MDGridLayout:
+            cols:2
+            padding: "30dp"
+            MDLabel:
+                text: "Correo:"
+
+            MDTextField:
+                id:entrada_usuario
+
+            MDLabel:
+                text: "Contraseña:"
+            MDTextField:
+                id: pass_usuario
+
+            MDLabel:
+                text: "Guardar Usuario"
+            MDCheckbox:
+                id: usuario_guardar
+
+        MDRectangleFlatButton:
+            text: "Iniciar"
+            pos_hint: {"center_x": .5, "center_y": .5}
+            on_release: root.siguiente()
+            
+        MDRectangleFlatButton:
+            text: "Salir"
+            pos_hint: {"center_x": .5, "center_y": .5}
+
+        MDRectangleFlatButton:
+            text: "Recuperar Usuario"
+            pos_hint: {"center_x": .5, "center_y": .5}
+            
+            
+        

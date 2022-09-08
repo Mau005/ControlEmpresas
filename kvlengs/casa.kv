@@ -1,0 +1,38 @@
+ 
+
+<Casa>:
+    lista_productos:lista_productos
+    MDBottomNavigation:
+
+        MDBottomNavigationItem:
+            name: 'screen 1'
+            text: 'Mis Servicios'
+            icon: 'archive'
+            #badge_icon: "numeric-1"
+
+            MDLabel:
+                text: 'Mail'
+                halign: 'center'
+
+        MDBottomNavigationItem:
+            name: 'screen 2'
+            text: 'Mis Clientes'
+            icon: 'discord'
+            #badge_icon: "numeric-5"
+
+            MDLabel:
+                text: 'Discord'
+                halign: 'center'
+
+        MDBottomNavigationItem:
+            name: 'Bodega'
+            text: "Bodega"
+            icon: 'linkedin'
+
+            MDList:
+                id: lista_productos
+                OneLineListItem:
+                    text: "Añadir Productos"
+                OneLineListItem:
+                    text: "Eliminar Productos"
+                OneLineListItem:

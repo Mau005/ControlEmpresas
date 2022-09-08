@@ -1,32 +1,30 @@
 
 from kivymd.app import MDApp
-from kivymd.uix.boxlayout import MDBoxLayout
-from kivy.uix.screenmanager import Screen, ScreenManager
+from kivymd.uix.screenmanager import MDScreenManager
 from kivy.lang import Builder
 
 from network.clientenetwork import ClienteNetwork
+from ventanas.entrada import Entrada
+from ventanas.casa import Casa
 
-Builder.load_file("kvlengs/login.kv")
+Builder.load_file("kvlengs/root.kv")
 
-class Login(Screen):
-    
-    def __init__(self,network, **kwargs):
-        super(Screen, self).__init__(**kwargs)
-        self.network = network
-        
-    def enviar_saludo(self):
-        self.network.enviar({"estado": "saludo", "contenido": "Hola te hablo del servidor"})
-        print(self.network.recibir())
-        
 
 
 class ControlEmpresas(MDApp):
+    
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.network = ClienteNetwork()
-        self.login = Login(self.network)
-        self.manejador = ScreenManager()
+        self.manejador = MDScreenManager()
+        self.login = Entrada(self.network, self.manejador,"entrada", siguiente="casa")
+        #self.login = Casa(self.network, self.manejador, "casa")
+        
+        self.__cargar_ventanas()
+        
+    def __cargar_ventanas(self):
         self.manejador.add_widget(self.login)
+        #self.manejador.add_widget(self.casa)
         
     def cerrar(self):
         self.network.cerrar()
