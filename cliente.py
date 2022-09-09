@@ -10,9 +10,8 @@ from ventanas.servicios import Servicios
 
 Builder.load_file("kvlengs/root.kv")
 
-
-
 class ControlEmpresas(MDApp):
+    #Kastachaña: ordenar separar en idioma aymara
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

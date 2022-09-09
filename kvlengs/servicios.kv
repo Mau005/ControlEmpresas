@@ -7,7 +7,7 @@
 <PreLabel@MDLabel>:
     size_hint_x: .2
 
-<Servicios>:
+<VServicios>:
         
     MDCardPre:
         orientation: 'vertical'
@@ -15,12 +15,14 @@
         spacing: "20dp"
         pos_hint: {"center_x": .5, "center_y": .5}
         size_hint: .95,.95
+        MDLabel:
+            size_hint_x: .3
+            text: "Registrar Servicio"
+            pos_hint: {"center_x": .5, "center_y": .5}
         MDGridLayout:
             padding: "25dp"
+            size_hint_x: .7
             cols: 2
-            PreLabel:
-                text: "ID Servicio:"
-            MDTextField:
             PreLabel:
                 text: "Nombre:"
             MDTextField:
@@ -29,24 +31,27 @@
             MDTextField:
                 multiline: True
             PreLabel:
-                text: "Correo:"
+                text: "Fecha Inicio:"
+            MDRaisedButton:
+                text: "Open date picker"
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                on_release: root.show_date_picker()
+            PreLabel:
+                text: "Fecha Termino:"
+            MDRaisedButton:
+                text: "Open date picker"
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                on_release: root.show_date_picker()
+            PreLabel:
+                text: "Estado:"
             MDTextField:
             PreLabel:
-                text: "Correo:"
-            MDTextField:
-            PreLabel:
-                text: "Correo:"
+                text: "Precio:"
             MDTextField:
             
-        BoxLayout:
-            orientation: "horizontal"
-            padding: "45dp"
-            spacing: "100dp"
-            PreButton:
-                text: "Guardar"
-            PreButton:
-                text: "salir"
-            PreButton:
-                text: "Mama esta presa"
+            
+        MDFloatingActionButtonSpeedDial:
+            id: botones_servicios
+            root_button_anim: True
 
                 

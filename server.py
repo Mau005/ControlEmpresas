@@ -8,6 +8,7 @@ from schema.querys import Querys
 
 
 class Server():
+    #Kastachaña: ordenar separar en idioma aymara
     
     def __init__(self):
         info = her.cargar_json("data/ConfiguracionServidor.json")
