@@ -22,7 +22,7 @@ class Server():
         print("[OK] Servidor Iniciado")
         while True:
             cliente, direccion = self.socket.accept()
-            objeto_cliente = ServidorNetwork(cliente, direccion)
+            objeto_cliente = ServidorNetwork(cliente, direccion,self.querys)
             print(f"Se intenta conectar: {direccion}")
             objeto_cliente.start()
             

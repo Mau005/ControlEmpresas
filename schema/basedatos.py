@@ -1,5 +1,6 @@
 import mysql.connector
 import sys
+from core.constantes import PROTOCOLO
 class BaseDatos():
     def __init__(self, estrucura):
         self.estructura = estrucura
@@ -10,7 +11,7 @@ class BaseDatos():
         print("BD a Iniciado correctamente")
         
         
-    def consultar(self, querys, all = None):
+    def consultar(self, querys, all = False):
         self.__conectar()
         self.cursor.execute(querys)
         contenido = None
@@ -19,16 +20,19 @@ class BaseDatos():
         else: 
             contenido = self.cursor.fetchone()
         self.__cerrar()
-        return contenido
+        
+        if contenido != None:
+            return {"estado": True, "datos": contenido}
+        return {"estado": False}
     
     def insertar(self, querys):
         self.__conectar()
         try: 
             self.cursor.execute(querys)
             self.conec.commit()
-            return {"estado":True, "contenido": "Usuario registrado con exito"}
+            return {"estado":True, "condicion": "Usuario registrado con exito"}
         except mysql.connector.errors.IntegrityError:
-            return {"estado": False, "contenido": "Usuario o contraseña ya existe"}
+            return {"estado": False, "condicion": "Usuario o contraseña ya existe"}
         
     def __conectar(self):
         try:

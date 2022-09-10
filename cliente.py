@@ -18,14 +18,14 @@ class ControlEmpresas(MDApp):
         self.network = ClienteNetwork()
         self.manejador = MDScreenManager()
         self.login = Entrada(self.network, self.manejador,"entrada", siguiente="casa")
-        #self.login = Casa(self.network, self.manejador, "casa")
+        self.casa = Casa(self.network, self.manejador, "casa")
         #self.login = VServicios(self.network, self.manejador, "Servicios")
         
         self.__cargar_ventanas()
         
     def __cargar_ventanas(self):
         self.manejador.add_widget(self.login)
-        #self.manejador.add_widget(self.casa)
+        self.manejador.add_widget(self.casa)
         
     def cerrar(self):
         self.network.cerrar()
