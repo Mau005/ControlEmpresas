@@ -2,9 +2,36 @@ from kivymd.uix.card import MDCard
 from kivymd.uix.behaviors import RoundedRectangularElevationBehavior
 from abc import abstractmethod
 from kivymd.uix.screen import MDScreen
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.label import MDLabel
+from kivymd.uix.button import MDRoundFlatButton
 
 class MDCardPre(MDCard, RoundedRectangularElevationBehavior):
     pass
+
+
+class Notificacion(MDDialog):
+    
+    def __init__(self,titulo, mensaje, funcion_concurrente = None,  **kwargs):
+        super().__init__(**kwargs)
+        
+        self.title = titulo
+        self.text = mensaje
+        self.aceptar = MDRoundFlatButton(text = "Aceptar", on_release = self.salir)
+        self.cancelar = MDRoundFlatButton(text = "Cancelar",  on_release = self.salir)
+        self.buttons = [self.aceptar, self.cancelar]
+        
+        if funcion_concurrente != None:
+            self.aceptar.bind(on_release = funcion_concurrente)
+            
+        
+        self.create_buttons() #actualiza los widget de el array de buttones
+
+        
+    def salir(self, *Arg):
+        self.dismiss()
+        
+
     
 
 class MDScreenAbstrac(MDScreen):
