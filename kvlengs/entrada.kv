@@ -1,6 +1,8 @@
 #:import MDCardPre ventanas.widgets_predefinidos
 
 <Entrada>:
+    entrada_usuario:entrada_usuario
+    pass_usuario:pass_usuario
         
     MDCardPre:
         orientation: 'vertical'
@@ -25,6 +27,7 @@
                 text: "Contraseña:"
             MDTextField:
                 id: pass_usuario
+                password: True
 
             MDLabel:
                 text: "Guardar Usuario"
@@ -34,7 +37,7 @@
         MDRectangleFlatButton:
             text: "Iniciar"
             pos_hint: {"center_x": .5, "center_y": .5}
-            on_release: root.siguiente()
+            on_release: root.ingresar_usuario(entrada_usuario.text, pass_usuario.text)
             
         MDRectangleFlatButton:
             text: "Salir"

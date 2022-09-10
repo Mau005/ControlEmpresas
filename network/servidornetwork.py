@@ -32,6 +32,9 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "login":
                 self.login(datos)
                 
+            if datos.get("estado") == "registroservicio":
+                pass
+                
             elif datos.get("estado") == "cierreAbrupto":
                 print("Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
                 break

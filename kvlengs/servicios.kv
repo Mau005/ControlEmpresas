@@ -8,6 +8,11 @@
     size_hint_x: .2
 
 <VServicios>:
+    nombre:nombre
+    descr:descr
+    estado:estado
+    precio:precio
+    botones_servicios:botones_servicios
         
     MDCardPre:
         orientation: 'vertical'
@@ -16,42 +21,50 @@
         pos_hint: {"center_x": .5, "center_y": .5}
         size_hint: .95,.95
         MDLabel:
-            size_hint_x: .3
+            halign: "center"
+            font_size : dp(55)
+            size_hint_y: .1
             text: "Registrar Servicio"
-            pos_hint: {"center_x": .5, "center_y": .5}
         MDGridLayout:
             padding: "25dp"
-            size_hint_x: .7
+            size_hint_y: .5
             cols: 2
             PreLabel:
                 text: "Nombre:"
             MDTextField:
-            PreLabel:
-                text: "Descripcion:"
-            MDTextField:
-                multiline: True
-            PreLabel:
-                text: "Fecha Inicio:"
-            MDRaisedButton:
-                text: "Open date picker"
-                pos_hint: {'center_x': .5, 'center_y': .5}
-                on_release: root.show_date_picker()
-            PreLabel:
-                text: "Fecha Termino:"
-            MDRaisedButton:
-                text: "Open date picker"
-                pos_hint: {'center_x': .5, 'center_y': .5}
-                on_release: root.show_date_picker()
+                id: nombre
             PreLabel:
                 text: "Estado:"
             MDTextField:
+                id:estado
             PreLabel:
+
                 text: "Precio:"
             MDTextField:
+                id:precio
+            PreLabel:
+                text: "Descripcion:"
+            MDTextField:
+                id:descr
+                size_hint_y: None
+                height: dp(35)
+                multiline: True
+
+            MDLabel:
+                text: "Fechas"
+        
+            MDTextButton:
+                size_hint: None, None
+                width: dp(450)
+                height: dp(45)
+                text: "00/00/00 - 00/00/00"
+                id: btn_fecha
+                on_release: root.abrir_fecha()
             
             
         MDFloatingActionButtonSpeedDial:
             id: botones_servicios
+            callback: root.test
             root_button_anim: True
 
                 
