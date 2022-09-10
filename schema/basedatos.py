@@ -1,6 +1,6 @@
 import mysql.connector
 import sys
-from core.constantes import PROTOCOLO
+
 class BaseDatos():
     def __init__(self, estrucura):
         self.estructura = estrucura

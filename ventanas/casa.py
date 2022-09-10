@@ -8,6 +8,9 @@ class Casa(MDScreenAbstrac):
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
         
+        
+    def crear_servicios(self):
+        self.manager.current= "servicios"
     def actualizar(self, *dt):
         return super().actualizar(*dt)
     

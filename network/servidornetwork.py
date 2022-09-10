@@ -53,6 +53,7 @@ class ServidorNetwork(Thread):
             self.enviar({"estado": False, "condicion": "Intentos completados procedaras a ser baneado FDP"})
             self.cliente.close()
             print(f"Intentos: {self.intentos}")
+            
         self.enviar(datosnuevos)
         
     def saludo(self):

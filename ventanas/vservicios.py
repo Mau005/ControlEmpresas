@@ -1,9 +1,9 @@
-
-from tkinter import E
-from ventanas.widgets_predefinidos import MDScreenAbstrac
+from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion
 from kivymd.uix.pickers import MDDatePicker
 from kivy.properties import ObjectProperty
 import datetime
+from entidades.registroservicio import RegistroServicios
+
 class VServicios(MDScreenAbstrac):
     nombre = ObjectProperty()
     descr = ObjectProperty()
@@ -22,6 +22,7 @@ class VServicios(MDScreenAbstrac):
         self.fecha_inicio = None
         self.fecha_final = None
         self.botones_servicios.data = self.data
+        self.correo = "prueba"
         
         
         
@@ -29,6 +30,22 @@ class VServicios(MDScreenAbstrac):
         print(arg.icon)
         if arg.icon == "language-php":
             self.formatear()
+        if arg.icon == "pencil":
+            obj = RegistroServicios(nombre = self.nombre.text,
+                                    descr = self.descr.text,
+                                    fecha_inicio = self.fecha_inicio,
+                                    fecha_final = self.fecha_final,
+                                    correo = self.correo,
+                                    estado = self.estado.text
+                                    )
+            info = self.network.enviar(obj)
+            if info.get("estado"):
+                test = Notificacion("Exito", "Se ha guardado todo lo que deberia guardarse")
+                test.open()
+                self.formatear()
+            else:
+                test = Notificacion("Error", "No se ha podido crear esta sheets")
+                test.open()
 
     def formatear(self):
         self.fecha_final = None

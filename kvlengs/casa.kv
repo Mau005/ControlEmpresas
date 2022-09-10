@@ -6,33 +6,45 @@
 
         MDBottomNavigationItem:
             name: 'screen 1'
-            text: 'Mis Servicios'
+            text: 'Mis Notificaciones'
             icon: 'archive'
             #badge_icon: "numeric-1"
 
             MDLabel:
                 text: 'Mail'
                 halign: 'center'
+            MDList:
+                OneLineListItem:
+                    text: "pruba"
 
         MDBottomNavigationItem:
             name: 'screen 2'
-            text: 'Mis Clientes'
+            text: 'Herramientas'
             icon: 'discord'
             #badge_icon: "numeric-5"
 
             MDLabel:
                 text: 'Discord'
                 halign: 'center'
+            MDList:
+                OneLineListItem:
+                    text: "Crear Servicios"
+                    on_release: root.crear_servicios()
+
 
         MDBottomNavigationItem:
             name: 'Bodega'
-            text: "Bodega"
+            text: "Configuracion"
             icon: 'linkedin'
 
             MDList:
                 id: lista_productos
                 OneLineListItem:
-                    text: "Añadir Productos"
+                    text: "Mi Cuenta"
                 OneLineListItem:
-                    text: "Eliminar Productos"
+                    text: "Themas"
                 OneLineListItem:
+                    text: "Ayuda"
+                OneLineListItem:
+                    text: "Salir"
+                

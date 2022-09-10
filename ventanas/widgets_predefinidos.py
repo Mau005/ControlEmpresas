@@ -6,9 +6,22 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.label import MDLabel
 from kivymd.uix.button import MDRoundFlatButton
 
+from kivymd.uix.list import OneLineListItem
+
 class MDCardPre(MDCard, RoundedRectangularElevationBehavior):
     pass
 
+
+class NotificacionLobby(OneLineListItem):
+    
+    def __init__(self, nombre ,funcion_concurrente = None, **kwargs):
+        super().__init__(**kwargs)
+        
+        if funcion_concurrente != None:
+            self.on_release = funcion_concurrente
+                        
+        
+    
 
 class Notificacion(MDDialog):
     

@@ -2,27 +2,26 @@
 
 class RegistroServicios:
     
-    def __init__(self):
+    def __init__(self, **kargs):
         self.estructura = {
-            "ID_Servicio": None,
-            "Nombre": None,
-            "Descr": None,
-            "Fecha_Inicio": None,
-            "Fecha_Termino": None,
-            "Historial_Registros": None,
-            "Correo": None,
-            "Estado": None,
+            "ID_Servicio": kargs.get("id_servicio"),
+            "Nombre": kargs.get("nombre"),
+            "Descr": kargs.get("descr"),
+            "fecha_inicio": kargs.get("fecha_inicio"),
+            "fecha_final": kargs.get("fecha_final"),
+            "correo": kargs.get("correo"),
+            "Estado": kargs.get("estado"),
         }
         
         
     def asignar(self, key,valor):
-        self.estructura[key] = valor
+        self.estructura.update({key:valor})
         
     def estructura(self):
         return self.estructura
     
     def preparar(self):
-        self.estructura["estado"] = "registroservicio"
+        self.estructura.update({"estado":"registroservicios"})
         return self.estructura
     
     

@@ -25,6 +25,10 @@ class Querys():
     def __registrar_accesos(self, correo):
         querys = f'INSERT INTO ACCESOS(CORREO) VALUES("{correo}")'
         return self.bd.insertar(querys)
+    
+    def solicitar_estados(self):
+        querys = f'SELECT * FROM ESTADOS;'
+        return self.bd.consultar(querys, all= True)
 
     def registrar_baneo(self, correo, ip, descr = "" ):
         """Methodo de prueba dado que no se puede banear a un usuario por intento
