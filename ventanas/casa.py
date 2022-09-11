@@ -11,6 +11,13 @@ class Casa(MDScreenAbstrac):
         
     def crear_servicios(self):
         self.manager.current= "servicios"
+        
+    def crear_usuarios(self):
+        self.manager.current = "personas"
+        
+    def cambiar_ventanta(self, ventana):
+        self.manager.current = ventana
+        
     def actualizar(self, *dt):
         return super().actualizar(*dt)
     

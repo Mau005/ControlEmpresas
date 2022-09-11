@@ -5,5 +5,9 @@
         "bd": "CE",
         "host": "localhost",
         "port": 3306
+    },
+    "Servidor":{
+        "MOTD": "Bienvenido a El proyecto de tu Hermana",
+        "Version": 0.1
     }
 }

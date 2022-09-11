@@ -1,12 +1,14 @@
 
 
 from distutils.debug import DEBUG
+import sys
 
 
 class Querys():
     
     def __init__(self, bd):
         self.bd = bd
+
         
     def consultar_usuario(self, correo, contraseña):
         querys = f'SELECT * FROM USUARIOS WHERE CORREO = "{correo}" AND CONTRASEÑA = SHA({contraseña});'
@@ -42,6 +44,13 @@ class Querys():
         Returns:
             _type_: _description_
         """
-        querys = f'INSERT INTO(CORREO,IP,DESCR) VALUES("{correo}", "{ip}", "{descr}")'
+        querys = f'INSERT INTO HISTORIAL_BANEOS(CORREO,IP,DESCR) VALUES("{correo}", "{ip}", "{descr}")'
         return self.bd.insertar(querys)
         
+    def registrar_servicios(self,datos):
+        querys = f'''
+        INSERT INTO SERVICIOS(NOMBRE_SERVICIO, DESCRIPCION, FECHA_INICIO, FECHA_TERMINO, PRECIO, ID_ESTADO)
+        VALUES("{datos.get("nombre")}", "{datos.get("descr")}","{datos.get("fecha_inicio")}","{datos.get("fecha_termino")}", {int(datos.get("precio"))}, {int(datos.get("id_estado"))});
+        '''
+        
+        return self.bd.insertar(querys)

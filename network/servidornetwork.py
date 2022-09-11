@@ -26,7 +26,6 @@ class ServidorNetwork(Thread):
     def run(self):
         while True:
             datos = self.recibir()
-            print(datos)
             if datos.get("estado") == "saludo":
                 self.saludo()
                 
@@ -34,7 +33,7 @@ class ServidorNetwork(Thread):
                 self.login(datos)
                 
             if datos.get("estado") == "registroservicio":
-                pass
+                self.registroservicios(datos)
                 
             elif datos.get("estado") == "cierreAbrupto":
                 print("Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
@@ -55,6 +54,12 @@ class ServidorNetwork(Thread):
             print(f"Intentos: {self.intentos}")
             
         self.enviar(datosnuevos)
+        
+    def registroservicios(self,datos):
+        estado = self.querys.registrar_servicios(datos)
+        self.enviar(estado)
+        
+        
         
     def saludo(self):
         self.enviar({"estado": "saludo", "contenido": "Hola fdp del servidor"})

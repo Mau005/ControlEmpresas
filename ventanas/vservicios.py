@@ -3,22 +3,19 @@ from kivymd.uix.pickers import MDDatePicker
 from kivy.properties import ObjectProperty
 import datetime
 from entidades.registroservicio import RegistroServicios
+from core.constantes import BUTTONCREATE
 
 class VServicios(MDScreenAbstrac):
     nombre = ObjectProperty()
     descr = ObjectProperty()
-    estado = ObjectProperty()
+    id_estado = ObjectProperty()
     precio = ObjectProperty()
     botones_servicios = ObjectProperty()
         
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
         self.set_activo(True)
-        self.data = {
-            'Crear': 'pencil',
-            'Formatear': 'language-php',
-            'Salir': 'language-cpp',
-        }
+        self.data = BUTTONCREATE
         self.fecha_inicio = None
         self.fecha_final = None
         self.botones_servicios.data = self.data
@@ -26,20 +23,25 @@ class VServicios(MDScreenAbstrac):
         
         
         
-    def test(self, arg):
+    def accion_boton(self, arg):
         print(arg.icon)
-        if arg.icon == "language-php":
+        if arg.icon == "delete":
             self.formatear()
+        if arg.icon == "exit-run":
+            self.botones_servicios.on_close()
+            self.siguiente()
         if arg.icon == "pencil":
             obj = RegistroServicios(nombre = self.nombre.text,
                                     descr = self.descr.text,
-                                    fecha_inicio = self.fecha_inicio,
-                                    fecha_final = self.fecha_final,
+                                    fecha_inicio = str(self.fecha_inicio),
+                                    fecha_termino = str(self.fecha_final),
                                     correo = self.correo,
-                                    estado = self.estado.text
+                                    id_estado = self.id_estado.text,
+                                    precio = self.precio.text
                                     )
-            info = self.network.enviar(obj)
-            if info.get("estado"):
+            self.network.enviar(obj.preparar())
+            datos = self.network.recibir()
+            if datos.get("estado"):
                 test = Notificacion("Exito", "Se ha guardado todo lo que deberia guardarse")
                 test.open()
                 self.formatear()
@@ -51,6 +53,7 @@ class VServicios(MDScreenAbstrac):
         self.fecha_final = None
         self.fecha_final = None
         self.nombre.text = ""
+        self.id_estado.text = ""
         self.descr.text = ""
         self.precio.text = ""
         self.ids.btn_fecha.text = "00/00/00 al 00/00/00"

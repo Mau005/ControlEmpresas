@@ -4,13 +4,14 @@ class RegistroServicios:
     
     def __init__(self, **kargs):
         self.estructura = {
-            "ID_Servicio": kargs.get("id_servicio"),
-            "Nombre": kargs.get("nombre"),
-            "Descr": kargs.get("descr"),
+            "id_servicio": kargs.get("id_servicio"),
+            "nombre": kargs.get("nombre"),
+            "descr": kargs.get("descr"),
             "fecha_inicio": kargs.get("fecha_inicio"),
-            "fecha_final": kargs.get("fecha_final"),
+            "fecha_termino": kargs.get("fecha_termino"),
             "correo": kargs.get("correo"),
-            "Estado": kargs.get("estado"),
+            "id_estado": kargs.get("id_estado"),
+            "precio": kargs.get("precio")
         }
         
         
@@ -21,7 +22,7 @@ class RegistroServicios:
         return self.estructura
     
     def preparar(self):
-        self.estructura.update({"estado":"registroservicios"})
+        self.estructura.update({"estado":"registroservicio"})
         return self.estructura
     
     

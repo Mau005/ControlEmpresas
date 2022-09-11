@@ -10,7 +10,7 @@
 <VServicios>:
     nombre:nombre
     descr:descr
-    estado:estado
+    id_estado:id_estado
     precio:precio
     botones_servicios:botones_servicios
         
@@ -36,7 +36,7 @@
             PreLabel:
                 text: "Estado:"
             MDTextField:
-                id:estado
+                id:id_estado
             PreLabel:
 
                 text: "Precio:"
@@ -64,7 +64,7 @@
             
         MDFloatingActionButtonSpeedDial:
             id: botones_servicios
-            callback: root.test
+            callback: root.accion_boton
             root_button_anim: True
 
                 

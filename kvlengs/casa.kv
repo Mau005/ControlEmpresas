@@ -29,8 +29,10 @@
             MDList:
                 OneLineListItem:
                     text: "Crear Servicios"
-                    on_release: root.crear_servicios()
-
+                    on_release: root.cambiar_ventanta("servicios")
+                OneLineListItem:
+                    text: "Crear Usuarios"
+                    on_release: root.cambiar_ventanta("personas")
 
         MDBottomNavigationItem:
             name: 'Bodega'

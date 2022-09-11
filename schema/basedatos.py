@@ -8,7 +8,7 @@ class BaseDatos():
         self.cursor = None
         self.__conectar()
         self.__cerrar()
-        print("BD a Iniciado correctamente")
+        print("[OK] Mysql Iniciada correctamente")
         
         
     def consultar(self, querys, all = False):
@@ -33,6 +33,9 @@ class BaseDatos():
             return {"estado":True, "condicion": "Usuario registrado con exito"}
         except mysql.connector.errors.IntegrityError:
             return {"estado": False, "condicion": "Usuario o contraseña ya existe"}
+        finally:
+            self.__cerrar()
+            print("se ejecuta el finally?")
         
     def __conectar(self):
         try:
