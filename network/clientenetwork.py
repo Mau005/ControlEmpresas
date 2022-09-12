@@ -1,5 +1,7 @@
 from core.constantes import IP, PORT, TAMANIO_PAQUETE
 from core.herramientas import Herramientas as her
+from kivy.logger import Logger
+from ventanas.widgets_predefinidos import Notificacion
 
 import socket
 
@@ -8,19 +10,21 @@ class ClienteNetwork():
     def __init__(self):
         self.socket = None
         self.__estado = False
-        self.__iniciar()
+        self.iniciar()
         
         
-    def __iniciar(self):
+    def iniciar(self, *args):
         try:
             self.socket = socket.socket()
             self.socket.connect((IP, PORT))
             self.__estado = True
-            print("SE HA CONECTADO CON EXITO FDP")
+            Logger.info("Se ha conectado con exito")
             return self.socket
         except socket.error as error:
-            print(error)
+            Logger.critical("Problemas para conectarse hacia el servidor")
             self.__estado = False
+            noti = Notificacion("Error de conexión", " Aun no se ha podido establecer la conexión al servidor desea reintentar?", funcion_concurrente = self.iniciar)
+            noti.open()
             
     def enviar(self, datos):
         if self.__estado:
@@ -28,14 +32,16 @@ class ClienteNetwork():
             
         
     def recibir(self):
-        return her.desenpaquetar(self.socket.recv(TAMANIO_PAQUETE))
+        if self.__estado:
+            return her.desenpaquetar(self.socket.recv(TAMANIO_PAQUETE))
+        return {"estado": False, "condicion": "NETWORK"}
             
             
     def consultar_estado(self):
         return self.__estado
     
     def conectar_network(self):
-        self.__iniciar()
+        self.iniciar()
         return self.__estado
             
     def cerrar(self):

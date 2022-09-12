@@ -5,6 +5,7 @@ from kivy.logger import Logger
 
 from ventanas.widgets_predefinidos import Notificacion
 from core.herramientas import Herramientas as her
+from core.constantes import PROTOCOLOERROR
 
 
 class Entrada(MDScreenAbstrac):
@@ -24,40 +25,43 @@ class Entrada(MDScreenAbstrac):
             
         self.ids.usuario_guardar.active = self.contenido_usuario["Usuario"]["boton"]
         
-    def guardado(self, correo, contraseña, boton):
-        self.contenido_usuario["Usuario"]["contraseña"] = correo
-        self.contenido_usuario["Usuario"]["correo"] = contraseña
+    def guardado(self, correo, contraseña, boton, condicion = False):
+        self.contenido_usuario["Usuario"]["contraseña"] = contraseña
+        self.contenido_usuario["Usuario"]["correo"] = correo
         self.contenido_usuario["Usuario"]["boton"] = boton
-        self.entrada_usuario = correo
-        self.pass_usuario = contraseña
+        if condicion:
+            self.entrada_usuario.text = correo
+            self.pass_usuario.text = contraseña
 
         her.escribir_json(self.contenido_usuario, "data/ConfiguracionCliente.json")
         
     def ingresar_usuario(self, correo, password):
         if self.ids.usuario_guardar.active:
-            if not(self.contenido_usuario["Usuario"]["contraseña"] == self.pass_usuario.text):
-                self.guardado(her.cifrado_sha1(self.pass_usuario.text),self.entrada_usuario.text, self.ids.usuario_guardar.active)
-            else:
-                self.pass_usuario.text = her.cifrado_sha1(self.pass_usuario.text)
+            if not(self.contenido_usuario["Usuario"]["contraseña"] == password):
+                password = her.cifrado_sha1(password)
+                self.guardado(self.entrada_usuario.text, password, self.ids.usuario_guardar.active)
+                
         else:
-            self.guardado("", "", False)
-            self.pass_usuario.text = her.cifrado_sha1(self.pass_usuario.text)
+            self.guardado("", "", False, condicion = True)
+            password = her.cifrado_sha1(password)
+            
         
         if len(correo) >= 2 and len(password) >= 2:
             estructura = {"estado":"login", "correo":correo, "password":password}
             self.network.enviar(estructura)
             info = self.network.recibir()
             if info.get("estado"):
-                
-                Logger.info("Usuario Iniciado de forma exitosa")
-                noti = Notificacion(f"Querido: {correo}", "Se ha iniciado seccion con exito")
+                noti = Notificacion(f"Querido: {correo}", info.get("MOTD"))
                 self.siguiente()
                 noti.open()
             else:
-                noti = Notificacion("Error", "Usuario o Contraseña invalida")
-                noti.open()
+                condicion = info.get("condicion")
+                if condicion == "NETWORK":
+                    noti = Notificacion("Error", PROTOCOLOERROR[info.get("condicion")] + " Desea intentar conectarse Nuevamente? ", funcion_concurrente=self.network.iniciar)
+                    noti.open()
+                
         else:
-            noti = Notificacion("Error", "Tiene que ser mas de 2 caracteres en usaurio o password")
+            noti = Notificacion("ror", "Tiene que ser mas de 2 caracteres en usaurio o passwordEr")
             noti.open()
     
     def recuperar_contra(self):

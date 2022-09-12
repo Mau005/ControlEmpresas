@@ -23,7 +23,7 @@ class BaseDatos():
         
         if contenido != None:
             return {"estado": True, "datos": contenido}
-        return {"estado": False}
+        return {"estado": False, "condicion": ""}
     
     def insertar(self, querys):
         self.__conectar()

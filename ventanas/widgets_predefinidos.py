@@ -15,6 +15,7 @@ class Notificacion(MDDialog):
     def __init__(self,titulo, mensaje, funcion_concurrente = None,  **kwargs):
         self.title = titulo
         self.text = mensaje
+        self.auto_dismiss = True
         self.aceptar = MDRoundFlatButton(text = "Aceptar", on_release = self.salir)
         self.cancelar = MDRoundFlatButton(text = "Cancelar",  on_release = self.salir)
         self.buttons = [self.aceptar, self.cancelar]

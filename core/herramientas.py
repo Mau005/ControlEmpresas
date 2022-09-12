@@ -22,6 +22,7 @@ class Herramientas:
     def cargar_json(ruta):
         if os.path.exists(ruta):
             archivo = open(ruta, "r" , encoding = "utf-8")
+            print("[OK] Variables importadas correctamente!")
             return json.load(archivo)
         
     @staticmethod

@@ -5,12 +5,14 @@ from core.herramientas import Herramientas as her
 
 class ServidorNetwork(Thread):
     
-    def __init__(self, cliente, direccion, querys):
+    def __init__(self, cliente, direccion, querys, info):
         Thread.__init__(self)
         self.cliente = cliente
         self.direccion = direccion
         self.querys = querys
         self.intentos = 0
+        self.info = info
+        
         
     def enviar(self, datos):
         return self.cliente.send(her.empaquetar(datos))
@@ -43,6 +45,7 @@ class ServidorNetwork(Thread):
         correo = datos.get("correo")
         passw = datos.get("password")
         datosnuevos = self.querys.consultar_usuario(correo,passw)
+        datosnuevos.update({"MOTD":self.info["Servidor"]["MOTD"]})
         if datosnuevos.get("estado"):
             self.intentos = 0
         else:

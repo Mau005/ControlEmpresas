@@ -11,8 +11,9 @@ class Server():
     #Kastachaña: ordenar separar en idioma aymara
     
     def __init__(self):
-        info = her.cargar_json("data/ConfiguracionServidor.json")
-        self.bd = BaseDatos(info.get("Mysql"))
+        self.info = her.cargar_json("data/ConfiguracionServidor.json")
+        
+        self.bd = BaseDatos(self.info.get("Mysql"))
         self.querys = Querys(self.bd)
         self.socket = socket.socket()
         self.socket.bind((IP, PORT))
@@ -22,7 +23,7 @@ class Server():
         print("[OK] Servidor Iniciado")
         while True:
             cliente, direccion = self.socket.accept()
-            objeto_cliente = ServidorNetwork(cliente, direccion,self.querys)
+            objeto_cliente = ServidorNetwork(cliente, direccion,self.querys, self.info)
             print(f"Se intenta conectar: {direccion}")
             objeto_cliente.start()
             
