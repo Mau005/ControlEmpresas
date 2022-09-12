@@ -37,11 +37,13 @@
                 text: "Estado:"
             MDTextField:
                 id:id_estado
+                input_filter: 'int'
             PreLabel:
 
                 text: "Precio:"
             MDTextField:
                 id:precio
+                input_filter: 'int'
             PreLabel:
                 text: "Descripcion:"
             MDTextField:
@@ -60,6 +62,7 @@
                 text: "00/00/00 - 00/00/00"
                 id: btn_fecha
                 on_release: root.abrir_fecha()
+            
             
             
         MDFloatingActionButtonSpeedDial:

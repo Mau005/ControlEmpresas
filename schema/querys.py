@@ -11,7 +11,7 @@ class Querys():
 
         
     def consultar_usuario(self, correo, contraseña):
-        querys = f'SELECT * FROM USUARIOS WHERE CORREO = "{correo}" AND CONTRASEÑA = SHA({contraseña});'
+        querys = f'SELECT * FROM USUARIOS WHERE CORREO = "{correo}" AND CONTRASEÑA = "{contraseña}";'
         datos = self.bd.consultar(querys)
         return datos
     

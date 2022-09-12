@@ -7,7 +7,7 @@
         MDBottomNavigationItem:
             name: 'screen 1'
             text: 'Mis Notificaciones'
-            icon: 'archive'
+            icon: 'note'
             #badge_icon: "numeric-1"
 
             MDLabel:
@@ -20,11 +20,11 @@
         MDBottomNavigationItem:
             name: 'screen 2'
             text: 'Herramientas'
-            icon: 'discord'
+            icon: 'tools'
             #badge_icon: "numeric-5"
 
             MDLabel:
-                text: 'Discord'
+                text: 'Herramientas'
                 halign: 'center'
             MDList:
                 OneLineListItem:
@@ -33,11 +33,14 @@
                 OneLineListItem:
                     text: "Crear Usuarios"
                     on_release: root.cambiar_ventanta("personas")
+                OneLineListItem:
+                    text: "Crear Empresas"
+                    on_release: root.cambiar_ventanta("empresas")
 
         MDBottomNavigationItem:
-            name: 'Bodega'
+            name: 'Configuraciòn'
             text: "Configuracion"
-            icon: 'linkedin'
+            icon: 'account'
 
             MDList:
                 id: lista_productos

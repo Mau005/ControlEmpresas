@@ -11,41 +11,59 @@
         pos_hint: {"center_x": .5, "center_y": .5}
         size_hint: .95,.95
 
-        FitImage:
-            source: "./data/logo.png"
+        MDBoxLayout:
+            size_hint_y: None
+            height: "200dp"
+            orientation: 'vertical'
+
+            FitImage:
+                source: "./data/logo.jpeg"
+                size_hint_y: .8
 
         MDGridLayout:
-            cols:2
+            cols:1
             padding: "30dp"
-            MDLabel:
-                text: "Correo:"
 
             MDTextField:
                 id:entrada_usuario
+                icon_left: "email"
+                hint_text: "Correo"
 
-            MDLabel:
-                text: "Contraseña:"
             MDTextField:
                 id: pass_usuario
                 password: True
+                icon_left: 'key'
+                hint_text: 'Contraseña'
 
+        MDGridLayout:
+            cols: 2
+            padding: "30dp"
             MDLabel:
                 text: "Guardar Usuario"
             MDCheckbox:
                 id: usuario_guardar
 
-        MDRectangleFlatButton:
-            text: "Iniciar"
-            pos_hint: {"center_x": .5, "center_y": .5}
-            on_release: root.ingresar_usuario(entrada_usuario.text, pass_usuario.text)
-            
-        MDRectangleFlatButton:
-            text: "Salir"
+        MDBoxLayout:
+            size_hint_y: .1
+            adaptive_size: True
+            spacing: "12dp"
             pos_hint: {"center_x": .5, "center_y": .5}
 
-        MDRectangleFlatButton:
-            text: "Recuperar Usuario"
-            pos_hint: {"center_x": .5, "center_y": .5}
+            MDRectangleFlatButton:
+                text: "Iniciar"
+                pos_hint: {"center_x": .5, "center_y": .5}
+                halign: "left"
+                on_release: root.ingresar_usuario(entrada_usuario.text, pass_usuario.text)
+                
+            MDRectangleFlatButton:
+                text: "Salir"
+                halign: "center"
+                pos_hint: {"center_x": .5, "center_y": .5}
+
+            MDRectangleFlatButton:
+                halign: "right"
+                text: "Recuperar Usuario"
+                pos_hint: {"center_x": .5, "center_y": .5}
             
             
         

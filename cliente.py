@@ -8,6 +8,8 @@ from ventanas.entrada import Entrada
 from ventanas.casa import Casa
 from ventanas.vservicios import VServicios
 from ventanas.vpersonas import VPersonas
+from ventanas.vempresas import VEmpresas
+from core.herramientas import Herramientas as her
 
 Builder.load_file("kvlengs/root.kv")
 
@@ -16,12 +18,17 @@ class ControlEmpresas(MDApp):
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.theme_cls.theme_style = "Dark"
+        self.theme_cls.primary_palette = "BlueGray"
         self.network = ClienteNetwork()
         self.manejador = MDScreenManager()
+        
         self.login = Entrada(self.network, self.manejador,"entrada", siguiente="casa")
         self.casa = Casa(self.network, self.manejador, "casa")
         self.vservicios = VServicios(self.network, self.manejador, "servicios", siguiente= "casa")
         self.vpersonas = VPersonas(self.network, self.manejador, "personas", siguiente="casa")
+        self.vempresas = VEmpresas(self.network, self.manejador, "empresas", siguiente = "casa")
+        
         self.__cargar_ventanas()
         
     def __cargar_ventanas(self):
@@ -29,6 +36,7 @@ class ControlEmpresas(MDApp):
         self.manejador.add_widget(self.casa)
         self.manejador.add_widget(self.vservicios)
         self.manejador.add_widget(self.vpersonas)
+        self.manejador.add_widget(self.vempresas)
         
     def cerrar(self):
         self.network.cerrar()

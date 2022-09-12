@@ -1,58 +1,77 @@
-#:import MDCardPre ventanas.widgets_predefinidos
-
-<PreButton@Button>:
-    size_hint: None, None
-    size: "125dp", "45dp"
-
-<PreLabel@MDLabel>:
-    size_hint_x: .2
 
 <VPersonas>:
     botones:botones
-    ScrollView:
+    MDCardPre:
+        orientation: 'vertical'
+        elevation: 10
+        spacing: "20dp"
+        pos_hint: {"center_x": .5, "center_y": .5}
+        size_hint: .95,.95
+        padding: dp(45)
+        MDLabel:
+            halign: "center"
+            font_size : dp(55)
+            size_hint_y: .1
+            text: "Registrar Personas"
             
-        MDCardPre:
-            orientation: 'vertical'
-            elevation: 10
-            spacing: "20dp"
-            pos_hint: {"center_x": .5, "center_y": .5}
-            size_hint: .95,.95
+        MDGridLayout:
+            cols: 4
+            size_hint_y: 0.142
+            PreLabel:
+                text: "Rut"
+                hint_text: "Ejm: 11.111.111"
+            MDTextField:
+                id: rut
+                max_text_length: 8
+                helper_text_mode: "on_error"
+                helper_text: "Ingrese rut sin punto ni guion ejemplo: 10100200"
             MDLabel:
-            #RUT_PERSONA	NOMBRES	APELLIDOS	TELEFONO	CELULAR	CORREO
-                halign: "center"
-                font_size : dp(55)
-                size_hint_y: .1
-                text: "Registrar Personas"
-            MDGridLayout:
-                padding: dp(25)
-                cols: 4
-                PreLabel:
-                    text: "Rut"
-                MDTextField:
-                PreLabel:
-                    text: "-"
-                MDTextField:
-                    size_hint_x: None
-                    widht: dp(10)
-            MDGridLayout:
-                padding: "25dp"
-                cols: 2
-                PreLabel:
-                    text: "Nombre:"
-                MDTextField:
-                PreLabel:
-                    text: "Apellidos:"
-                MDTextField:
-                PreLabel:
-                    text: "Telefono:"
-                MDTextField:
-                PreLabel:
-                    text: "Celular:"
-                MDTextField:
-                PreLabel:
-                    text: "Correo:"
-                MDTextField:
-                    multiline : True
+                text: " -"
+                size_hint_x: .2
+            MDTextField:
+                id:rut_verificador
+                max_text_length: 1
+                helper_text_mode: "on_error"
+                hint_text: "Digito Verificador"
+                helper_text: "un digito"
+
+        MDGridLayout:
+            cols: 2
+            size_hint_y: 0.858
+            PreLabel:
+                text: "Nombre:"
+            MDTextField:
+                id: nombres
+                max_text_length: 150
+            PreLabel:
+                text: "Apellidos:"
+            MDTextField:
+                id: apellidos
+                max_text_length: 150
+                helper_text_mode: "on_error"
+                helper_text: "Minimo 3 caracteres y maximo 150"
+            PreLabel:
+                text: "Telefono:"
+                
+            MDTextField:
+                id: telefono
+                max_text_length: 14
+                helper_text_mode: "on_error"
+                helper_text: "Ejemplo: +0224040404"
+                
+            PreLabel:
+                text: "Celular:"
+                
+            MDTextField:
+                id: celular
+                max_text_length: 14
+                helper_text_mode: "on_error"
+                helper_text: "Ejemplo: +569 44444444"
+            PreLabel:
+                text: "Correo:"
+            MDTextField:
+                id: correo
+                
 
             
             
