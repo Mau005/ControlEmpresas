@@ -43,7 +43,7 @@ class ControlEmpresas(MDApp):
         self.network.cerrar()
         
     def build(self):
-        self.title = "Kastachaña Beta 0.0000000001"
+        self.title = "Kastachaña Beta 0.2.1"
         return self.manejador
     
 if __name__ == "__main__":
