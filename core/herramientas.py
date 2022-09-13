@@ -1,4 +1,4 @@
-from encodings.utf_8 import encode
+
 import pickle
 import json
 import os

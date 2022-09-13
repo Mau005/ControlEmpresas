@@ -1,4 +1,4 @@
-import socket, time
+import socket
 from core.constantes import IP, PORT
 from network.servidornetwork import ServidorNetwork
 from schema.basedatos import BaseDatos
