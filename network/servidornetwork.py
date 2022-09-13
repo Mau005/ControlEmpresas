@@ -1,6 +1,7 @@
 from threading import Thread
 from core.constantes import TAMANIO_PAQUETE
 from core.herramientas import Herramientas as her
+from entidades.registroempresas import RegistroEmpresas
 
 
 class ServidorNetwork(Thread):
@@ -37,6 +38,9 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "registroservicio":
                 self.registroservicios(datos)
                 
+            if datos.get("estado") == "registroempresa":
+                self.registroempresas(datos.get("contenido"))
+                
             elif datos.get("estado") == "cierreAbrupto":
                 print("Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
                 break
@@ -61,6 +65,14 @@ class ServidorNetwork(Thread):
     def registroservicios(self,datos):
         estado = self.querys.registrar_servicios(datos)
         self.enviar(estado)
+        
+    def registroempresas(self, empresa):
+        objeto = RegistroEmpresas()
+        objeto = empresa
+        print(objeto)
+        estado = self.querys.registrar_empresas(objeto)
+        self.enviar(estado)
+        
         
         
         
