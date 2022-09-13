@@ -1,5 +1,6 @@
 import mysql.connector
 import sys
+from core.constantes import PROTOCOLOERROR, PROTOCOLOAFIRMATIVO
 
 class BaseDatos():
     def __init__(self, estrucura):
@@ -30,12 +31,13 @@ class BaseDatos():
         try: 
             self.cursor.execute(querys)
             self.conec.commit()
-            return {"estado":True, "condicion": "Usuario registrado con exito"}
+            return {"estado":True, "condicion": PROTOCOLOAFIRMATIVO["INSERTAR"]}
         except mysql.connector.errors.IntegrityError:
-            return {"estado": False, "condicion": "Usuario o contraseña ya existe"}
+            return {"estado": False, "condicion": PROTOCOLOERROR["INSERTAR"]}
         finally:
             self.__cerrar()
-            print("se ejecuta el finally?")
+    
+            
         
     def __conectar(self):
         try:
