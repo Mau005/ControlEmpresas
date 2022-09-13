@@ -4,7 +4,7 @@ class RegistroEmpresas():
     
     def __init__(self, **kargs):
         self.rut_empresa = kargs.get("rut_empresa")
-        self.nombre_empresa = kargs.get("nombre_embresa")
+        self.nombre_empresa = kargs.get("nombre_empresa")
         self.giro_empresa = kargs.get("giro_empresa")
         self.direccion_empresa = kargs.get("direccion_empresa")
         self.telefono = kargs.get("telefono")

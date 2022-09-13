@@ -11,6 +11,8 @@ from ventanas.vservicios import VServicios
 from ventanas.vpersonas import VPersonas
 from ventanas.vempresas import VEmpresas
 from core.herramientas import Herramientas as her
+from ventanas.vnotasempresas import VNotasEmpresas
+from ventanas.vlistaempresa import VListasEmpresas
 
 Builder.load_file("kvlengs/root.kv")
 
@@ -29,6 +31,8 @@ class ControlEmpresas(MDApp):
         self.vservicios = VServicios(self.network, self.manejador, "servicios", siguiente= "casa")
         self.vpersonas = VPersonas(self.network, self.manejador, "personas", siguiente="casa")
         self.vempresas = VEmpresas(self.network, self.manejador, "empresas", siguiente = "casa")
+        self.vnotasempresas = VNotasEmpresas(self.network, self.manejador, "notasempresas",siguiente = "casa")
+        self.vlistaempresas = VListasEmpresas(self.network, self.manejador, "listaempresas", siguiente="casa")
         
         self.__cargar_ventanas()
         
@@ -38,6 +42,8 @@ class ControlEmpresas(MDApp):
         self.manejador.add_widget(self.vservicios)
         self.manejador.add_widget(self.vpersonas)
         self.manejador.add_widget(self.vempresas)
+        self.manejador.add_widget(self.vnotasempresas)
+        self.manejador.add_widget(self.vlistaempresas)
         
     def cerrar(self):
         self.network.cerrar()

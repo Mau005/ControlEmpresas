@@ -70,3 +70,17 @@ class Querys():
         '''.format(objeto.rut_empresa, objeto.nombre_empresa, objeto.giro_empresa,
                    objeto.direccion_empresa, objeto.telefono, objeto.correo_empresa, objeto.correo_respaldo, objeto.celular_empresa)
         return self.bd.insertar(querys)
+    
+    
+    #	ID_REGISTRO	RUT_EMPRESA	CORREO	FECHA_CREACION
+    def registrar_notas_empresas(self, nota, rut_empresa, correo):
+        querys = '''
+        INSERT INTO REGISTRO_NOTAS_EMRPESAS(NOTA, RUT_EMPRESA, CORREO)
+        VALUES("{}", "{}", "{}")
+        '''.format(nota, rut_empresa, correo)
+        return self.bd.insertar(querys)
+    
+    def solicitar_lista_empresas(self):
+        querys = f'SELECT RUT_EMPRESA, NOMBRE_EMPRESA FROM EMPRESAS;'
+        return self.bd.consultar(querys, all= True)
+        

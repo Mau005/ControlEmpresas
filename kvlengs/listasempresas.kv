@@ -1,0 +1,29 @@
+<VListasEmpresas>:
+    botones:botones
+    contenedor:contenedor
+    ScrollView:
+        do_scroll_y: True
+        do_scroll_x: False
+    
+        MDList:
+            id: contenedor
+            padding: dp(30)
+            MDBoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: None
+                height: dp(55)
+                PreLabel:
+                    text: "Buscar Rut: "
+                
+                MDTextField:
+                    hint_text: "Ejemplo: 11.111.111-2"
+
+                MDFlatButton:
+                    text: "Buscar"
+
+            
+
+    MDFloatingActionButtonSpeedDial:
+        callback: root.accion_boton
+        id: botones
+        root_button_anim: True

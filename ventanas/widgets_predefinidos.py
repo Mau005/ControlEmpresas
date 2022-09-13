@@ -6,6 +6,18 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.label import MDLabel
 from kivymd.uix.button import MDRoundFlatButton
 
+from kivymd.uix.list import TwoLineListItem
+
+
+class MDTwoLine(TwoLineListItem):
+    def __init__(self,titulo, contenido, network,  **kwargs):
+        super().__init__(**kwargs)
+        self.text = titulo
+        self.secondary_text = contenido
+        self.network = network
+        
+        
+        
 
 class MDCardPre(MDCard, RoundedRectangularElevationBehavior):
     pass
@@ -28,8 +40,6 @@ class Notificacion(MDDialog):
         
     def salir(self, *Arg):
         self.dismiss()
-        
-
     
 
 class MDScreenAbstrac(MDScreen):

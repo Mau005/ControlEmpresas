@@ -1,0 +1,51 @@
+
+
+<VNotasEmpresas>:
+    botones:botones
+    MDCardPre:
+        orientation: 'vertical'
+        elevation: 10
+        spacing: "20dp"
+        pos_hint: {"center_x": .5, "center_y": .5}
+        size_hint: .95,.95
+        padding: dp(45)
+
+        MDGridLayout:
+            cols: 2
+            size_hint_y: .7
+
+            PreLabel:
+                text: "ID Notas"
+            MDTextField:
+                hint_text: "Se activara cuando sea necesario"
+                disabled: True
+
+            PreLabel:
+                text: "Rut Empresa"
+            MDTextField:
+                hint_text: "Se activara cuando sea necesario"
+                disable: True
+
+            PreLabel:
+                text: "Correo"
+            MDTextField:
+
+            PreLabel:
+                text: "Fecha Creacion"
+            MDTextField:
+                hint_text: "Se activara cuando sea necesario"
+                disabled: True
+                
+            PreLabel:
+                text: "Nota"
+            MDTextField:
+                size_hint_y : None
+                height: dp(300)
+                multiline: True
+
+            
+    
+    MDFloatingActionButtonSpeedDial:
+        callback: root.accion_boton
+        id: botones
+        root_button_anim: True
