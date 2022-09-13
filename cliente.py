@@ -7,6 +7,7 @@ from kivy.lang import Builder
 from network.clientenetwork import ClienteNetwork
 from ventanas.entrada import Entrada
 from ventanas.casa import Casa
+from ventanas.vlistadoservicios import VListadoServicios
 from ventanas.vservicios import VServicios
 from ventanas.vpersonas import VPersonas
 from ventanas.vempresas import VEmpresas
@@ -33,6 +34,7 @@ class ControlEmpresas(MDApp):
         self.vempresas = VEmpresas(self.network, self.manejador, "empresas", siguiente = "casa")
         self.vnotasempresas = VNotasEmpresas(self.network, self.manejador, "notasempresas",siguiente = "casa")
         self.vlistaempresas = VListasEmpresas(self.network, self.manejador, "listaempresas", siguiente="casa")
+        self.vlistaservicios = VListadoServicios(self.network, self.manejador, "listaservicios", siguiente="casa")
         
         self.__cargar_ventanas()
         
@@ -44,6 +46,7 @@ class ControlEmpresas(MDApp):
         self.manejador.add_widget(self.vempresas)
         self.manejador.add_widget(self.vnotasempresas)
         self.manejador.add_widget(self.vlistaempresas)
+        self.manejador.add_widget(self.vlistaservicios)
         
     def cerrar(self):
         self.network.cerrar()

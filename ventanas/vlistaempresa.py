@@ -31,10 +31,12 @@ class VListasEmpresas(MDScreenAbstrac):
         data = {"estado":"listaEmpresas"}
         self.network.enviar(data)
         info = self.network.recibir()
-        for x in info.get("datos"):
-            obj = MDTwoLine(x[0], x[1], self.network)
-            self.contenido_empresas.append(obj)
-            self.contenedor.add_widget(obj)
+        
+        if info.get("estado"):
+            for x in info.get("datos"):
+                obj = MDTwoLine(x[0], x[1], self.network)
+                self.contenido_empresas.append(obj)
+                self.contenedor.add_widget(obj)
         
     def siguiente(self, *dt):
         return super().siguiente(*dt)

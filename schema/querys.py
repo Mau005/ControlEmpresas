@@ -84,3 +84,6 @@ class Querys():
         querys = f'SELECT RUT_EMPRESA, NOMBRE_EMPRESA FROM EMPRESAS;'
         return self.bd.consultar(querys, all= True)
         
+    def solicitar_listado_servicios(self):
+        querys = f'SELECT ID_SERVICIO, NOMBRE_SERVICIO FROM SERVICIOS;'
+        return self.bd.consultar(querys, all=True)

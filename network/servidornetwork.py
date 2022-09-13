@@ -51,12 +51,21 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "listaEmpresas":
                 self.listaEmpresas()
                 
+            if datos.get("estado") == "listadoservicios":
+                self.listadoservicios()
+                
             elif datos.get("estado") == "cierreAbrupto":
                 print("Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
                 break
+            
+    def listadoservicios(self):
+        datos = self.querys.solicitar_listado_servicios()
+        self.enviar(datos)
+        
     def listaEmpresas(self):
         datos = self.querys.solicitar_lista_empresas()
         self.enviar(datos)
+        
     def registronotasempresas(self, notas):      
         self.querys.registrar_notas_empresas(notas.notas ,notas.rut_empresa, self.usuario.correo,)
         
