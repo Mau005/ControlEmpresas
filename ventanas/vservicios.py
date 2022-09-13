@@ -3,7 +3,7 @@ from kivymd.uix.pickers import MDDatePicker
 from kivy.properties import ObjectProperty
 import datetime
 from entidades.registroservicio import RegistroServicios
-from core.constantes import BUTTONCREATE
+from core.constantes import BUTTONCREATE, PROTOCOLOERROR, PROTOCOLOAFIRMATIVO
 
 class VServicios(MDScreenAbstrac):
     nombre = ObjectProperty()
@@ -17,7 +17,7 @@ class VServicios(MDScreenAbstrac):
         self.set_activo(True)
         self.data = BUTTONCREATE
         self.fecha_inicio = None
-        self.fecha_final = None
+        self.fecha_termino = None
         self.botones_servicios.data = self.data
         self.correo = "prueba"
         
@@ -31,27 +31,33 @@ class VServicios(MDScreenAbstrac):
             self.botones_servicios.on_close()
             self.siguiente()
         if arg.icon == "pencil":
-            obj = RegistroServicios(nombre = self.nombre.text,
-                                    descr = self.descr.text,
-                                    fecha_inicio = str(self.fecha_inicio),
-                                    fecha_termino = str(self.fecha_final),
-                                    correo = self.correo,
-                                    id_estado = self.id_estado.text,
-                                    precio = self.precio.text
-                                    )
-            self.network.enviar(obj.preparar())
-            datos = self.network.recibir()
-            if datos.get("estado"):
-                test = Notificacion("Exito", "Se ha guardado todo lo que deberia guardarse")
-                test.open()
-                self.formatear()
+            if self.fecha_inicio is None:
+                noti = Notificacion("ERROR", "Alemenos debe indicar la fecha de inicio.")
+                noti.open()
             else:
-                test = Notificacion("Error", "No se ha podido crear esta sheets")
-                test.open()
+                if self.fecha_termino is None:
+                    self.fecha_termino = "NULL"
+                obj = RegistroServicios(nombre = self.nombre.text,
+                                        descr = self.descr.text,
+                                        fecha_inicio = str(self.fecha_inicio),
+                                        fecha_termino = str(self.fecha_termino),
+                                        correo = self.correo,
+                                        id_estado = self.id_estado.text,
+                                        precio = self.precio.text
+                                        )
+                self.network.enviar(obj.preparar())
+                datos = self.network.recibir()
+                if datos.get("estado"):
+                    test = Notificacion("Exito", datos.get("condicion"))
+                    test.open()
+                    self.formatear()
+                else:
+                    test = Notificacion("Error", datos.get("condicion"))
+                    test.open()
 
     def formatear(self):
-        self.fecha_final = None
-        self.fecha_final = None
+        self.fecha_termino = None
+        self.fecha_termino = None
         self.nombre.text = ""
         self.id_estado.text = ""
         self.descr.text = ""
@@ -71,12 +77,12 @@ class VServicios(MDScreenAbstrac):
     def on_save(self, instance, value, date_range):
         if len(date_range) >= 2:
             self.fecha_inicio = date_range[0]
-            self.fecha_final = date_range[-1]
-            formato = f"{self.fecha_inicio} al {self.fecha_final}"
+            self.fecha_termino = date_range[-1]
+            formato = f"{self.fecha_inicio} al {self.fecha_termino}"
             self.ids.btn_fecha.text = str(formato)
         else:
             self.fecha_inicio = value
-            self.fecha_final = None
+            self.fecha_termino = None
             self.ids.btn_fecha.text = str(value)
         
     def actualizar(self, *dt):
