@@ -1,9 +1,4 @@
 
-
-from distutils.debug import DEBUG
-import sys
-
-
 class Querys():
     
     def __init__(self, bd):

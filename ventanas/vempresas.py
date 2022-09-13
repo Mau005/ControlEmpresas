@@ -1,7 +1,4 @@
 from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion
-from kivymd.uix.pickers import MDDatePicker
-from kivy.properties import ObjectProperty
-import datetime
 from entidades.registroservicio import RegistroServicios
 from core.constantes import BUTTONCREATE
 from entidades.registroempresas import RegistroEmpresas

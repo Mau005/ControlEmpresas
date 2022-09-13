@@ -1,4 +1,4 @@
-from entidades.registropersonas import RegistroPersonas
+
 from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion
 from kivy.properties import ObjectProperty
 

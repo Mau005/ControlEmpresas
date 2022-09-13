@@ -1,4 +1,3 @@
-from tkinter import BUTT
 from ventanas.widgets_predefinidos import MDScreenAbstrac, MDTwoLine
 from core.constantes import BUTTONCREATE
 from kivy.properties import ObjectProperty

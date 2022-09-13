@@ -1,8 +1,7 @@
-from hashlib import new
 from threading import Thread
 from core.constantes import TAMANIO_PAQUETE
 from core.herramientas import Herramientas as her
-from entidades.registro_notas_empresas import Registro_Notas_Empresas
+
 from entidades.registroempresas import RegistroEmpresas
 from entidades.registrousaurios import RegistroUsuarios
 

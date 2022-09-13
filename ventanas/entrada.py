@@ -1,4 +1,3 @@
-from curses.ascii import controlnames
 from ventanas.widgets_predefinidos import MDScreenAbstrac
 from kivy.properties import ObjectProperty
 from kivy.logger import Logger
