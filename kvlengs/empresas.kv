@@ -9,89 +9,73 @@
         spacing: "20dp"
         pos_hint: {"center_x": .5, "center_y": .5}
         size_hint: .95,.95
-        MDGridLayout:
-            padding: dp(45)
-            cols: 2
-            PreLabel:
-                text:"Rut Empresa"
-            MDTextField:
-                id: rut_empresa
-                hint_text: "18.888.888-5"
-                max_text_length: 12
-                helper_text_mode: "on_error"
-                helper_text: "Ingrese rut con este formato: 18.888.888-5"
+        padding: dp(38)
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            MDList:
+                
+                MDTextField:
+                    id: rut_empresa
+                    hint_text: "Rut Empresa*"
+                    max_text_length: 12
+                    helper_text_mode: "on_error"
+                    helper_text: "Ingrese rut sin puntos y con '-': 18888888-5"
 
-            PreLabel:
-                text:"Nombre Empresa"
-            MDTextField:
-                id: nombre_empresa
-                hint_text: "LosTResPinos spa"
-                max_text_length: 150
-                helper_text_mode: "on_error"
-                helper_text: "Maxima cantidad de caracteres es de 150"
+                MDTextField:
+                    id: nombre_empresa
+                    hint_text: "Nombre Empresa*"
+                    max_text_length: 150
+                    helper_text_mode: "on_error"
+                    helper_text: "Maxima cantidad de caracteres es de 150"
 
-            PreLabel:
-                text:"Giro"
-            MDTextField:
-                id: giro_empresa
-                hint_text: "Arriendo y venta de baños quimicos"
-                max_text_length: 150
-                helper_text_mode: "on_error"
-                helper_text: "Maxima cantidad de caracteres es de 150"
+                MDTextField:
+                    id: giro_empresa
+                    hint_text: "Giro*"
+                    max_text_length: 150
+                    helper_text_mode: "on_error"
+                    helper_text: "Maxima cantidad de caracteres es de 150"
 
 
-            PreLabel:
-                text:"Direccion"
-            MDTextField:
-                id: direccion_empresa
-                hint_text: "Michimalongo 14600, la pintana"
-                max_text_length: 150
-                helper_text_mode: "on_error"
-                helper_text: "Maxima cantidad de caracteres es de 150"
+                MDTextField:
+                    id: direccion_empresa
+                    hint_text: "Direccion*"
+                    max_text_length: 150
+                    helper_text_mode: "on_error"
+                    helper_text: "Maxima cantidad de caracteres es de 150"
 
-            PreLabel:
-                text:"Telefono"
-            MDTextField:
-                id: telefono_empresa
-                hint_text: "02XXXXXXX"
-                max_text_length: 14
-                helper_text_mode: "on_error"
-                helper_text: "Maxima cantidad de caracteres es de 14"
+                MDTextField:
+                    id: telefono_empresa
+                    hint_text: "Telefono"
+                    max_text_length: 14
+                    helper_text_mode: "on_error"
+                    helper_text: "Maxima cantidad de caracteres es de 14"
 
+                MDTextField:
+                    id: celular_empresa
+                    max_text_length: 14
+                    hint_text: "Celular*"
+                    helper_text_mode: "on_error"
+                    helper_text: "Maxima cantidad de caracteres es de 14"
 
+                MDTextField:
+                    id: correo_empresa
+                    hint_text: "Correo*"
+                    max_text_length: 150
+                    helper_text_mode: "on_error"
+                    helper_text: "Debe contener un correo entendible"
 
-            PreLabel:
-                text:"Celular"
-            MDTextField:
-                id: celular_empresa
-                max_text_length: 14
-                hint_text: "+569XXXXXXXX"
-                helper_text_mode: "on_error"
-                helper_text: "Maxima cantidad de caracteres es de 14"
-
-
-
-            PreLabel:
-                text:"Correo"
-            MDTextField:
-                id: correo_empresa
-                hint_text: "ejemplo@tudominio.cl"
-                max_text_length: 150
-                helper_text_mode: "on_error"
-                helper_text: "Debe contener un correo entendible"
-
-            PreLabel:
-                text:"Correo Respaldo"
-            MDTextField:
-                id: correo_respaldo_empresa
-                max_text_length: 150
-                hint_text: "ejemplo2@tudominio.cl"
-                helper_text_mode: "on_error"
-                helper_text: "Maxima cantidad de caracteres es de 150"
+                MDTextField:
+                    id: correo_respaldo_empresa
+                    max_text_length: 150
+                    hint_text: "Correo Respaldo"
+                    helper_text_mode: "on_error"
+                    helper_text: "Maxima cantidad de caracteres es de 150"
 
             
     
         MDFloatingActionButtonSpeedDial:
+            size_hint_y: .1
             callback: root.accion_boton
             id: botones
             root_button_anim: True

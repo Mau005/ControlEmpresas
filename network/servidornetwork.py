@@ -83,6 +83,7 @@ class ServidorNetwork(Thread):
             self.cliente.close()
             print(f"Intentos: {self.intentos}")
         
+        print(datosnuevos)
         self.usuario = RegistroUsuarios(correo = datosnuevos["datos"][0], contraseña = datosnuevos["datos"][1],
                                         fecha_creacion = datosnuevos["datos"][1], estado_usuario = datosnuevos["datos"][2])
         self.enviar(datosnuevos)

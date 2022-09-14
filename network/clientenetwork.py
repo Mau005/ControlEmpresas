@@ -10,20 +10,23 @@ class ClienteNetwork():
     def __init__(self):
         self.socket = None
         self.__estado = False
+        self.ip = "192.168.100.4"
         self.iniciar()
         
         
+        
     def iniciar(self, *args):
+        print(f"|{self.ip}|")
         try:
             self.socket = socket.socket()
-            self.socket.connect((IP, PORT))
+            self.socket.connect((self.ip, PORT))
             self.__estado = True
             Logger.info("Se ha conectado con exito")
             return self.socket
         except socket.error as error:
             Logger.critical("Problemas para conectarse hacia el servidor")
             self.__estado = False
-            noti = Notificacion("Error de conexión", " Aun no se ha podido establecer la conexión al servidor desea reintentar?", funcion_concurrente = self.iniciar)
+            noti = Notificacion("Error de conexión", " Aun no se ha podido establecer la conexión al servidor, intententelo mas tarde")
             noti.open()
             
     def enviar(self, datos):

@@ -1,15 +1,17 @@
-from ventanas.widgets_predefinidos import MDScreenAbstrac
+from ventanas.widgets_predefinidos import MDScreenAbstrac, NotificacionText
 from kivy.properties import ObjectProperty
 from kivy.logger import Logger
+import sys
 
 from ventanas.widgets_predefinidos import Notificacion
 from core.herramientas import Herramientas as her
-from core.constantes import PROTOCOLOERROR
+from core.constantes import BUTTONCREATE, PROTOCOLOERROR
 
 
 class Entrada(MDScreenAbstrac):
     entrada_usuario = ObjectProperty()
     pass_usuario = ObjectProperty()
+    botones = ObjectProperty()
     
     
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
@@ -17,12 +19,28 @@ class Entrada(MDScreenAbstrac):
         self.set_activo(True)
         self.contenido_usuario = her.cargar_json("data/ConfiguracionCliente.json")
         Logger.info("Se Cargado la configuración")
+        self.botones.data = {"Configuración": "ip-network",
+                             "Recuperar Cuenta": "account-box",
+                             "Salir": "exit-run"}
+        self.noti = NotificacionText("Configura la IP", "127.0.0.1", aceptar = self.func_concurrente_notificacion)
         
         if self.contenido_usuario["Usuario"]["boton"]:
             self.entrada_usuario.text = self.contenido_usuario["Usuario"]["correo"]
             self.pass_usuario.text = self.contenido_usuario["Usuario"]["contraseña"]
             
         self.ids.usuario_guardar.active = self.contenido_usuario["Usuario"]["boton"]
+        
+        
+    def func_concurrente_notificacion(self, *args):
+        self.network.ip = self.noti.campo.text
+        self.network.iniciar()
+        
+    def accion_boton(self, arg):
+        if arg.icon == "exit-run":
+            sys.exit()
+        if arg.icon == "ip-network":
+            self.noti.open()
+        
         
     def guardado(self, correo, contraseña, boton, condicion = False):
         self.contenido_usuario["Usuario"]["contraseña"] = contraseña
@@ -33,7 +51,8 @@ class Entrada(MDScreenAbstrac):
             self.pass_usuario.text = contraseña
 
         her.escribir_json(self.contenido_usuario, "data/ConfiguracionCliente.json")
-        
+
+
     def ingresar_usuario(self, correo, password):
         if self.ids.usuario_guardar.active:
             if not(self.contenido_usuario["Usuario"]["contraseña"] == password):

@@ -7,6 +7,8 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.button import MDRoundFlatButton
 
 from kivymd.uix.list import TwoLineListItem
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.textfield import MDTextField
 
 
 class MDTwoLine(TwoLineListItem):
@@ -21,6 +23,29 @@ class MDTwoLine(TwoLineListItem):
 
 class MDCardPre(MDCard, RoundedRectangularElevationBehavior):
     pass
+
+class NotificacionText(MDDialog):
+
+    def __init__(self, title, ayuda, aceptar = None, **kargs):
+        self.auto_dismiss = True
+        self.title = title
+        self.campo = MDTextField(hint_text = ayuda, size_hint_x= None, width= "240")
+        self.mensaje_capturado = ""
+        self.botonCancelar = MDRoundFlatButton(text= "Cancelar", on_release = self.cancelar)
+        self.botonAceptar = MDRoundFlatButton(text= "Aceptar", on_release = self.cancelar)
+        if aceptar != None:
+            self.botonAceptar.bind(on_release = aceptar)
+
+        self.buttons = [self.botonCancelar, self.botonAceptar]
+
+        super().__init__(**kargs)
+        self.add_widget(self.campo)
+    
+    def guardado(self):
+        self.mensaje_capturado = self.campo.text 
+
+    def cancelar(self, *args):
+        self.dismiss()
 
 class Notificacion(MDDialog):
     

@@ -12,7 +12,6 @@ class Server():
     
     def __init__(self):
         self.info = her.cargar_json("data/ConfiguracionServidor.json")
-        
         self.bd = BaseDatos(self.info.get("Mysql"))
         self.querys = Querys(self.bd)
         self.socket = socket.socket()

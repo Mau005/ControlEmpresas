@@ -3,6 +3,7 @@
 <Entrada>:
     entrada_usuario:entrada_usuario
     pass_usuario:pass_usuario
+    botones:botones
         
     MDCardPre:
         orientation: 'vertical'
@@ -50,20 +51,14 @@
             pos_hint: {"center_x": .5, "center_y": .5}
 
             MDRectangleFlatButton:
-                text: "Iniciar"
+                text: "Conectar"
                 pos_hint: {"center_x": .5, "center_y": .5}
-                halign: "left"
+                halign: "center"
                 on_release: root.ingresar_usuario(entrada_usuario.text, pass_usuario.text)
                 
-            MDRectangleFlatButton:
-                text: "Salir"
-                halign: "center"
-                pos_hint: {"center_x": .5, "center_y": .5}
-
-            MDRectangleFlatButton:
-                halign: "right"
-                text: "Recuperar Usuario"
-                pos_hint: {"center_x": .5, "center_y": .5}
             
-            
+    MDFloatingActionButtonSpeedDial:
+        callback: root.accion_boton
+        id: botones
+        root_button_anim: True
         
