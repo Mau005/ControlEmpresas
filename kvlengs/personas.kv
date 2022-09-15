@@ -8,69 +8,54 @@
         pos_hint: {"center_x": .5, "center_y": .5}
         size_hint: .95,.95
         padding: dp(45)
-        MDLabel:
-            halign: "center"
-            font_size : dp(55)
-            size_hint_y: .1
-            text: "Registrar Personas"
-            
-        MDGridLayout:
-            cols: 4
-            size_hint_y: 0.142
-            PreLabel:
-                text: "Rut"
-                hint_text: "Ejm: 11.111.111"
-            MDTextField:
-                id: rut
-                max_text_length: 8
-                helper_text_mode: "on_error"
-                helper_text: "Ingrese rut sin punto ni guion ejemplo: 10100200"
-            MDLabel:
-                text: " -"
-                size_hint_x: .2
-            MDTextField:
-                id:rut_verificador
-                max_text_length: 1
-                helper_text_mode: "on_error"
-                hint_text: "Digito Verificador"
-                helper_text: "un digito"
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
 
-        MDGridLayout:
-            cols: 2
-            size_hint_y: 0.858
-            PreLabel:
-                text: "Nombre:"
-            MDTextField:
-                id: nombres
-                max_text_length: 150
-            PreLabel:
-                text: "Apellidos:"
-            MDTextField:
-                id: apellidos
-                max_text_length: 150
-                helper_text_mode: "on_error"
-                helper_text: "Minimo 3 caracteres y maximo 150"
-            PreLabel:
-                text: "Telefono:"
+            MDList:
+                MDTextField:
+                    id: rut
+                    max_text_length: 8
+                    hint_text: "Rut Persona*"
+                    max_text_length: 10
+                    helper_text_mode: "on_focus"
+                    helper_text: "Ingrese rut sin puntos y con '-': 18888888-5"
+
+
+                MDTextField:
+                    id: nombres
+                    hint_text: "Nombres"
+                    helper_text_mode: "on_error"
+                    max_text_length: 150
+                    helper_text: "Maximo 150 caracteres"
+                MDTextField:
+                    id: apellidos
+                    hint_text: "Apellidos: "
+                    max_text_length: 150
+                    helper_text_mode: "on_error"
+                    helper_text: "Minimo 3 caracteres y maximo 150"
+                    
+                MDTextField:
+                    id: telefono
+                    max_text_length: 14
+                    hint_text: "Telefono"
+                    helper_text_mode: "on_error"
+                    helper_text: "maximo 14 caracteres"
+                    
+                MDTextField:
+                    id: celular
+                    max_text_length: 14
+                    hint_text: "Celular"
+                    helper_text_mode: "on_error"
+                    helper_text: "maximo 14 caracteres"
+                    
+                MDTextField:
+                    id: correo
+                    max_text_length: 150
+                    hint_text: "Correo"
+                    helper_text_mode: "on_error"
+                    helper_text: "debe incluir una @"
                 
-            MDTextField:
-                id: telefono
-                max_text_length: 14
-                helper_text_mode: "on_error"
-                helper_text: "Ejemplo: +0224040404"
-                
-            PreLabel:
-                text: "Celular:"
-                
-            MDTextField:
-                id: celular
-                max_text_length: 14
-                helper_text_mode: "on_error"
-                helper_text: "Ejemplo: +569 44444444"
-            PreLabel:
-                text: "Correo:"
-            MDTextField:
-                id: correo
                 
 
             

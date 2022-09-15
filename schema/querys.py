@@ -10,6 +10,10 @@ class Querys():
         datos = self.bd.consultar(querys)
         return datos
     
+    def actualizar_grupo_usuario(self, correo, grupo):
+        querys = f'UPDATE USUARIOS SET GRUPOS = {grupo} WHERE CORREO = "{correo}";'
+        return self.bd.insertar(querys)
+    
     def registrar_usuario(self, correo, contraseña):
         querys = f'INSERT INTO USUARIOS(CORREO,CONTRASEÑA) VALUES("{correo}", SHA({contraseña}));'
         condicion = self.bd.insertar(querys)
@@ -66,6 +70,13 @@ class Querys():
                    objeto.direccion_empresa, objeto.telefono, objeto.correo_empresa, objeto.correo_respaldo, objeto.celular_empresa)
         return self.bd.insertar(querys)
     
+    def registrar_usuarios(self, rut_persona, nombres, apellidos, telefono, celular, correo):
+        querys = '''
+        INSERT INTO PERSONAS(RUT_PERSONA, NOMBRES, APELLIDOS, TELEFONO, CELULAR, CORREO)
+        VALUES("{}", "{}", "{}" , "{}" , "{}" , "{}" ); 
+        '''.format(rut_persona, nombres, apellidos, telefono, celular,correo)
+        
+        return self.bd.insertar(querys)
     
     #	ID_REGISTRO	RUT_EMPRESA	CORREO	FECHA_CREACION
     def registrar_notas_empresas(self, nota, rut_empresa, correo):

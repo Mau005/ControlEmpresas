@@ -8,7 +8,7 @@ from entidades.registrousaurios import RegistroUsuarios
 
 class ServidorNetwork(Thread):
     
-    def __init__(self, cliente, direccion, querys, info):
+    def __init__(self, cliente, direccion, querys, info, grupos):
         Thread.__init__(self)
         self.cliente = cliente
         self.direccion = direccion
@@ -16,6 +16,9 @@ class ServidorNetwork(Thread):
         self.intentos = 0
         self.info = info
         self.usuario = RegistroUsuarios()
+        
+        self.grupos = grupos
+        
         
         
     def enviar(self, datos):
@@ -50,6 +53,9 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "listaEmpresas":
                 self.listaEmpresas()
                 
+            if datos.get("estado") == "registropersona":
+                self.registrarpersonas(datos.get("contenido"))
+                
             if datos.get("estado") == "listadoservicios":
                 self.listadoservicios()
                 
@@ -57,6 +63,13 @@ class ServidorNetwork(Thread):
                 print("Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
                 break
             
+    def registrarpersonas(self, datos):
+        print("Ejecutar Esto es: ", datos )
+        datos = self.querys.registrar_usuarios(datos.rut_persona, datos.nombres, datos.apellidos, datos.telefono, datos.celular, datos.correo)
+        
+        
+        self.enviar(datos)
+    
     def listadoservicios(self):
         datos = self.querys.solicitar_listado_servicios()
         self.enviar(datos)
@@ -85,7 +98,7 @@ class ServidorNetwork(Thread):
         
         if datosnuevos.get("datos") != None:
             self.usuario = RegistroUsuarios(correo = datosnuevos["datos"][0], contraseña = datosnuevos["datos"][1],
-                                            fecha_creacion = datosnuevos["datos"][1], estado_usuario = datosnuevos["datos"][2])
+                                            fecha_creacion = datosnuevos["datos"][1], estado_usuario = datosnuevos["datos"][2], grupos = datosnuevos["datos"][3])
         self.enviar(datosnuevos)
         
     def registroservicios(self,datos):
@@ -93,10 +106,12 @@ class ServidorNetwork(Thread):
         self.enviar(estado)
         
     def registroempresas(self, empresa):
-        objeto = RegistroEmpresas()
-        objeto = empresa
-        estado = self.querys.registrar_empresas(objeto)
-        self.enviar(estado)
+        if self.grupos.get(str(self.usuario.grupos)).get("CrearEmpresas"):
+            estado = self.querys.registrar_empresas(empresa)
+            self.enviar(estado)
+        else:
+            self.enviar({"estado": False, "condicion": "No tienes los privilegios para ejercer esta accion"})
+            
         
     def saludo(self):
         self.enviar({"estado": "saludo", "contenido": "Hola fdp del servidor"})

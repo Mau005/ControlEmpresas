@@ -62,8 +62,9 @@ class VEmpresas(MDScreenAbstrac):
                         self.formatear()
                         self.siguiente()
                     else:
+                        
                         Logger.warning("No se ha podido registrar la empresa")
-                        noti.text = "No se ha podido ingresar los datos"
+                        noti.text = info.get("condicion")
             noti.open()
             
                 

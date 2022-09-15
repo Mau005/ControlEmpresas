@@ -1,6 +1,9 @@
 
+from entidades.registropersonas import RegistroPersonas
 from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion
 from kivy.properties import ObjectProperty
+from core.herramientas import Herramientas as her
+from kivy.logger import Logger
 
 class VPersonas(MDScreenAbstrac):
     botones = ObjectProperty()
@@ -15,8 +18,6 @@ class VPersonas(MDScreenAbstrac):
         
     def formatear(self):
         self.ids.rut.text = ""
-        self.ids.rut_verificador.text = ""
-        
         self.ids.nombres.text = ""
         self.ids.apellidos.text = ""
         self.ids.telefono.text = ""
@@ -32,23 +33,40 @@ class VPersonas(MDScreenAbstrac):
             self.formatear()
         
         if args.icon == "pencil":
-            
-            if len(self.ids.nombres.text) >= 3 and len(self.ids.apellidos.text) >= 3  and len(self.ids.celular.text) >= 9 and "@" in self.ids.correo.text:
-                if len(self.ids.rut.text) >= 8:
-                    if self.ids.rut_verificador.text.lower() in "123456789k":
-                        rut = self.ids.rut.text+"-"+self.ids.rut_verificador.text
-                        if len(self.ids.telefono) >= 7:
-                            pass
-                            
-                    else:
-                        noti = Notificacion("Error", "El Verificador debe tener uno de estos verificadores 123456789k")
-                        noti.open()
-                else:
-                    noti = Notificacion("Error", "El rut debe tener 8 caracteres")
-                    noti.open()
+            noti = Notificacion("Error", "")
+            estado = True
+            if not len(self.ids.rut.text) == 10:
+                noti.text += "El rut debe tener 10 caracteres ejemplo: 11222333-4\n"
+                estado = False
+            if not "@" in self.ids.correo.text:
+                noti.text += "El Correo debe ser correcto ejemplo: tuempresa@tudominio.cl"
+                estado = False
                 
-            else:
-                noti = Notificacion("Error", "Error todos los campos tienen que estar correcto")
-                noti.open()  
+            rut_verificado = her.verificar_rut(self.ids.rut.text)
+            
+            if not rut_verificado[0]:
+                estado = False
+                noti.text += rut_verificado[1]
+                
+            if estado:
+                objeto = RegistroPersonas(rut_persona = rut_verificado[1],
+                                          nombres = self.ids.nombres.text,
+                                          apellidos = self.ids.apellidos.text,
+                                          telefono = self.ids.telefono.text,
+                                          celular = self.ids.celular.text,
+                                          correo = self.ids.correo.text)
+                self.network.enviar(objeto.preparar())
+                print(objeto)
+                info = self.network.recibir()
+                if info.get("estado"):
+                    Logger.info("se ha registrado el usuario correctamente")
+                    noti.title = "Exito"
+                    noti.text = "Usuario ingresado correctamente"
+                    self.formatear()
+                    self.siguiente()
+                else:
+                    Logger.warning("No se ha podido registrar el usuario")
+                    noti.text = "No se ha podido registrar este usuario, el rut ya existe"
+            noti.open()
 
             

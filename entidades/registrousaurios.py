@@ -7,6 +7,7 @@ class RegistroUsuarios():
         self.contraseña = kargs.get("contraseña")
         self.fecha_creacion = kargs.get("fecha_creacion")
         self.estado_usuario = kargs.get("estado_usuario")
+        self.grupos = kargs.get("grupos")
         
     def __str__(self):
         return '''
@@ -14,7 +15,8 @@ class RegistroUsuarios():
     Contraseña: {}
     Fecha Creacion: {}
     Estado Usuario: {}
-    '''.format(self.correo, self.contraseña, self.fecha_creacion, self.estado_usuario)
+    Grupos: {}
+    '''.format(self.correo, self.contraseña, self.fecha_creacion, self.estado_usuario, self.grupos)
     
     def preparar(self):
         return {"estado":"registrousuarios", "contenido":self}

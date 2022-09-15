@@ -1,0 +1,27 @@
+{
+    "Grupos":{
+        "1": {
+            "Grupos": "Cliente"
+        },
+        "2":{
+            "Nombre": "Choferes"
+        },
+        "3":{
+            "Nombre": "Limpiadores"
+        },
+        "4":{
+            "Nombre": "Soporte"
+        },
+        "5":{
+            "Nombre":"Administradores",
+            "CrearEmpresas": true,
+            "Crearusuarios": true,
+            "CrearServicios": true,
+            "RecibirTodaNotificacion": true,
+            "EliminarEmpresas": true,
+            "EliminarUsuarios": true,
+            "EliminarServicios": true,
+            "ModificarServicios": true
+        }
+    }
+}

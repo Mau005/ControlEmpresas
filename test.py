@@ -1,6 +1,6 @@
 
-rut = "12345678-6"
+
+diccionario = {"05bban": True}
 
 
-        
-print(f"Formato nuevo es: {formato_nuevo}")
+print(diccionario.get("05bbank"))

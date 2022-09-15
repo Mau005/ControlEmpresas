@@ -12,6 +12,7 @@ class Server():
     
     def __init__(self):
         self.info = her.cargar_json("data/ConfiguracionServidor.json")
+        self.grupos = her.cargar_json("data/Grupos.json")["Grupos"]
         self.bd = BaseDatos(self.info.get("Mysql"))
         self.querys = Querys(self.bd)
         self.socket = socket.socket()
@@ -22,7 +23,7 @@ class Server():
         print("[OK] Servidor Iniciado")
         while True:
             cliente, direccion = self.socket.accept()
-            objeto_cliente = ServidorNetwork(cliente, direccion,self.querys, self.info)
+            objeto_cliente = ServidorNetwork(cliente, direccion,self.querys, self.info, self.grupos)
             print(f"Se intenta conectar: {direccion}")
             objeto_cliente.start()
             
