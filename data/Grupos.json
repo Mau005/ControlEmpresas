@@ -17,11 +17,13 @@
             "CrearEmpresas": true,
             "Crearusuarios": true,
             "CrearServicios": true,
+            "CrearProductos": true,
             "RecibirTodaNotificacion": true,
             "EliminarEmpresas": true,
             "EliminarUsuarios": true,
             "EliminarServicios": true,
             "ModificarServicios": true
+            
         }
     }
 }

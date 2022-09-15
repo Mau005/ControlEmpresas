@@ -1,5 +1,5 @@
 from threading import Thread
-from core.constantes import TAMANIO_PAQUETE
+from core.constantes import TAMANIO_PAQUETE, ERRORPRIVILEGIOS
 from core.herramientas import Herramientas as her
 
 from entidades.registroempresas import RegistroEmpresas
@@ -58,17 +58,28 @@ class ServidorNetwork(Thread):
                 
             if datos.get("estado") == "listadoservicios":
                 self.listadoservicios()
+            
+            if datos.get("estado") == "registroproductos":
+                self.registrarproductos(datos.get("contenido"))
                 
             elif datos.get("estado") == "cierreAbrupto":
                 print("Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
                 break
             
-    def registrarpersonas(self, datos):
-        print("Ejecutar Esto es: ", datos )
-        datos = self.querys.registrar_usuarios(datos.rut_persona, datos.nombres, datos.apellidos, datos.telefono, datos.celular, datos.correo)
-        
-        
+
         self.enviar(datos)
+    
+    def registrarproductos(self, datos):
+        print(datos)
+        print(self.grupos.get(str(self.usuario.grupos)).get("CrearProductos"))
+        print(f"El usuario tiene como privilegios: ", self.usuario.grupos)
+        print(self.usuario)
+        print(self.grupos)
+        if self.grupos.get(str(self.usuario.grupos)).get("CrearProductos"):
+            datos = self.querys.registrar_productos(datos.nombre_producto, datos.descripcion, datos.cantidad)
+            self.enviar(datos)
+        else:
+            self.enviar({"estado":False, "condicion": ERRORPRIVILEGIOS})
     
     def listadoservicios(self):
         datos = self.querys.solicitar_listado_servicios()
@@ -98,19 +109,30 @@ class ServidorNetwork(Thread):
         
         if datosnuevos.get("datos") != None:
             self.usuario = RegistroUsuarios(correo = datosnuevos["datos"][0], contraseña = datosnuevos["datos"][1],
-                                            fecha_creacion = datosnuevos["datos"][1], estado_usuario = datosnuevos["datos"][2], grupos = datosnuevos["datos"][3])
+                                            fecha_creacion = datosnuevos["datos"][2], estado_usuario = datosnuevos["datos"][3], grupos = datosnuevos["datos"][4])
         self.enviar(datosnuevos)
         
+        
+        
+        
+    def registrarpersonas(self, datos):
+        print("Ejecutar Esto es: ", datos )
+        datos = self.querys.registrar_usuarios(datos.rut_persona, datos.nombres, datos.apellidos, datos.telefono, datos.celular, datos.correo)
+          
     def registroservicios(self,datos):
-        estado = self.querys.registrar_servicios(datos)
-        self.enviar(estado)
+        if self.grupos.get(str(self.usuario.grupos)).get("CrearServicios"):
+            
+            estado = self.querys.registrar_servicios(datos)
+            self.enviar(estado)
+        else:
+            self.enviar({"estado":False, "condicion": ERRORPRIVILEGIOS})
         
     def registroempresas(self, empresa):
         if self.grupos.get(str(self.usuario.grupos)).get("CrearEmpresas"):
             estado = self.querys.registrar_empresas(empresa)
             self.enviar(estado)
         else:
-            self.enviar({"estado": False, "condicion": "No tienes los privilegios para ejercer esta accion"})
+            self.enviar({"estado": False, "condicion": ERRORPRIVILEGIOS})
             
         
     def saludo(self):

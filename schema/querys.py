@@ -93,3 +93,10 @@ class Querys():
     def solicitar_listado_servicios(self):
         querys = f'SELECT ID_SERVICIO, NOMBRE_SERVICIO FROM SERVICIOS;'
         return self.bd.consultar(querys, all=True)
+    
+    def registrar_productos(self, nombre, descripcion, cantidad):
+        querys = '''
+        INSERT INTO PRODUCTOS(NOMBRE_PRODUCTO, DESCRIPCION, CANTIDAD)
+        VALUES("{}", "{}", {});
+        '''.format(nombre, descripcion, cantidad)
+        return self.bd.insertar(querys)

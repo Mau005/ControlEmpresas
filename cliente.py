@@ -6,6 +6,7 @@ from network.clientenetwork import ClienteNetwork
 from ventanas.entrada import Entrada
 from ventanas.casa import Casa
 from ventanas.vlistadoservicios import VListadoServicios
+from ventanas.vproductos import VProductos
 from ventanas.vservicios import VServicios
 from ventanas.vpersonas import VPersonas
 from ventanas.vempresas import VEmpresas
@@ -33,7 +34,7 @@ class ControlEmpresas(MDApp):
         self.vnotasempresas = VNotasEmpresas(self.network, self.manejador, "notasempresas",siguiente = "casa")
         self.vlistaempresas = VListasEmpresas(self.network, self.manejador, "listaempresas", siguiente="casa")
         self.vlistaservicios = VListadoServicios(self.network, self.manejador, "listaservicios", siguiente="casa")
-        
+        self.vproductos = VProductos(self.network, self.manejador, "productos", siguiente="casa")
         self.__cargar_ventanas()
         
     def __cargar_ventanas(self):
@@ -45,6 +46,7 @@ class ControlEmpresas(MDApp):
         self.manejador.add_widget(self.vnotasempresas)
         self.manejador.add_widget(self.vlistaempresas)
         self.manejador.add_widget(self.vlistaservicios)
+        self.manejador.add_widget(self.vproductos)
         
     def cerrar(self):
         self.network.cerrar()

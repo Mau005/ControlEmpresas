@@ -1,0 +1,48 @@
+<VProductos>:
+    botones:botones
+    MDCardPre:
+        orientation: 'vertical'
+        elevation: 10
+        spacing: "20dp"
+        pos_hint: {"center_x": .5, "center_y": .5}
+        size_hint: .95,.95
+        padding: dp(38)
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            MDList:
+                
+                MDTextField:
+                    id: nombre_producto
+                    hint_text: "Nombre Producto*"
+                    max_text_length: 100
+                    helper_text_mode: "on_error"
+                    helper_text: "Maximo de 100 caracteres"
+
+                MDTextField:
+                    id: descripcion
+                    hint_text: "Descripción"
+                    max_text_length: 250
+                    multiline: True
+                    helper_text_mode: "on_error"
+                    helper_text: "Maximo de 250 caracteres"
+
+                MDTextField:
+                    id: cantidad
+                    hint_text: "Cantidad*"
+                    max_text_length: 11
+                    helper_text_mode: "on_focus"
+                    input_filter: 'int'
+                    helper_text: "Ingrese la cantida de productos"
+
+                
+
+
+
+                
+    
+    MDFloatingActionButtonSpeedDial:
+        size_hint_y: .1
+        callback: root.accion_boton
+        id: botones
+        root_button_anim: True
