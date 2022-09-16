@@ -2,7 +2,8 @@ from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion
 from kivymd.uix.pickers import MDDatePicker
 from kivy.properties import ObjectProperty
 from entidades.registroservicio import RegistroServicios
-from core.constantes import BUTTONCREATE, PROTOCOLOERROR, PROTOCOLOAFIRMATIVO
+from core.constantes import BUTTONCREATE
+
 
 class VServicios(MDScreenAbstrac):
     nombre = ObjectProperty()
@@ -10,7 +11,7 @@ class VServicios(MDScreenAbstrac):
     id_estado = ObjectProperty()
     precio = ObjectProperty()
     botones_servicios = ObjectProperty()
-        
+
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
         self.set_activo(True)
@@ -19,9 +20,7 @@ class VServicios(MDScreenAbstrac):
         self.fecha_termino = None
         self.botones_servicios.data = self.data
         self.correo = "prueba"
-        
-        
-        
+
     def accion_boton(self, arg):
         print(arg.icon)
         if arg.icon == "delete":
@@ -36,13 +35,13 @@ class VServicios(MDScreenAbstrac):
             else:
                 if self.fecha_termino is None:
                     self.fecha_termino = "NULL"
-                obj = RegistroServicios(nombre = self.nombre.text,
-                                        descr = self.descr.text,
-                                        fecha_inicio = str(self.fecha_inicio),
-                                        fecha_termino = str(self.fecha_termino),
-                                        correo = self.correo,
-                                        id_estado = self.id_estado.text,
-                                        precio = self.precio.text
+                obj = RegistroServicios(nombre=self.nombre.text,
+                                        descr=self.descr.text,
+                                        fecha_inicio=str(self.fecha_inicio),
+                                        fecha_termino=str(self.fecha_termino),
+                                        correo=self.correo,
+                                        id_estado=self.id_estado.text,
+                                        precio=self.precio.text
                                         )
                 self.network.enviar(obj.preparar())
                 datos = self.network.recibir()
@@ -62,17 +61,15 @@ class VServicios(MDScreenAbstrac):
         self.descr.text = ""
         self.precio.text = ""
         self.ids.btn_fecha.text = "00/00/00 al 00/00/00"
-    
-    
+
     def abrir_fecha(self):
         date_dialog = MDDatePicker(mode="range")
-        date_dialog.bind(on_cancel = self.on_cancel, on_save = self.on_save )
+        date_dialog.bind(on_cancel=self.on_cancel, on_save=self.on_save)
         date_dialog.open()
-        
-    def on_cancel(self, instance, value):
-        '''Events called when the "CANCEL" dialog box button is clicked.'''
 
-        
+    def on_cancel(self, instance, value):
+        """Events called when the "CANCEL" dialog box button is clicked."""
+
     def on_save(self, instance, value, date_range):
         if len(date_range) >= 2:
             self.fecha_inicio = date_range[0]
@@ -83,14 +80,12 @@ class VServicios(MDScreenAbstrac):
             self.fecha_inicio = value
             self.fecha_termino = None
             self.ids.btn_fecha.text = str(value)
-        
+
     def actualizar(self, *dt):
         return super().actualizar(*dt)
-    
+
     def siguiente(self, *dt):
         return super().siguiente(*dt)
-    
+
     def volver(self, *dt):
         return super().volver(*dt)
-        
-    
