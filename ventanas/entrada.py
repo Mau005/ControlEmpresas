@@ -16,8 +16,7 @@ class Entrada(MDScreenAbstrac):
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.set_activo(True)
-        self.contenido_usuario = her.cargar_json("data/ConfiguracionCliente.json")
+        self.contenido_usuario = her.cargar_json("data/ConfiguracionCliente.json", "Se carga configuración del cliente")
         Logger.info("Se Cargado la configuración")
         self.botones.data = {"Configuración": "ip-network",
                              "Recuperar Cuenta": "account-box",
@@ -87,8 +86,8 @@ class Entrada(MDScreenAbstrac):
     def recuperar_contra(self):
         pass
 
-    def actualizar(self, *dt):
-        return super().actualizar(*dt)
+    def actualizar(self, dt):
+        return super().actualizar(dt)
 
     def siguiente(self, *dt):
         return super().siguiente(*dt)

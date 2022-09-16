@@ -39,6 +39,18 @@ class VListadoServicios(MDScreenAbstrac):
                     self.listas_widget.append(obj)
                     self.contenedor.add_widget(obj)
 
+    def activar(self):
+        self.limpiar_widget()
+        data = {"estado": "listadoservicios"}
+        self.network.enviar(data)
+        info = self.network.recibir()
+        if info.get("estado"):
+            for x in info.get("datos"):
+                obj = MDTwoLine(str(x[0]), x[1], self.network)
+                self.listas_widget.append(obj)
+                self.contenedor.add_widget(obj)
+        super().activar()
+
     def siguiente(self, *dt):
         return super().siguiente(*dt)
 

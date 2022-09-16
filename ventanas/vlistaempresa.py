@@ -26,7 +26,7 @@ class VListasEmpresas(MDScreenAbstrac):
         self.contenido_empresas.clear()
 
     def activar(self):
-        # self.limpiar_objetos()
+        self.limpiar_objetos()
         data = {"estado": "listaEmpresas"}
         self.network.enviar(data)
         info = self.network.recibir()
@@ -36,6 +36,7 @@ class VListasEmpresas(MDScreenAbstrac):
                 obj = MDTwoLine(x[0], x[1], self.network)
                 self.contenido_empresas.append(obj)
                 self.contenedor.add_widget(obj)
+        super().activar()
 
     def siguiente(self, *dt):
         return super().siguiente(*dt)

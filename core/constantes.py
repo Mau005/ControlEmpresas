@@ -14,3 +14,4 @@ PROTOCOLOAFIRMATIVO = {
 }
 ERRORPRIVILEGIOS = "No tienes los privilegios para ejercer esta accion"
 TIEMPOACTUALIZAR = 1#segundos
+REVISARCORREOS = 2

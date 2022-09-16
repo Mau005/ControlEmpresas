@@ -15,6 +15,7 @@ class Casa(MDScreenAbstrac):
         self.manager.current = "personas"
 
     def cambiar_ventanta(self, ventana):
+        self.manager.get_screen(ventana).activar()
         self.manager.current = ventana
 
     def actualizar(self, *dt):

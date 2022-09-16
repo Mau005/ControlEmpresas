@@ -9,7 +9,6 @@ class VEmpresas(MDScreenAbstrac):
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.set_activo(True)
         self.data = BUTTONCREATE
         self.ids.botones.data = self.data
         self.correo = "prueba"

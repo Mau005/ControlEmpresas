@@ -14,7 +14,6 @@ class VServicios(MDScreenAbstrac):
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.set_activo(True)
         self.data = BUTTONCREATE
         self.fecha_inicio = None
         self.fecha_termino = None

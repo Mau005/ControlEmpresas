@@ -18,15 +18,15 @@ class Server:
         self.__iniciar_variables()
         self.__configurar_servidor()
         self.__tiempos()
-        tiempo = threading.Thread(target=self.actualizar)
-        tiempo.start()
+        self.tiempo = threading.Thread(target=self.actualizar)
+        self.tiempo.start()
 
     def __tiempos(self):
         self.tiempo_inicial = time.time()
 
     def __iniciar_variables(self):
-        self.info = her.cargar_json("data/ConfiguracionServidor.json")
-        self.grupos = her.cargar_json("data/Grupos.json")["Grupos"]
+        self.info = her.cargar_json("data/ConfiguracionServidor.json", "Se Cargan Variables")
+        self.grupos = her.cargar_json("data/Grupos.json", "Se cargan los Grupos")["Grupos"]
         self.bd = BaseDatos(self.info.get("Mysql"))
         self.querys = Querys(self.bd)
         self.control_network = Control_Network()
@@ -43,8 +43,11 @@ class Server:
             self.tiempo_ejecucion = tiempo_transcurrido - self.tiempo_inicial
         # self.control_network.actualizar()
 
-    def iniciar(self):
+    def cerrar(self):
+        self.enfuncionamiento = False
+        self.tiempo.join()
 
+    def iniciar(self):
         print("[OK] Servidor Iniciado")
         while self.enfuncionamiento:
             cliente, direccion = self.socket.accept()
@@ -52,8 +55,10 @@ class Server:
                                              self.control_network)
             print(f"Se intenta conectar: {direccion}")
             objeto_cliente.start()
-        self.enfuncionamiento = False
+
+        self.cerrar()
 
 
 if __name__ == "__main__":
-    Server().iniciar()
+    servidor = Server()
+    servidor.iniciar()

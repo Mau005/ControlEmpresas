@@ -43,52 +43,53 @@ class ServidorNetwork(Thread):
                 self.login(datos)
 
             if datos.get("estado") == "registroservicio":
-                self.registroservicios(datos)
+                self.registro_servicios(datos)
 
             if datos.get("estado") == "registroempresa":
                 self.registroempresas(datos.get("contenido"))
 
             if datos.get("estado") == "registro_notas_empresas":
-                self.registronotasempresas(datos.get("contenido"))
+                self.registro_notas_empresas(datos.get("contenido"))
 
             if datos.get("estado") == "listaEmpresas":
-                self.listaEmpresas()
+                self.lista_empresa()
 
             if datos.get("estado") == "registropersona":
-                self.registrarpersonas(datos.get("contenido"))
+                self.registrar_persona(datos.get("contenido"))
 
             if datos.get("estado") == "listadoservicios":
-                self.listadoservicios()
+                self.listado_servicios()
 
             if datos.get("estado") == "registroproductos":
-                self.registrarproductos(datos.get("contenido"))
+                self.registrar_productos(datos.get("contenido"))
 
             if datos.get("estado") == "salir":
                 print("el usuario intenta salir")
                 pass
 
             elif datos.get("estado") == "cierreAbrupto":
-                print("Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
+                print(
+                    "Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
                 break
 
         self.enviar(datos)
 
-    def registrarproductos(self, datos):
+    def registrar_productos(self, datos):
         if self.grupos.get(str(self.usuario.grupos)).get("CrearProductos"):
             datos = self.querys.registrar_productos(datos.nombre_producto, datos.descripcion, datos.cantidad)
             self.enviar(datos)
         else:
             self.enviar({"estado": False, "condicion": ERRORPRIVILEGIOS})
 
-    def listadoservicios(self):
+    def listado_servicios(self):
         datos = self.querys.solicitar_listado_servicios()
         self.enviar(datos)
 
-    def listaEmpresas(self):
+    def lista_empresa(self):
         datos = self.querys.solicitar_lista_empresas()
         self.enviar(datos)
 
-    def registronotasempresas(self, notas):
+    def registro_notas_empresas(self, notas):
         self.querys.registrar_notas_empresas(notas.notas, notas.rut_empresa, self.usuario.correo, )
 
     def login(self, datos):
@@ -96,16 +97,9 @@ class ServidorNetwork(Thread):
         passw = datos.get("password")
         datosnuevos = self.querys.consultar_usuario(correo, passw)
         datosnuevos.update({"MOTD": self.info["Servidor"]["MOTD"]})
+
         if datosnuevos.get("estado"):
             self.intentos = 0
-        else:
-            self.intentos += 1
-            if self.intentos >= 3:
-                self.enviar({"estado": False, "condicion": "Intentos completados procedaras a ser baneado FDP"})
-                self.cliente.close()
-                print(f"Intentos: {self.intentos}")
-
-        if datosnuevos.get("datos") is not None:
             self.usuario = RegistroUsuarios(correo=datosnuevos["datos"][0], contraseña=datosnuevos["datos"][1],
                                             fecha_creacion=datosnuevos["datos"][2],
                                             estado_usuario=datosnuevos["datos"][3], grupos=datosnuevos["datos"][4])
@@ -114,17 +108,21 @@ class ServidorNetwork(Thread):
                 datosnuevos.update(
                     {"estado": False, "condicion": "Usuario ya ha iniciado seccion espere unos momentos"})
                 self.usuario = RegistroUsuarios()
+        else:
+            self.intentos += 1
+            if self.intentos >= 3:
+                self.enviar({"estado": False, "condicion": "Intentos completados procedaras a ser baneado FDP"})
+                self.cliente.close()
+                print(f"Intentos: {self.intentos}")
 
         self.enviar(datosnuevos)
 
-    def registrarpersonas(self, datos):
-        print("Ejecutar Esto es: ", datos)
+    def registrar_persona(self, datos):
         datos = self.querys.registrar_usuarios(datos.rut_persona, datos.nombres, datos.apellidos, datos.telefono,
                                                datos.celular, datos.correo)
 
-    def registroservicios(self, datos):
+    def registro_servicios(self, datos):
         if self.grupos.get(str(self.usuario.grupos)).get("CrearServicios"):
-
             estado = self.querys.registrar_servicios(datos)
             self.enviar(estado)
         else:

@@ -12,6 +12,7 @@ from ventanas.vpersonas import VPersonas
 from ventanas.vempresas import VEmpresas
 from ventanas.vnotasempresas import VNotasEmpresas
 from ventanas.vlistaempresa import VListasEmpresas
+from kivy.clock import  Clock
 
 Builder.load_file("kvlengs/root.kv")
 
@@ -37,6 +38,8 @@ class ControlEmpresas(MDApp):
         self.vproductos = VProductos(self.network, self.manejador, "productos", siguiente="casa")
         self.__cargar_ventanas()
 
+        Clock.schedule_interval(self.actualizar, 1)
+
     def __cargar_ventanas(self):
         self.manejador.add_widget(self.login)
         self.manejador.add_widget(self.casa)
@@ -47,7 +50,11 @@ class ControlEmpresas(MDApp):
         self.manejador.add_widget(self.vlistaempresas)
         self.manejador.add_widget(self.vlistaservicios)
         self.manejador.add_widget(self.vproductos)
+        self.login.activar()
 
+    def actualizar(self, dt):
+        for ventana in self.manejador.screens:
+            ventana.actualizar(dt)
     def cerrar(self):
         self.network.cerrar()
 

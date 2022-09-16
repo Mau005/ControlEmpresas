@@ -73,25 +73,31 @@ class MDScreenAbstrac(MDScreen):
         self.manejador = manejador
         self.nombre_siguiente = siguiente
         self.nombre_volver = volver
-        self.__activo = False
-
-    def set_activo(self, condicion):
-        if isinstance(condicion, bool):
-            self.__activo = condicion
-
-    def get_activo(self):
-        return self.__activo
+        self.activo = False
 
     @abstractmethod
-    def actualizar(self, *dt):
+    def activar(self):
+        self.desactivar_ventanas()
+        self.activo = True
+
+    def desactivar_ventanas(self):
+        for elementos in self.manager.screen_names:
+            self.manager.get_screen(elementos).activo = False
+    @abstractmethod
+    def actualizar(self, dt):
+
+        if self.activo:
+            print(f"Ventana activa: {self.name}")
         pass
 
     @abstractmethod
     def siguiente(self, *dt):
         if self.nombre_siguiente:
+            self.manager.get_screen(self.nombre_siguiente).activar()
             self.manager.current = self.nombre_siguiente
 
     @abstractmethod
     def volver(self, *dt):
         if self.nombre_volver:
+            self.manejador.get_screen(self.nombre_volver).activar()
             self.manager.current = self.nombre_volver

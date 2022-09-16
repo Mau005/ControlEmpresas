@@ -25,10 +25,10 @@ class Herramientas:
         return  contenido.hexdigest()
     
     @staticmethod
-    def cargar_json(ruta):
+    def cargar_json(ruta, mensaje):
         if os.path.exists(ruta):
             archivo = open(ruta, "r" , encoding = "utf-8")
-            print("[OK] Variables importadas correctamente!")
+            print(f"[OK] {mensaje}")
             return json.load(archivo)
         
     @staticmethod
