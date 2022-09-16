@@ -1,6 +1,24 @@
+import threading
 
 
-diccionario = {"05bban": True}
+class Prueba(threading.Thread):
+    
+    def __init__(self):
+        super(Prueba,self).__init__()
+        
+        
+        
 
-
-print(diccionario.get("05bbank"))
+    def run(self):
+        contador = 0
+        while True:
+            contador +=1
+            if contador >= 1000:
+                break
+        
+        self.join()
+        
+        
+        
+test =Prueba()
+test.start()

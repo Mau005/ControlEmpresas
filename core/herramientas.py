@@ -3,7 +3,13 @@ import pickle
 import json
 import os
 import hashlib
+import random
+
 class Herramientas:
+    
+    @staticmethod
+    def numero_aleatorio():
+        return random.randint(100000, 999999)
     
     @staticmethod
     def empaquetar(paquete):

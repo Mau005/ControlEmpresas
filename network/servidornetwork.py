@@ -2,13 +2,12 @@ from threading import Thread
 from core.constantes import TAMANIO_PAQUETE, ERRORPRIVILEGIOS
 from core.herramientas import Herramientas as her
 
-from entidades.registroempresas import RegistroEmpresas
 from entidades.registrousaurios import RegistroUsuarios
 
 
 class ServidorNetwork(Thread):
     
-    def __init__(self, cliente, direccion, querys, info, grupos):
+    def __init__(self, cliente, direccion, querys, info, grupos, control_network):
         Thread.__init__(self)
         self.cliente = cliente
         self.direccion = direccion
@@ -16,10 +15,13 @@ class ServidorNetwork(Thread):
         self.intentos = 0
         self.info = info
         self.usuario = RegistroUsuarios()
-        
         self.grupos = grupos
+        self.control_network = self.control_network
         
         
+    def actualizar(self, dt):
+        print("se ejecuta actualzar? ", dt)
+        pass
         
     def enviar(self, datos):
         return self.cliente.send(her.empaquetar(datos))
@@ -62,6 +64,10 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "registroproductos":
                 self.registrarproductos(datos.get("contenido"))
                 
+            if datos.get("estado") == "salir":
+                print("el usuario intenta salir")
+                pass
+                
             elif datos.get("estado") == "cierreAbrupto":
                 print("Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
                 break
@@ -70,11 +76,6 @@ class ServidorNetwork(Thread):
         self.enviar(datos)
     
     def registrarproductos(self, datos):
-        print(datos)
-        print(self.grupos.get(str(self.usuario.grupos)).get("CrearProductos"))
-        print(f"El usuario tiene como privilegios: ", self.usuario.grupos)
-        print(self.usuario)
-        print(self.grupos)
         if self.grupos.get(str(self.usuario.grupos)).get("CrearProductos"):
             datos = self.querys.registrar_productos(datos.nombre_producto, datos.descripcion, datos.cantidad)
             self.enviar(datos)
@@ -110,6 +111,10 @@ class ServidorNetwork(Thread):
         if datosnuevos.get("datos") != None:
             self.usuario = RegistroUsuarios(correo = datosnuevos["datos"][0], contraseña = datosnuevos["datos"][1],
                                             fecha_creacion = datosnuevos["datos"][2], estado_usuario = datosnuevos["datos"][3], grupos = datosnuevos["datos"][4])
+            estado = self.control_network.agregar_hilo(self)
+            if not estado:
+                self.datosnuevos.update({"estado": False, "condicion": "Usuario ya ha iniciado seccion espere unos momentos"})
+                self.usuario = RegistroUsuarios()
         self.enviar(datosnuevos)
         
         
