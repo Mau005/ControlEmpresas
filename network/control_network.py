@@ -1,12 +1,35 @@
 from entidades.registrousaurios import RegistroUsuarios
 
+
 class Control_Network():
 
     def __init__(self) -> None:
         self.hilos_cliente = {}
         self.pendientes_desconexion = []
+        self.pendientes_recuperacion = []
+        self.control_recuperacion = {}
 
-    def agregar_pendiente(self, key):
+    def agregar_control_recuperacion(self, correo, valor):
+        if self.control_recuperacion.get(correo) is None:
+            print("Se ha puesto recuperacon de objeto")
+            self.control_recuperacion.update({correo: valor})
+            return True
+        print("No se ha podido recuperar la recuperacion")
+        return False
+
+    def buscar_control_recuperacion(self, correo):
+        if correo in self.control_recuperacion.keys():
+            return True
+        return False
+    def comprobar_control_recuperacion(self, correo, valor):
+        if self.control_recuperacion[correo] == valor:
+            self.control_recuperacion.append(correo)
+            return True
+        return False
+    def perdida_tiempo_recuperacion(self, correo):
+        self.control_recuperacion.pop(correo)
+
+    def agregar_pendiente_hilos(self, key):
         if not key in self.pendientes_desconexion:
             self.pendientes_desconexion.append(key)
 
@@ -16,18 +39,30 @@ class Control_Network():
             return True
         return False
 
-    def eliminar(self, key):
+    def eliminar_hilos(self, key):
         self.hilos_cliente[key].enfuncionamiento = False
         self.hilos_cliente.pop(key)
-    def __agregar(self, key, valor):
+
+    def eliminar_recuperacion(self, key):
+        self.control_recuperacion.pop(key)
+    def __agregar_hilos(self, key, valor):
         self.hilos_cliente.update({key: valor})
 
     def actualizar(self):
+        """
+        Methodo que actualiza cada 1 segundo, espera listas para poder eliminar
+        contenido en tiempo real de los diccionarios
+        :return:
+        """
         for elementos in self.hilos_cliente.values():
             elementos.actualizar()
 
         for pendiente_eliminar in self.pendientes_desconexion:
-            self.eliminar(pendiente_eliminar)
+            self.eliminar_hilos(pendiente_eliminar)
+
+        for pendientes_eliminar in self.pendientes_recuperacion:
+            self.eliminar_recuperacion(pendientes_eliminar)
+
         self.pendientes_desconexion.clear()
 
     def solicitar_hilos(self):
@@ -35,4 +70,3 @@ class Control_Network():
 
     def eventos(self):
         pass
-

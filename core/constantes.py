@@ -16,3 +16,4 @@ ERRORPRIVILEGIOS = "No tienes los privilegios para ejercer esta accion"
 TIEMPOACTUALIZAR = 1#segundos
 REVISARCORREOS = 2
 TIMEPOESPERAUSUARIO = 20
+TIEMPOESPERADIGITO = 60 * 5

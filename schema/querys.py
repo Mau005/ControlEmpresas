@@ -3,6 +3,9 @@ class Querys():
     def __init__(self, bd):
         self.bd = bd
 
+    def existe_usuario(self,correo):
+        querys = f'SELECT * FROM USUARIOS WHERE CORREO = {correo}'
+        return self.bd.consultar(querys)
     def consultar_usuario(self, correo, contraseña):
         querys = f'SELECT * FROM USUARIOS WHERE CORREO = "{correo}" AND CONTRASEÑA = "{contraseña}";'
         datos = self.bd.consultar(querys)
@@ -98,4 +101,8 @@ class Querys():
         INSERT INTO PRODUCTOS(NOMBRE_PRODUCTO, DESCRIPCION, CANTIDAD)
         VALUES("{}", "{}", {});
         '''.format(nombre, descripcion, cantidad)
+        return self.bd.insertar(querys)
+
+    def nueva_contraseña(self, correo, contraseña_nueva):
+        querys = f'UPDATE USUARIOS SET CONTRASEÑA = "{contraseña_nueva}" WHERE CORREO = "{correo}";'
         return self.bd.insertar(querys)

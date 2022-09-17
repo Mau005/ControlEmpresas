@@ -1,34 +1,37 @@
 from threading import Thread
-from core.constantes import TAMANIO_PAQUETE, ERRORPRIVILEGIOS, TIMEPOESPERAUSUARIO
+from core.constantes import TAMANIO_PAQUETE, ERRORPRIVILEGIOS, TIMEPOESPERAUSUARIO, TIEMPOESPERADIGITO
 from core.herramientas import Herramientas as her
+from network.recuperacion_cuenta import RecuperacionCuenta
 
 from entidades.registrousaurios import RegistroUsuarios
 
 
 class ServidorNetwork(Thread):
 
-    def __init__(self, cliente, direccion, querys, info, grupos, control_network):
+    def __init__(self, cliente, direccion, querys, info, grupos, control_network, servicio_correos):
         Thread.__init__(self)
-        self.intentos = 0
-        self.tiempo_actividad = 0
-        self.enfuncionamiento = True
-        self.ventana_actual = "entrada"
+        self.__variable_usuarios()
         self.cliente = cliente
         self.direccion = direccion
         self.querys = querys
         self.info = info
-
-        self.usuario = RegistroUsuarios()
         self.grupos = grupos
         self.control_network = control_network
-
-    def reiniciar(self):
-        self.tiempo_actividad = 0
-        self.usuario = RegistroUsuarios()
+        self.servicio_correos = servicio_correos
+        self.recuperacion_cuenta = RecuperacionCuenta(self.servicio_correos,self.control_network)
+    def __variable_usuarios(self):
         self.ventana_actual = "entrada"
+        self.intentos = 0
+        self.tiempo_actividad = 0
+        self.enfuncionamiento = True
+        self.usuario = RegistroUsuarios()
+
     def actualizar(self):
         if self.ventana_actual != "entrada":
             self.tiempo_actividad += 1
+
+        if self.recuperacion_cuenta.activo:
+            self.recuperacion_cuenta.actualizar()
 
     def enviar(self, datos):
         return self.cliente.send(her.empaquetar(datos))
@@ -36,12 +39,13 @@ class ServidorNetwork(Thread):
     def recibir(self):
         try:
             datos = self.cliente.recv(TAMANIO_PAQUETE)
-        except ConnectionResetError as error:
-            pass
+        except ConnectionResetError:
+            return None
 
         if datos != b'':
             return her.desenpaquetar(datos)
-        return {"estado":"cierreAbrupto"}
+        return {"estado": "cierreAbrupto"}
+
 
     def run(self):
         while self.enfuncionamiento:
@@ -54,6 +58,9 @@ class ServidorNetwork(Thread):
 
             if datos.get("estado") == "login":
                 self.login(datos)
+
+            if datos.get("estado") == "nueva_contraseña":
+                self.nueva_contraseña(datos.get("contenido"))
 
             if datos.get("estado") == "registroservicio":
                 self.registro_servicios(datos)
@@ -76,6 +83,10 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "registroproductos":
                 self.registrar_productos(datos.get("contenido"))
 
+            if datos.get("estado") == "nueva_contraseña":
+                self.cambiar_contraseña(datos.get("contenido"))
+                # methodo no implementado
+
             if datos.get("estado") == "salir":
                 print("el usuario intenta salir")
                 pass
@@ -85,6 +96,9 @@ class ServidorNetwork(Thread):
                     "Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
                 break
         self.cerrar()
+
+    def nueva_contraseña(self, contraseña_nueva):
+        self.querys.nueva_contraseña(self.usuario.correo, contraseña_nueva)
     def cerrar(self):
         self.cliente.close()
 
@@ -107,9 +121,11 @@ class ServidorNetwork(Thread):
         self.querys.registrar_notas_empresas(notas.notas, notas.rut_empresa, self.usuario.correo, )
 
     def login(self, datos):
-        correo = datos.get("correo")
-        passw = datos.get("password")
-        datosnuevos = self.querys.consultar_usuario(correo, passw)
+        self.usuario = RegistroUsuarios()
+        self.usuario.correo = datos.get("correo")
+        self.usuario.contraseña = datos.get("password")
+
+        datosnuevos = self.querys.consultar_usuario(self.usuario.correo, self.usuario.contraseña)
         datosnuevos.update({"MOTD": self.info["Servidor"]["MOTD"]})
 
         if datosnuevos.get("estado"):
@@ -133,7 +149,7 @@ class ServidorNetwork(Thread):
 
     def registrar_persona(self, datos):
         datos = self.querys.registrar_usuarios(datos.rut_persona, datos.nombres, datos.apellidos, datos.telefono,
-                                               datos.celular, datos.correo)
+                                               datos.celular, datos.correo_sistema)
 
     def registro_servicios(self, datos):
         if self.grupos.get(str(self.usuario.grupos)).get("CrearServicios"):
@@ -155,12 +171,10 @@ class ServidorNetwork(Thread):
     def actualizar_ventanas(self, contenido):
         if self.tiempo_actividad >= TIMEPOESPERAUSUARIO:
             self.enviar({"estado": False, "contenido": "Se ha expirado el tiempo de seccion activa."})
-            self.control_network.agregar_pendiente(self.usuario.correo)
-
+            self.control_network.agregar_pendiente_hilos(self.usuario.correo)
         if self.ventana_actual == contenido:
-            self.enviar({"estado":True})
+            self.enviar({"estado": True})
         else:
             self.ventana_actual = contenido
             self.tiempo_actividad = 0
             self.enviar({"estado": True})
-

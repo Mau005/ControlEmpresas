@@ -6,7 +6,15 @@ import hashlib
 import random
 
 class Herramientas:
-    
+
+    @staticmethod
+    def cargar_archivo( ruta, mensaje):
+        if os.path.exists(ruta):
+            archivo = open(ruta, "r", encoding="utf-8")
+            print("[OK] ", mensaje)
+            return archivo.read()
+        return None
+
     @staticmethod
     def numero_aleatorio():
         return random.randint(100000, 999999)
@@ -17,12 +25,16 @@ class Herramientas:
     
     @staticmethod
     def desenpaquetar(paquete):
-        return pickle.loads(paquete)
+        try:
+            return pickle.loads(paquete)
+        except EOFError as error:
+            print(error, "Cierre abrupto por parte del servidor")
+            return {"estado": False, "condicion": "Caida abrupta del servidor"}
     
     @staticmethod
     def cifrado_sha1(mensaje):
         contenido = hashlib.sha1(mensaje.encode())
-        return  contenido.hexdigest()
+        return contenido.hexdigest()
     
     @staticmethod
     def cargar_json(ruta, mensaje):

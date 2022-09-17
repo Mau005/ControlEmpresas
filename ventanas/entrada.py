@@ -21,7 +21,11 @@ class Entrada(MDScreenAbstrac):
         self.botones.data = {"Configuración": "ip-network",
                              "Recuperar Cuenta": "account-box",
                              "Salir": "exit-run"}
-        self.noti = NotificacionText("Configura la IP", "127.0.0.1", aceptar=self.func_concurrente_notificacion)
+        self.noti_network = NotificacionText("Configura la IP", "127.0.0.1", aceptar=self.func_concurrente_notificacion)
+        self.noti_recuperacion = NotificacionText("Indique correo electronico: ", "ejemplo@tudominio.cl",
+                                                  aceptar=self.func_concurrente_recuperacion)
+        self.noti_recuperacion_digito = NotificacionText("Recuperacion", "Indicame el Codigo",
+                                             aceptar=self.func_concurrente_recuperacion_digito)
 
         if self.contenido_usuario["Usuario"]["boton"]:
             self.entrada_usuario.text = self.contenido_usuario["Usuario"]["correo"]
@@ -30,14 +34,27 @@ class Entrada(MDScreenAbstrac):
         self.ids.usuario_guardar.active = self.contenido_usuario["Usuario"]["boton"]
 
     def func_concurrente_notificacion(self, *args):
-        self.network.ip = self.noti.campo.text
+        self.network.ip = self.noti_network.campo.text
         self.network.iniciar()
 
+    def func_concurrente_recuperacion(self, *args):
+        self.network.enviar({"estado": "recuperacion", "contenido": self.noti_recuperacion.campo.text})
+        info = self.network.recibir()
+
+        if info.get("estado"):
+            noti = Notificacion("Recuperación",
+                                "Se ha enviado un correo electornico con el numero verificador, por faro inicie seccion y complete los datos")
+            noti.open()
+
     def accion_boton(self, arg):
+        print(arg.icon)
         if arg.icon == "exit-run":
             sys.exit()
         if arg.icon == "ip-network":
-            self.noti.open()
+            self.noti_network.open()
+        if arg.icon == "account-box":
+            #self.noti_recuperacion.open()
+            self.manager.current = "recuperacion"
 
     def guardado(self, correo, contraseña, boton, condicion=False):
         self.contenido_usuario["Usuario"]["contraseña"] = contraseña
@@ -49,6 +66,16 @@ class Entrada(MDScreenAbstrac):
 
         her.escribir_json(self.contenido_usuario, "data/ConfiguracionCliente.json")
 
+    def func_concurrente_recuperacion_digito(self, *args):
+        self.network.enviar({"datos":"recuperacion_digito", "contenido": self.noti_recuperacion_digito.campo.text})
+        info = self.network.recibir()
+        if info.get("estado"):
+            noti = Notificacion("Aceptado", "Se confirma el digito")
+            noti.open
+        else:
+            noti = Notificacion("Error", "Digito incorrecto")
+            noti.open
+
     def ingresar_usuario(self, correo, password):
         if self.ids.usuario_guardar.active:
             if not (self.contenido_usuario["Usuario"]["contraseña"] == password):
@@ -59,32 +86,30 @@ class Entrada(MDScreenAbstrac):
             self.guardado("", "", False, condicion=True)
             password = her.cifrado_sha1(password)
 
+        noti = Notificacion("Error", "")
         if len(correo) >= 2 and len(password) >= 2:
             estructura = {"estado": "login", "correo": correo, "password": password}
             self.network.enviar(estructura)
             info = self.network.recibir()
-            print(info)
             if info.get("estado"):
-                noti = Notificacion(f"Querido: {correo}", info.get("MOTD"))
+                noti.title = f"Bienvenido {correo}"
+                noti.text = info.get("MOTD")
                 self.siguiente()
                 noti.open()
             else:
                 condicion = info.get("condicion")
                 if condicion == "NETWORK":
-                    noti = Notificacion("Error", PROTOCOLOERROR[
+                    notilocal = Notificacion("Error", PROTOCOLOERROR[
                         info.get("condicion")] + " Desea intentar conectarse Nuevamente? ",
                                         funcion_concurrente=self.network.iniciar)
-                    noti.open()
+                    notilocal.open()
                 else:
-                    noti = Notificacion("Error", condicion)
+                    noti = Notificacion("Error", "Usuario o Contraseña incorrecta")
                     noti.open()
 
         else:
             noti = Notificacion("ror", "Tiene que ser mas de 2 caracteres en usaurio o passwordEr")
             noti.open()
-
-    def recuperar_contra(self):
-        pass
 
     def actualizar(self, dt):
         return super().actualizar(dt)

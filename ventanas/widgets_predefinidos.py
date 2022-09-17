@@ -37,9 +37,6 @@ class NotificacionText(MDDialog):
         super().__init__(**kargs)
         self.add_widget(self.campo)
 
-    def guardado(self):
-        self.mensaje_capturado = self.campo.text
-
     def cancelar(self, *args):
         self.dismiss()
 

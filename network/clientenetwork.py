@@ -31,7 +31,10 @@ class ClienteNetwork:
 
     def enviar(self, datos):
         if self.__estado:
-            self.socket.send(her.empaquetar(datos))
+            try:
+                self.socket.send(her.empaquetar(datos))
+            except BrokenPipeError as error:
+                print(f"Caida abrupta del sistema")
 
     def recibir(self):
         if self.__estado:

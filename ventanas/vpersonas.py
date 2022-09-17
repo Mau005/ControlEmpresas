@@ -23,7 +23,7 @@ class VPersonas(MDScreenAbstrac):
         self.ids.apellidos.text = ""
         self.ids.telefono.text = ""
         self.ids.celular.text = ""
-        self.ids.correo.text = ""
+        self.ids.correo_sistema.text = ""
 
     def accion_boton(self, args):
 
@@ -39,7 +39,7 @@ class VPersonas(MDScreenAbstrac):
             if not len(self.ids.rut.text) == 10:
                 noti.text += "El rut debe tener 10 caracteres ejemplo: 11222333-4\n"
                 estado = False
-            if not "@" in self.ids.correo.text:
+            if not "@" in self.ids.correo_sistema.text:
                 noti.text += "El Correo debe ser correcto ejemplo: tuempresa@tudominio.cl"
                 estado = False
 
@@ -55,7 +55,7 @@ class VPersonas(MDScreenAbstrac):
                                           apellidos=self.ids.apellidos.text,
                                           telefono=self.ids.telefono.text,
                                           celular=self.ids.celular.text,
-                                          correo=self.ids.correo.text)
+                                          correo=self.ids.correo_sistema.text)
                 self.network.enviar(objeto.preparar())
                 print(objeto)
                 info = self.network.recibir()

@@ -6,6 +6,8 @@ from core.herramientas import Herramientas as her
 from schema.querys import Querys
 from network.control_network import Control_Network
 import threading, time
+from servicios_correos.servicio_correos import Servicio_Correos
+
 
 
 class Server:
@@ -27,6 +29,10 @@ class Server:
     def __iniciar_variables(self):
         self.info = her.cargar_json("data/ConfiguracionServidor.json", "Se Cargan Variables")
         self.grupos = her.cargar_json("data/Grupos.json", "Se cargan los Grupos")["Grupos"]
+        self.servicio_correos = Servicio_Correos(self.info["Correo"]["correo"],
+                                                 self.info["Correo"]["contraseña"],
+                                                 self.info["Correo"]["host"],
+                                                 self.info["Correo"]["port"])
         self.bd = BaseDatos(self.info.get("Mysql"))
         self.querys = Querys(self.bd)
         self.control_network = Control_Network()
@@ -51,7 +57,7 @@ class Server:
         while self.enfuncionamiento:
             cliente, direccion = self.socket.accept()
             objeto_cliente = ServidorNetwork(cliente, direccion, self.querys, self.info, self.grupos,
-                                             self.control_network)
+                                             self.control_network, self.servicio_correos)
             print(f"Se intenta conectar: {direccion}")
             objeto_cliente.start()
 
