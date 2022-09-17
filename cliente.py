@@ -12,6 +12,7 @@ from ventanas.vpersonas import VPersonas
 from ventanas.vempresas import VEmpresas
 from ventanas.vnotasempresas import VNotasEmpresas
 from ventanas.vlistaempresa import VListasEmpresas
+from ventanas.vrecuperacion import VRecuperacion
 from kivy.clock import Clock
 
 Builder.load_file("kvlengs/root.kv")
@@ -27,6 +28,11 @@ class ControlEmpresas(MDApp):
         self.network = ClienteNetwork()
         self.manejador = MDScreenManager()
 
+        self.__cargar_ventanas()
+
+        Clock.schedule_interval(self.actualizar, 1)
+
+    def __cargar_ventanas(self):
         self.login = Entrada(self.network, self.manejador, "entrada", siguiente="casa")
         self.casa = Casa(self.network, self.manejador, "casa")
         self.vservicios = VServicios(self.network, self.manejador, "servicios", siguiente="casa")
@@ -36,11 +42,7 @@ class ControlEmpresas(MDApp):
         self.vlistaempresas = VListasEmpresas(self.network, self.manejador, "listaempresas", siguiente="casa")
         self.vlistaservicios = VListadoServicios(self.network, self.manejador, "listaservicios", siguiente="casa")
         self.vproductos = VProductos(self.network, self.manejador, "productos", siguiente="casa")
-        self.__cargar_ventanas()
-
-        Clock.schedule_interval(self.actualizar, 1)
-
-    def __cargar_ventanas(self):
+        self.vrecuperacion = VRecuperacion(self.network, self.manejador, "recuperacion", volver="entrada")
         self.manejador.add_widget(self.login)
         self.manejador.add_widget(self.casa)
         self.manejador.add_widget(self.vservicios)
@@ -50,11 +52,13 @@ class ControlEmpresas(MDApp):
         self.manejador.add_widget(self.vlistaempresas)
         self.manejador.add_widget(self.vlistaservicios)
         self.manejador.add_widget(self.vproductos)
+        self.manejador.add_widget(self.vrecuperacion)
         self.login.activar()
 
     def actualizar(self, dt):
         for ventana in self.manejador.screens:
             ventana.actualizar(dt)
+
     def cerrar(self):
         self.network.cerrar()
 
