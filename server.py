@@ -12,7 +12,7 @@ class Server:
     # Kastachaña: ordenar separar en idioma aymara
 
     def __init__(self):
-        self.tiempo_ejecucion = None
+        self.tiempo_ejecucion = 0
         self.__tiempos()
         self.enfuncionamiento = True
         self.__iniciar_variables()
@@ -38,10 +38,9 @@ class Server:
 
     def actualizar(self):
         while self.enfuncionamiento:
-            tiempo_transcurrido = time.time()
-            time.sleep(2)
-            self.tiempo_ejecucion = tiempo_transcurrido - self.tiempo_inicial
-        # self.control_network.actualizar()
+            self.tiempo_ejecucion += 1
+            self.control_network.actualizar()
+            time.sleep(1)
 
     def cerrar(self):
         self.enfuncionamiento = False

@@ -12,7 +12,7 @@ from ventanas.vpersonas import VPersonas
 from ventanas.vempresas import VEmpresas
 from ventanas.vnotasempresas import VNotasEmpresas
 from ventanas.vlistaempresa import VListasEmpresas
-from kivy.clock import  Clock
+from kivy.clock import Clock
 
 Builder.load_file("kvlengs/root.kv")
 

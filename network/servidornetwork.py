@@ -1,5 +1,5 @@
 from threading import Thread
-from core.constantes import TAMANIO_PAQUETE, ERRORPRIVILEGIOS
+from core.constantes import TAMANIO_PAQUETE, ERRORPRIVILEGIOS, TIMEPOESPERAUSUARIO
 from core.herramientas import Herramientas as her
 
 from entidades.registrousaurios import RegistroUsuarios
@@ -9,35 +9,48 @@ class ServidorNetwork(Thread):
 
     def __init__(self, cliente, direccion, querys, info, grupos, control_network):
         Thread.__init__(self)
+        self.intentos = 0
+        self.tiempo_actividad = 0
+        self.enfuncionamiento = True
+        self.ventana_actual = "entrada"
         self.cliente = cliente
         self.direccion = direccion
         self.querys = querys
-        self.intentos = 0
         self.info = info
-        self.tiempo_actividad = 0
+
         self.usuario = RegistroUsuarios()
         self.grupos = grupos
         self.control_network = control_network
 
-    def actualizar(self, dt):
-        print("se ejecuta actualzar? ", dt)
-        pass
+    def reiniciar(self):
+        self.tiempo_actividad = 0
+        self.usuario = RegistroUsuarios()
+        self.ventana_actual = "entrada"
+    def actualizar(self):
+        if self.ventana_actual != "entrada":
+            self.tiempo_actividad += 1
 
     def enviar(self, datos):
         return self.cliente.send(her.empaquetar(datos))
 
     def recibir(self):
-        datos = self.cliente.recv(TAMANIO_PAQUETE)
+        try:
+            datos = self.cliente.recv(TAMANIO_PAQUETE)
+        except ConnectionResetError as error:
+            pass
 
         if datos != b'':
             return her.desenpaquetar(datos)
-        return {"estado": "cierreAbrupto"}
+        return {"estado":"cierreAbrupto"}
 
     def run(self):
-        while True:
+        while self.enfuncionamiento:
             datos = self.recibir()
             if datos.get("estado") == "saludo":
                 self.saludo()
+
+            if datos.get("estado") == "actualizar":
+                self.actualizar_ventanas(datos.get("contenido"))
 
             if datos.get("estado") == "login":
                 self.login(datos)
@@ -71,8 +84,9 @@ class ServidorNetwork(Thread):
                 print(
                     "Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
                 break
-
-        self.enviar(datos)
+        self.cerrar()
+    def cerrar(self):
+        self.cliente.close()
 
     def registrar_productos(self, datos):
         if self.grupos.get(str(self.usuario.grupos)).get("CrearProductos"):
@@ -137,3 +151,16 @@ class ServidorNetwork(Thread):
 
     def saludo(self):
         self.enviar({"estado": "saludo", "contenido": "Hola fdp del servidor"})
+
+    def actualizar_ventanas(self, contenido):
+        if self.tiempo_actividad >= TIMEPOESPERAUSUARIO:
+            self.enviar({"estado": False, "contenido": "Se ha expirado el tiempo de seccion activa."})
+            self.control_network.agregar_pendiente(self.usuario.correo)
+
+        if self.ventana_actual == contenido:
+            self.enviar({"estado":True})
+        else:
+            self.ventana_actual = contenido
+            self.tiempo_actividad = 0
+            self.enviar({"estado": True})
+

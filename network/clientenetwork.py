@@ -16,7 +16,6 @@ class ClienteNetwork:
         self.iniciar()
 
     def iniciar(self, *args):
-        print(f"|{self.ip}|")
         try:
             self.socket = socket.socket()
             self.socket.connect((self.ip, PORT))

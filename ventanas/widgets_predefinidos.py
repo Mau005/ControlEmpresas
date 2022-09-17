@@ -85,10 +85,15 @@ class MDScreenAbstrac(MDScreen):
             self.manager.get_screen(elementos).activo = False
     @abstractmethod
     def actualizar(self, dt):
-
-        if self.activo:
-            print(f"Ventana activa: {self.name}")
-        pass
+        if self.name != "entrada" and self.activo:
+            self.network.enviar({"estado": "actualizar","contenido":self.name})
+            info = self.network.recibir()
+            if not info.get("estado"):
+                noti = Notificacion("Error",  info.get("contenido"))
+                noti.open()
+                self.manager.current = "entrada"
+                self.manager.get_screen("entrada").activar()
+                self.network.iniciar()
 
     @abstractmethod
     def siguiente(self, *dt):
