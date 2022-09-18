@@ -99,7 +99,7 @@ class MDScreenAbstrac(MDScreen):
             self.manager.current = self.nombre_siguiente
 
     @abstractmethod
-    def volver(self, *dt):
+    def volver(self):
         if self.nombre_volver:
             self.manejador.get_screen(self.nombre_volver).activar()
             self.manager.current = self.nombre_volver

@@ -12,25 +12,24 @@ class RecuperacionCuenta():
         self.correo = None
         self.digito = None
         self.activo = False
-        self.tiempo_recuperacion = TIEMPOESPERADIGITO
+        self.tiempo_recuperacion = None
         self.tiempo_transcurrido = 0
         self.intentos = 0
         self.servicio_correos = servicio_correos
         self.control_network = control_network
 
-    def iniciar(self, correo, digito):
+    def iniciar(self, correo):
         """
         Iniciamos los procesos de recuperacion
         :param correo:  correo de usuario
-        :param digito:  digito verificador para gestionar el cambio
         :return: True
         """
         self.correo = correo
-        self.digito = digito
+        self.digito = str(her.numero_aleatorio())
+        self.tiempo_recuperacion = TIEMPOESPERADIGITO
         mensaje = her.cargar_archivo("data/correos/Recuperacion_Cuenta.msg", "Se cargo mensaje correo")
-        digito = her.numero_aleatorio()
-        self.servicio_correos.enviar_mensaje(self.correo, mensaje.format(self.correo, digito))
-        return True
+        self.servicio_correos.enviar_mensaje(self.correo, mensaje.format(self.correo, self.digito))
+        self.control_network.agregar_control_recuperacion(self.correo, self.digito)
 
     def actualizar(self):
         """
@@ -39,3 +38,5 @@ class RecuperacionCuenta():
         """
         if self.tiempo_recuperacion is not None:
             self.tiempo_transcurrido += 1
+            if self.tiempo_transcurrido >= self.tiempo_recuperacion:
+                print("se ha superado el maximo de tiempo permitido para poder realizar la gestion de recuperacion")

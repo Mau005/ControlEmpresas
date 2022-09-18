@@ -10,9 +10,12 @@ class VRecuperacion(MDScreenAbstrac):
     def siguiente(self, *dt):
         super().siguiente(dt)
 
-    def volver(self, *dt):
+    def activar(self):
+        super().activar()
+
+    def volver(self):
         self.formatear()
-        super().volver(dt)
+        super().volver()
 
     def actualizar(self, dt):
         super().actualizar(dt)
@@ -26,14 +29,16 @@ class VRecuperacion(MDScreenAbstrac):
         if len(self.ids.contraseña.text) >= 5:
 
             if self.ids.contraseña.text == self.ids.contraseña2.text:
-                self.network.enviar({"datos": "nueva_contraseña", "contenido": her.cifrado_sha1(self.ids.contraseña.text)})
+                self.network.enviar({"estado": "nueva_contraseña", "contenido": her.cifrado_sha1(self.ids.contraseña.text)})
                 info = self.network.recibir()
                 if info.get("estado"):
                     noti.title = "Exito"
                     noti.text = "Se ha cambiado la contraseña con exito"
+                    self.volver()
                 else:
                     noti.title = "Error"
                     noti.text = info.get("contenido")
+                    self.volver()
 
             else:
                 noti.text = "Contraseñas puestas equivocadamente"

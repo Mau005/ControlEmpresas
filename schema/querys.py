@@ -4,7 +4,7 @@ class Querys():
         self.bd = bd
 
     def existe_usuario(self,correo):
-        querys = f'SELECT * FROM USUARIOS WHERE CORREO = {correo}'
+        querys = f'SELECT * FROM USUARIOS WHERE CORREO = "{correo}";'
         return self.bd.consultar(querys)
     def consultar_usuario(self, correo, contraseña):
         querys = f'SELECT * FROM USUARIOS WHERE CORREO = "{correo}" AND CONTRASEÑA = "{contraseña}";'

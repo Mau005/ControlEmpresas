@@ -59,6 +59,12 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "login":
                 self.login(datos)
 
+            if datos.get("estado") == "recuperacion":
+                self.inciar_recuperacion(datos.get("contenido"))
+
+            if datos.get("estado") == "recuperacion_digito":
+                self.recuperacion_digito(datos.get("contenido"))
+
             if datos.get("estado") == "nueva_contraseña":
                 self.nueva_contraseña(datos.get("contenido"))
 
@@ -83,10 +89,6 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "registroproductos":
                 self.registrar_productos(datos.get("contenido"))
 
-            if datos.get("estado") == "nueva_contraseña":
-                self.cambiar_contraseña(datos.get("contenido"))
-                # methodo no implementado
-
             if datos.get("estado") == "salir":
                 print("el usuario intenta salir")
                 pass
@@ -97,8 +99,28 @@ class ServidorNetwork(Thread):
                 break
         self.cerrar()
 
+    def inciar_recuperacion(self, contenido):
+        info = self.querys.existe_usuario(contenido)
+        if info.get("estado"):
+            self.recuperacion_cuenta.iniciar(info.get("datos")[0])
+
+        self.enviar({"estado":True, "condicion": "Se ha enviado un correo electronico."})
+    def recuperacion_digito(self, contenido):
+        condicion = self.control_network.comprobar_control_recuperacion(self.usuario.correo, contenido)
+
+        print(f"COndicion de recuperacion despues de la comprobacion : {condicion}")
+        if condicion:
+            self.enviar({"estado":True, "condicion":"desde recuperacion_digito"})
+        else:
+            self.enviar({"estado":False, "condicion":"desde recuperacion_digito"})
     def nueva_contraseña(self, contraseña_nueva):
-        self.querys.nueva_contraseña(self.usuario.correo, contraseña_nueva)
+        print(f"Se intenta cambia la contraseña nueva: {contraseña_nueva}")
+        info = self.querys.nueva_contraseña(self.usuario.correo, contraseña_nueva)
+        print(f"informacion recupilada por el cambio de contraseña {info}")
+        if info.get("estado"):
+            self.enviar({"estado":True})
+        else:
+            self.enviar({"estado": False})
     def cerrar(self):
         self.cliente.close()
 
@@ -139,10 +161,15 @@ class ServidorNetwork(Thread):
                     {"estado": False, "condicion": "Usuario ya ha iniciado seccion espere unos momentos"})
                 self.usuario = RegistroUsuarios()
         else:
+            if self.control_network.buscar_control_recuperacion(self.usuario.correo):
+                self.enviar({"estado": False, "condicion":"recuperacion"})
+                return None
+
             self.intentos += 1
             if self.intentos >= 3:
                 self.enviar({"estado": False, "condicion": "Intentos completados procedaras a ser baneado FDP"})
                 self.cliente.close()
+                return None
                 print(f"Intentos: {self.intentos}")
 
         self.enviar(datosnuevos)
