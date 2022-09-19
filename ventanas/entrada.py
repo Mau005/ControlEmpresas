@@ -27,7 +27,7 @@ class Entrada(MDScreenAbstrac):
                                                   aceptar=self.func_concurrente_recuperacion)
 
         self.noti_recuperacion_digito = NotificacionText("Recuperacion", "Indicame el Codigo",
-                                             aceptar=self.func_concurrente_recuperacion_digito)
+                                                         aceptar=self.func_concurrente_recuperacion_digito)
 
         if self.contenido_usuario["Usuario"]["boton"]:
             self.entrada_usuario.text = self.contenido_usuario["Usuario"]["correo"]
@@ -44,9 +44,9 @@ class Entrada(MDScreenAbstrac):
         info = self.network.recibir()
 
         noti = Notificacion("Recuperación",
-                            "Se ha enviado un correo electornico con el numero verificador, por faro inicie seccion y complete los datos")
+                            "Se ha enviado un correo electornico con el numero verificador, por faro inicie seccion y "
+                            "complete los datos")
         noti.open()
-
 
     def accion_boton(self, arg):
         print(arg.icon)
@@ -56,7 +56,7 @@ class Entrada(MDScreenAbstrac):
             self.noti_network.open()
         if arg.icon == "account-box":
             self.noti_recuperacion.open()
-            #self.manager.current = "recuperacion"
+            # self.manager.current = "recuperacion"
 
     def guardado(self, correo, contraseña, boton, condicion=False):
         self.contenido_usuario["Usuario"]["contraseña"] = contraseña
@@ -70,7 +70,7 @@ class Entrada(MDScreenAbstrac):
 
     def func_concurrente_recuperacion_digito(self, *args):
 
-        self.network.enviar({"estado":"recuperacion_digito", "contenido": self.noti_recuperacion_digito.campo.text})
+        self.network.enviar({"estado": "recuperacion_digito", "contenido": self.noti_recuperacion_digito.campo.text})
         info = self.network.recibir()
         print(f"Contenido descargado es: {info}")
 
@@ -112,7 +112,7 @@ class Entrada(MDScreenAbstrac):
                 elif condicion == "NETWORK":
                     notilocal = Notificacion("Error", PROTOCOLOERROR[
                         info.get("condicion")] + " Desea intentar conectarse Nuevamente? ",
-                                        funcion_concurrente=self.network.iniciar)
+                                             funcion_concurrente=self.network.iniciar)
                     notilocal.open()
                 else:
                     noti = Notificacion("Error", "Usuario o Contraseña incorrecta")

@@ -53,10 +53,8 @@
                 pos_hint: {"center_x": .5, "center_y": .5}
                 halign: "center"
                 on_release: root.ingresar_usuario(entrada_usuario.text, pass_usuario.text)
-                
-            
+
     MDFloatingActionButtonSpeedDial:
-        callback: root.accion_boton
         id: botones
         root_button_anim: True
-        
+        callback: root.accion_boton

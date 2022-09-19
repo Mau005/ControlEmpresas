@@ -1,4 +1,3 @@
-
 class Control_Network():
 
     def __init__(self) -> None:
@@ -18,12 +17,14 @@ class Control_Network():
         if correo in self.control_recuperacion.keys():
             return True
         return False
+
     def comprobar_control_recuperacion(self, correo, valor):
 
         if self.control_recuperacion[correo] == valor:
             self.pendientes_recuperacion.append(correo)
             return True
         return False
+
     def perdida_tiempo_recuperacion(self, correo):
         self.control_recuperacion.pop(correo)
 
@@ -38,11 +39,13 @@ class Control_Network():
         return False
 
     def eliminar_hilos(self, key):
-        self.hilos_cliente[key].enfuncionamiento = False
-        self.hilos_cliente.pop(key)
+        if self.hilos_cliente.get(key) is not None:
+            self.hilos_cliente[key].enfuncionamiento = False
+            self.hilos_cliente.pop(key)
 
     def eliminar_recuperacion(self, key):
         self.control_recuperacion.pop(key)
+
     def __agregar_hilos(self, key, valor):
         self.hilos_cliente.update({key: valor})
 

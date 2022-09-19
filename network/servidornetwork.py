@@ -96,6 +96,7 @@ class ServidorNetwork(Thread):
             elif datos.get("estado") == "cierreAbrupto":
                 print(
                     "Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
+                self.control_network.pendientes_desconexion.append(self.usuario.correo)
                 break
         self.cerrar()
 
