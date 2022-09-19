@@ -1,6 +1,5 @@
-
 from cliente import ControlEmpresas
 
-
-control = ControlEmpresas()
-control.run()
+if __name__ == "__main__":
+    control = ControlEmpresas()
+    control.run()

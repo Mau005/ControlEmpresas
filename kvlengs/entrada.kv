@@ -55,6 +55,6 @@
                 on_release: root.ingresar_usuario(entrada_usuario.text, pass_usuario.text)
 
     MDFloatingActionButtonSpeedDial:
+        size_hint_y: .1
         id: botones
-        root_button_anim: True
-        callback: root.accion_boton
+        on_release_stack_button: root.accion_boton_entrada

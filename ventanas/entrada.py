@@ -17,7 +17,6 @@ class Entrada(MDScreenAbstrac):
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
         self.contenido_usuario = her.cargar_json("data/ConfiguracionCliente.json", "Se carga configuración del cliente")
-        Logger.info("Se Cargado la configuración")
         self.botones.data = {"Configuración": "ip-network",
                              "Recuperar Cuenta": "account-box",
                              "Salir": "exit-run"}
@@ -35,13 +34,13 @@ class Entrada(MDScreenAbstrac):
 
         self.ids.usuario_guardar.active = self.contenido_usuario["Usuario"]["boton"]
 
-    def func_concurrente_notificacion(self, *args):
+    def func_concurrente_notificacion(self, args):
         self.network.ip = self.noti_network.campo.text
         self.network.iniciar()
 
-    def func_concurrente_recuperacion(self, *args):
+    def func_concurrente_recuperacion(self, args):
         self.network.enviar({"estado": "recuperacion", "contenido": self.noti_recuperacion.campo.text})
-        info = self.network.recibir()
+        self.network.recibir()
 
         noti = Notificacion("Recuperación",
                             "Se ha enviado un correo electornico con el numero verificador, por faro inicie seccion y "
@@ -57,6 +56,9 @@ class Entrada(MDScreenAbstrac):
         if arg.icon == "account-box":
             self.noti_recuperacion.open()
             # self.manager.current = "recuperacion"
+
+    def accion_boton_entrada(self, args):
+        print(args.icon)
 
     def guardado(self, correo, contraseña, boton, condicion=False):
         self.contenido_usuario["Usuario"]["contraseña"] = contraseña
