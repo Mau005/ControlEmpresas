@@ -1,7 +1,7 @@
 <Entrada>:
     entrada_usuario:entrada_usuario
     pass_usuario:pass_usuario
-    botones:botones
+    boton_entrada:boton_entrada
         
     MDCardPre:
         orientation: 'vertical'
@@ -54,7 +54,7 @@
                 halign: "center"
                 on_release: root.ingresar_usuario(entrada_usuario.text, pass_usuario.text)
 
-    MDFloatingActionButtonSpeedDial:
+    ButtonVentana:
         size_hint_y: .1
-        id: botones
-        on_release_stack_button: root.accion_boton_entrada
+        id: boton_entrada
+        callback: root.accion_boton

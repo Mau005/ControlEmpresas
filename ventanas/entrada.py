@@ -1,6 +1,4 @@
 import sys
-
-from kivy.logger import Logger
 from kivy.properties import ObjectProperty
 
 from core.constantes import PROTOCOLOERROR
@@ -12,12 +10,12 @@ from ventanas.widgets_predefinidos import Notificacion
 class Entrada(MDScreenAbstrac):
     entrada_usuario = ObjectProperty()
     pass_usuario = ObjectProperty()
-    botones = ObjectProperty()
+    boton_entrada = ObjectProperty()
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
         self.contenido_usuario = her.cargar_json("data/ConfiguracionCliente.json", "Se carga configuración del cliente")
-        self.botones.data = {"Configuración": "ip-network",
+        self.boton_entrada.data = {"Configuración": "ip-network",
                              "Recuperar Cuenta": "account-box",
                              "Salir": "exit-run"}
         self.noti_network = NotificacionText("Configura la IP", "127.0.0.1", aceptar=self.func_concurrente_notificacion)
@@ -48,7 +46,6 @@ class Entrada(MDScreenAbstrac):
         noti.open()
 
     def accion_boton(self, arg):
-        print(arg.icon)
         if arg.icon == "exit-run":
             sys.exit()
         if arg.icon == "ip-network":
@@ -56,9 +53,6 @@ class Entrada(MDScreenAbstrac):
         if arg.icon == "account-box":
             self.noti_recuperacion.open()
             # self.manager.current = "recuperacion"
-
-    def accion_boton_entrada(self, args):
-        print(args.icon)
 
     def guardado(self, correo, contraseña, boton, condicion=False):
         self.contenido_usuario["Usuario"]["contraseña"] = contraseña
