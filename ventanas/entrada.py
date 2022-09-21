@@ -15,9 +15,6 @@ class Entrada(MDScreenAbstrac):
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
         self.contenido_usuario = her.cargar_json("data/ConfiguracionCliente.json", "Se carga configuración del cliente")
-        self.boton_entrada.data = {"Configuración": "ip-network",
-                             "Recuperar Cuenta": "account-box",
-                             "Salir": "exit-run"}
         self.noti_network = NotificacionText("Configura la IP", "127.0.0.1", aceptar=self.func_concurrente_notificacion)
 
         self.noti_recuperacion = NotificacionText("Indique correo electronico: ", "ejemplo@tudominio.cl",
@@ -46,11 +43,11 @@ class Entrada(MDScreenAbstrac):
         noti.open()
 
     def accion_boton(self, arg):
-        if arg.icon == "exit-run":
+        if arg == "salir":
             sys.exit()
-        if arg.icon == "ip-network":
+        if arg == "configurar ip":
             self.noti_network.open()
-        if arg.icon == "account-box":
+        if arg == "recuperar":
             self.noti_recuperacion.open()
             # self.manager.current = "recuperacion"
 

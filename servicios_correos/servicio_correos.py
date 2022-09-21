@@ -2,7 +2,6 @@
 import smtplib
 import ssl
 from email.mime.text import MIMEText
-from core.herramientas import Herramientas as her
 
 class EstructurasCorreos():
     contador = 0

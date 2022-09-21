@@ -29,7 +29,7 @@ source.include_exts = py,png,jpg,kv,atlas,json
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-version = 3.6
+version = 4.0
 
 # (str) Application versioning (method 2)
 # version.regex = __version__ = ['"](.*)['"]
@@ -37,7 +37,8 @@ version = 3.6
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = kivy==2.1.0, https://github.com/kivymd/KivyMD/archive/master.zip, pillow
+requirements = python, kivy==2.1.0, kivymd==1.0.2, sdl2_ttf == 2.0.15, pillows
+
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
 # requirements.source.kivy = ../../kivy
@@ -46,7 +47,7 @@ requirements = kivy==2.1.0, https://github.com/kivymd/KivyMD/archive/master.zip,
 #presplash.filename = %(source.dir)s/data/presplash.png
 
 # (str) Icon of the application
-icon.filename = %(source.dir)s/logo.jpg
+#icon.filename = %(source.dir)s/data/icon.png
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
 orientation = portrait
@@ -98,10 +99,10 @@ android.permissions = INTERNET
 #android.features = android.hardware.usb.host
 
 # (int) Target Android API, should be as high as possible.
-android.api = 27
+#android.api = 27
 
 # (int) Minimum API your APK / AAB will support.
-android.minapi = 21
+#android.minapi = 21
 
 # (int) Android SDK version to use
 #android.sdk = 20
@@ -223,6 +224,9 @@ android.accept_sdk_license = True
 # (str) XML file to include as an intent filters in <activity> tag
 #android.manifest.intent_filters =
 
+# (list) Copy these files to src/main/res/xml/ (used for example with intent-filters)
+#android.res_xml = PATH_TO_FILE,
+
 # (str) launchMode to set for the main activity
 #android.manifest.launch_mode = standard
 
@@ -248,7 +252,7 @@ android.accept_sdk_license = True
 #android.uses_library =
 
 # (str) Android logcat filters to use
-android.logcat_filters = *:S python:D
+#android.logcat_filters = *:S python:D
 
 # (bool) Android logcat only display log for activity's pid
 #android.logcat_pid_only = False
@@ -328,6 +332,7 @@ android.allow_backup = True
 
 # (str) extra command line arguments to pass when invoking pythonforandroid.toolchain
 #p4a.extra_args =
+
 
 
 #

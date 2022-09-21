@@ -1,9 +1,7 @@
-from core.constantes import PORT, TAMANIO_PAQUETE, TIEMPOACTUALIZAR
+from core.constantes import PORT, TAMANIO_PAQUETE
 from core.herramientas import Herramientas as her
 from kivy.logger import Logger
 from ventanas.widgets_predefinidos import Notificacion
-import threading
-import time
 import socket
 
 
