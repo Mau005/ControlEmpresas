@@ -1,12 +1,17 @@
-from kivymd.uix.card import MDCard
-from kivymd.uix.behaviors import RoundedRectangularElevationBehavior
 from abc import abstractmethod
+from kivymd.uix.card import MDCard
+from kivymd.uix.behaviors import CommonElevationBehavior
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDRoundFlatButton
 from kivymd.uix.list import TwoLineListItem
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.button import MDFloatingActionButtonSpeedDial
+
+
+class ButtonVentana(MDFloatingActionButtonSpeedDial):
+    def __init__(self, **kargs):
+        super().__init__(**kargs)
 
 
 class MDTwoLine(TwoLineListItem):
@@ -17,7 +22,7 @@ class MDTwoLine(TwoLineListItem):
         self.network = network
 
 
-class MDCardPre(MDCard, RoundedRectangularElevationBehavior):
+class MDCardPre(MDCard, CommonElevationBehavior):
     pass
 
 
@@ -81,13 +86,14 @@ class MDScreenAbstrac(MDScreen):
     def desactivar_ventanas(self):
         for elementos in self.manager.screen_names:
             self.manager.get_screen(elementos).activo = False
+
     @abstractmethod
     def actualizar(self, dt):
         if self.name != "entrada" and self.activo:
-            self.network.enviar({"estado": "actualizar","contenido":self.name})
+            self.network.enviar({"estado": "actualizar", "contenido": self.name})
             info = self.network.recibir()
             if not info.get("estado"):
-                noti = Notificacion("Error",  info.get("contenido"))
+                noti = Notificacion("Error", info.get("contenido"))
                 noti.open()
                 self.manager.current = "entrada"
                 self.manager.get_screen("entrada").activar()
