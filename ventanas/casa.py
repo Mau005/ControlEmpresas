@@ -1,6 +1,6 @@
 from ventanas.widgets_predefinidos import MDScreenAbstrac
 from kivy.properties import ObjectProperty
-
+import sys
 
 class Casa(MDScreenAbstrac):
     lista_productos = ObjectProperty()
@@ -17,6 +17,11 @@ class Casa(MDScreenAbstrac):
     def cambiar_ventanta(self, ventana):
         self.manager.get_screen(ventana).activar()
         self.manager.current = ventana
+
+    def salir(self, *Arg):
+        self.volver()
+        self.network.enviar({"estado":"esconectar"})
+
 
     def actualizar(self, *dt):
         return super().actualizar(*dt)

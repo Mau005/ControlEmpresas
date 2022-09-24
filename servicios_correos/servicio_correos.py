@@ -44,16 +44,13 @@ class Servicio_Correos():
         :return:
         """
         contexto = ssl.create_default_context()
-        mail_server = smtplib.SMTP_SSL(self.__host, self.__port, context=contexto)
+        mail_server = smtplib.SMTP_SSL(host = self.__host, port = self.__port, context=contexto)
         mail_server.login(self.correo_sistema, self.__contrasenia)
         return mail_server
 
     def enviar_mensaje(self, correo_destino, mensaje):
         objeto = EstructurasCorreos(self.correo_sistema, correo_destino, "Un Titulo rapido")
         self.__mail_server.sendmail(self.correo_sistema, correo_destino, objeto.preparar_envio(mensaje).as_string())
-
-
-
 
 if __name__ == "__main__":
     mensaje = """

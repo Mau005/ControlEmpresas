@@ -10,7 +10,6 @@ from ventanas.widgets_predefinidos import Notificacion
 class Entrada(MDScreenAbstrac):
     entrada_usuario = ObjectProperty()
     pass_usuario = ObjectProperty()
-    boton_entrada = ObjectProperty()
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
@@ -36,7 +35,6 @@ class Entrada(MDScreenAbstrac):
     def func_concurrente_recuperacion(self, args):
         self.network.enviar({"estado": "recuperacion", "contenido": self.noti_recuperacion.campo.text})
         self.network.recibir()
-
         noti = Notificacion("Recuperación",
                             "Se ha enviado un correo electornico con el numero verificador, por faro inicie seccion y "
                             "complete los datos")
@@ -81,17 +79,16 @@ class Entrada(MDScreenAbstrac):
             if not (self.contenido_usuario["Usuario"]["contraseña"] == password):
                 password = her.cifrado_sha1(password)
                 self.guardado(self.entrada_usuario.text, password, self.ids.usuario_guardar.active)
-
         else:
             self.guardado("", "", False, condicion=True)
             password = her.cifrado_sha1(password)
 
         noti = Notificacion("Error", "")
+
         if len(correo) >= 2 and len(password) >= 2:
             estructura = {"estado": "login", "correo": correo, "password": password}
             self.network.enviar(estructura)
             info = self.network.recibir()
-            print(f"login info: {info}")
             if info.get("estado"):
                 noti.title = f"Bienvenido {correo}"
                 noti.text = info.get("MOTD")
@@ -101,19 +98,21 @@ class Entrada(MDScreenAbstrac):
                 condicion = info.get("condicion")
                 if condicion == "recuperacion":
                     self.noti_recuperacion_digito.open()
+                elif condicion == "usuarioactivo":
+                    noti.text = "Usuario ya se encuentra ingresado."
 
-                elif condicion == "NETWORK":
+                elif condicion == "contraseñas":
+                    noti.text = "Usuario o Contraseñas incorrectas1"
+
+                elif condicion == "NETWORK":#condicion local
                     notilocal = Notificacion("Error", PROTOCOLOERROR[
                         info.get("condicion")] + " Desea intentar conectarse Nuevamente? ",
                                              funcion_concurrente=self.network.iniciar)
                     notilocal.open()
-                else:
-                    noti = Notificacion("Error", "Usuario o Contraseña incorrecta")
-                    noti.open()
-
         else:
-            noti = Notificacion("ror", "Tiene que ser mas de 2 caracteres en usaurio o passwordEr")
-            noti.open()
+            noti.text = "tiene que tener una longitud mayor a 2"
+
+        noti.open()
 
     def actualizar(self, dt):
         return super().actualizar(dt)

@@ -25,6 +25,15 @@ class Control_Network():
             return True
         return False
 
+    def comprobar_control_hilos(self, correo):
+        """
+        Methodo especifico para encontrar si el hilo se encuentra activo
+        :str correo: correo str
+        :return: bool si existe el hilo
+        """
+        if correo in self.hilos_cliente.keys():
+            return True
+        return False
     def perdida_tiempo_recuperacion(self, correo):
         self.control_recuperacion.pop(correo)
 

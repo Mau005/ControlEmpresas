@@ -1,5 +1,5 @@
 from threading import Thread
-from core.constantes import TAMANIO_PAQUETE, ERRORPRIVILEGIOS, TIMEPOESPERAUSUARIO, TIEMPOESPERADIGITO
+from core.constantes import TAMANIO_PAQUETE, ERRORPRIVILEGIOS, TIMEPOESPERAUSUARIO
 from core.herramientas import Herramientas as her
 from network.recuperacion_cuenta import RecuperacionCuenta
 
@@ -18,7 +18,7 @@ class ServidorNetwork(Thread):
         self.grupos = grupos
         self.control_network = control_network
         self.servicio_correos = servicio_correos
-        self.recuperacion_cuenta = RecuperacionCuenta(self.servicio_correos,self.control_network)
+        self.recuperacion_cuenta = RecuperacionCuenta(self.servicio_correos, self.control_network)
     def __variable_usuarios(self):
         self.ventana_actual = "entrada"
         self.intentos = 0
@@ -40,7 +40,7 @@ class ServidorNetwork(Thread):
         try:
             datos = self.cliente.recv(TAMANIO_PAQUETE)
         except ConnectionResetError:
-            return None
+            return {"estado": "cierreAbrupto"}
 
         if datos != b'':
             return her.desenpaquetar(datos)
@@ -50,6 +50,7 @@ class ServidorNetwork(Thread):
     def run(self):
         while self.enfuncionamiento:
             datos = self.recibir()
+            print(f"Recibo de datos del servidor: {datos}")
             if datos.get("estado") == "saludo":
                 self.saludo()
 
@@ -58,6 +59,8 @@ class ServidorNetwork(Thread):
 
             if datos.get("estado") == "login":
                 self.login(datos)
+            if datos.get("estado") == "desconectar":
+                self.desconectar()
 
             if datos.get("estado") == "recuperacion":
                 self.inciar_recuperacion(datos.get("contenido"))
@@ -89,16 +92,14 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "registroproductos":
                 self.registrar_productos(datos.get("contenido"))
 
-            if datos.get("estado") == "salir":
-                print("el usuario intenta salir")
-                pass
-
             elif datos.get("estado") == "cierreAbrupto":
-                print(
-                    "Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
+                print("Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
                 self.control_network.pendientes_desconexion.append(self.usuario.correo)
                 break
         self.cerrar()
+    def desconectar(self):
+        self.control_network.hilos_cliente.pop(self.usuario.correo)
+        self.usuario = RegistroUsuarios()
 
     def inciar_recuperacion(self, contenido):
         info = self.querys.existe_usuario(contenido)
@@ -109,7 +110,6 @@ class ServidorNetwork(Thread):
     def recuperacion_digito(self, contenido):
         condicion = self.control_network.comprobar_control_recuperacion(self.usuario.correo, contenido)
 
-        print(f"COndicion de recuperacion despues de la comprobacion : {condicion}")
         if condicion:
             self.enviar({"estado":True, "condicion":"desde recuperacion_digito"})
         else:
@@ -148,33 +148,27 @@ class ServidorNetwork(Thread):
         self.usuario.correo = datos.get("correo")
         self.usuario.contraseña = datos.get("password")
 
+        if self.control_network.buscar_control_recuperacion(self.usuario.correo):
+            return self.enviar({"estado": False, "condicion": "recuperacion"})
+
+        if self.control_network.comprobar_control_hilos(self.usuario.correo):
+            self.desconectar()
+            return self.enviar({"estado": False, "condicion": "usuarioactivo"})
+
         datosnuevos = self.querys.consultar_usuario(self.usuario.correo, self.usuario.contraseña)
-        datosnuevos.update({"MOTD": self.info["Servidor"]["MOTD"]})
 
         if datosnuevos.get("estado"):
             self.intentos = 0
             self.usuario = RegistroUsuarios(correo=datosnuevos["datos"][0], contraseña=datosnuevos["datos"][1],
                                             fecha_creacion=datosnuevos["datos"][2],
                                             estado_usuario=datosnuevos["datos"][3], grupos=datosnuevos["datos"][4])
-            estado = self.control_network.agregar_hilo(self)
-            if not estado:
-                datosnuevos.update(
-                    {"estado": False, "condicion": "Usuario ya ha iniciado seccion espere unos momentos"})
-                self.usuario = RegistroUsuarios()
+            datosnuevos.update({"MOTD": self.info["Servidor"]["MOTD"], "condicion": "iniciando"})
+            self.control_network.agregar_hilo(self)
+
+            return self.enviar(datosnuevos)
         else:
-            if self.control_network.buscar_control_recuperacion(self.usuario.correo):
-                self.enviar({"estado": False, "condicion":"recuperacion"})
-                return None
-
-            self.intentos += 1
-            if self.intentos >= 3:
-                self.enviar({"estado": False, "condicion": "Intentos completados procedaras a ser baneado FDP"})
-                self.cliente.close()
-                return None
-                print(f"Intentos: {self.intentos}")
-
-        self.enviar(datosnuevos)
-
+            self.usuario = RegistroUsuarios()
+            return self.enviar({"estado": False, "condicion": "contraseñas"})
     def registrar_persona(self, datos):
         datos = self.querys.registrar_usuarios(datos.rut_persona, datos.nombres, datos.apellidos, datos.telefono,
                                                datos.celular, datos.correo_sistema)

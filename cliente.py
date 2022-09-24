@@ -34,7 +34,7 @@ class ControlEmpresas(MDApp):
 
     def __cargar_ventanas(self):
         self.login = Entrada(self.network, self.manejador, "entrada", siguiente="casa")
-        self.casa = Casa(self.network, self.manejador, "casa")
+        self.casa = Casa(self.network, self.manejador, "casa", volver= "entrada")
         self.vservicios = VServicios(self.network, self.manejador, "servicios", siguiente="casa")
         self.vpersonas = VPersonas(self.network, self.manejador, "personas", siguiente="casa")
         self.vempresas = VEmpresas(self.network, self.manejador, "empresas", siguiente="casa")
