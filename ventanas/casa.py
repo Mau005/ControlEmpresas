@@ -20,7 +20,7 @@ class Casa(MDScreenAbstrac):
 
     def salir(self, *Arg):
         self.volver()
-        self.network.enviar({"estado":"esconectar"})
+        self.network.enviar({"estado":"desconectar"})
 
 
     def actualizar(self, *dt):

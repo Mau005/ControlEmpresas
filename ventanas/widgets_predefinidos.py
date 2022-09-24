@@ -4,14 +4,35 @@ from kivymd.uix.behaviors import CircularElevationBehavior
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDRoundFlatButton
-from kivymd.uix.list import TwoLineListItem
+from kivymd.uix.list import TwoLineListItem, ThreeLineListItem
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.button import MDFloatingActionButtonSpeedDial
 
 
-class ButtonVentana(MDFloatingActionButtonSpeedDial):
-    def __init__(self, **kargs):
+class MDTreeLine(ThreeLineListItem):
+
+    def __init__(self, id_identificador, nombres, cantidad, network, **kargs):
         super().__init__(**kargs)
+        self.network = network
+        self.id_identificador = id_identificador
+        self.nombres = nombres
+        self.cantidad = cantidad
+        self.text = str(self.id_identificador)
+        self.secondary_text = f"Nombre: {self.nombres}"
+        self.tertiary_text = f"Cantidad: {self.cantidad}"
+        self.procesar_colores(cantidad)
+
+
+
+    def procesar_colores(self,cantidad):
+        self.tertiary_theme_text_color = "Custom"
+        if cantidad >= 0 and cantidad <= 3:
+            self.tertiary_text_color = [1, 0, 0, 1]
+        elif cantidad >= 4 and cantidad <= 10:
+            self.tertiary_text_color = [0, .5, 0, 1]
+        elif cantidad >= 11:
+            self.tertiary_text_color = [0, 1, 0, 1]
+
 
 
 class MDTwoLine(TwoLineListItem):

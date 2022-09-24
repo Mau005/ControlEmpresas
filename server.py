@@ -58,7 +58,7 @@ class Server:
             cliente, direccion = self.socket.accept()
             objeto_cliente = ServidorNetwork(cliente, direccion, self.querys, self.info, self.grupos,
                                              self.control_network, self.servicio_correos)
-            print(f"Se intenta conectar: {direccion}")
+            print(f"Se ha conectado: {direccion}")
             objeto_cliente.start()
 
         self.cerrar()

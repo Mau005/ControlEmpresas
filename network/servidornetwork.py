@@ -19,6 +19,7 @@ class ServidorNetwork(Thread):
         self.control_network = control_network
         self.servicio_correos = servicio_correos
         self.recuperacion_cuenta = RecuperacionCuenta(self.servicio_correos, self.control_network)
+
     def __variable_usuarios(self):
         self.ventana_actual = "entrada"
         self.intentos = 0
@@ -46,7 +47,6 @@ class ServidorNetwork(Thread):
             return her.desenpaquetar(datos)
         return {"estado": "cierreAbrupto"}
 
-
     def run(self):
         while self.enfuncionamiento:
             datos = self.recibir()
@@ -60,6 +60,7 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "login":
                 self.login(datos)
             if datos.get("estado") == "desconectar":
+                print("se ha desconectado el usuario")
                 self.desconectar()
 
             if datos.get("estado") == "recuperacion":
@@ -92,11 +93,20 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "registroproductos":
                 self.registrar_productos(datos.get("contenido"))
 
-            elif datos.get("estado") == "cierreAbrupto":
-                print("Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
+            if datos.get("estado") == "listadoproductos":
+                self.listado_productos()
+            if datos.get("estado") == "cierreAbrupto":
+                print(
+                    "Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
                 self.control_network.pendientes_desconexion.append(self.usuario.correo)
                 break
         self.cerrar()
+
+    def listado_productos(self):
+        if self.grupos.get(str(self.usuario.grupos)).get("VerProductos"):
+            return self.enviar(self.querys.solicitar_lista_productos())
+        return self.enviar({"estado":False, "condicion":"privilegios"})
+
     def desconectar(self):
         self.control_network.hilos_cliente.pop(self.usuario.correo)
         self.usuario = RegistroUsuarios()
@@ -106,22 +116,25 @@ class ServidorNetwork(Thread):
         if info.get("estado"):
             self.recuperacion_cuenta.iniciar(info.get("datos")[0])
 
-        self.enviar({"estado":True, "condicion": "Se ha enviado un correo electronico."})
+        self.enviar({"estado": True, "condicion": "Se ha enviado un correo electronico."})
+
     def recuperacion_digito(self, contenido):
         condicion = self.control_network.comprobar_control_recuperacion(self.usuario.correo, contenido)
 
         if condicion:
-            self.enviar({"estado":True, "condicion":"desde recuperacion_digito"})
+            self.enviar({"estado": True, "condicion": "desde recuperacion_digito"})
         else:
-            self.enviar({"estado":False, "condicion":"desde recuperacion_digito"})
+            self.enviar({"estado": False, "condicion": "desde recuperacion_digito"})
+
     def nueva_contraseña(self, contraseña_nueva):
         print(f"Se intenta cambia la contraseña nueva: {contraseña_nueva}")
         info = self.querys.nueva_contraseña(self.usuario.correo, contraseña_nueva)
         print(f"informacion recupilada por el cambio de contraseña {info}")
         if info.get("estado"):
-            self.enviar({"estado":True})
+            self.enviar({"estado": True})
         else:
             self.enviar({"estado": False})
+
     def cerrar(self):
         self.cliente.close()
 
@@ -169,6 +182,7 @@ class ServidorNetwork(Thread):
         else:
             self.usuario = RegistroUsuarios()
             return self.enviar({"estado": False, "condicion": "contraseñas"})
+
     def registrar_persona(self, datos):
         datos = self.querys.registrar_usuarios(datos.rut_persona, datos.nombres, datos.apellidos, datos.telefono,
                                                datos.celular, datos.correo_sistema)

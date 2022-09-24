@@ -22,7 +22,8 @@
             "EliminarEmpresas": true,
             "EliminarUsuarios": true,
             "EliminarServicios": true,
-            "ModificarServicios": true
+            "ModificarServicios": true,
+            "VerProductos": true
             
         }
     }

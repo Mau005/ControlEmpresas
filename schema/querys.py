@@ -106,3 +106,7 @@ class Querys():
     def nueva_contraseña(self, correo, contraseña_nueva):
         querys = f'UPDATE USUARIOS SET CONTRASEÑA = "{contraseña_nueva}" WHERE CORREO = "{correo}";'
         return self.bd.insertar(querys)
+
+    def solicitar_lista_productos(self):
+        querys = f'SELECT ID_PRODUCTO, NOMBRE_PRODUCTO, CANTIDAD FROM productos;'
+        return self.bd.consultar(querys, all=True)

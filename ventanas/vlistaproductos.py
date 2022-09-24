@@ -1,4 +1,4 @@
-from ventanas.widgets_predefinidos import MDScreenAbstrac, MDTwoLine
+from ventanas.widgets_predefinidos import MDScreenAbstrac, MDTreeLine
 from core.constantes import BUTTONCREATE
 from kivy.properties import ObjectProperty
 
@@ -22,31 +22,22 @@ class VListaProductos(MDScreenAbstrac):
     def accion_boton(self, arg):
 
         if arg.icon == "delete":
-            self.limpiar_widget()
+            pass
 
         if arg.icon == "exit-run":
             self.siguiente()
 
         if arg.icon == "pencil":
-            data = {"estado": "listadoservicios"}
-            self.network.enviar(data)
-            info = self.network.recibir()
-
-            if info.get("estado"):
-                for x in info.get("datos"):
-                    print(f"Que vale x: {x}")
-                    obj = MDTwoLine(str(x[0]), x[1], self.network)
-                    self.listas_widget.append(obj)
-                    self.contenedor.add_widget(obj)
+            pass
 
     def activar(self):
         self.limpiar_widget()
-        data = {"estado": "listadoservicios"}
+        data = {"estado": "listadoproductos"}
         self.network.enviar(data)
         info = self.network.recibir()
         if info.get("estado"):
             for x in info.get("datos"):
-                obj = MDTwoLine(str(x[0]), x[1], self.network)
+                obj = MDTreeLine(str(x[0]), x[1], x[2], self.network)
                 self.listas_widget.append(obj)
                 self.contenedor.add_widget(obj)
         super().activar()
@@ -54,8 +45,8 @@ class VListaProductos(MDScreenAbstrac):
     def siguiente(self, *dt):
         return super().siguiente(*dt)
 
-    def volver(self, *dt):
-        return super().volver(*dt)
+    def volver(self):
+        return super().volver()
 
     def actualizar(self, *dt):
         return super().actualizar(*dt)
