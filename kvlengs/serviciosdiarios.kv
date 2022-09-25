@@ -1,0 +1,114 @@
+
+
+<PreButton@Button>:
+    size_hint: None, None
+    size: "125dp", "45dp"
+
+<PreLabel@MDLabel>:
+    size_hint_x: .2
+
+
+<VServiciosDiarios>:
+    nombre:nombre
+    descr:descr
+    id_estado:id_estado
+    precio:precio
+    botones_servicios:botones_servicios
+        
+    MDCardPre:
+        orientation: 'vertical'
+        elevation: 10
+        spacing: "20dp"
+        pos_hint: {"center_x": .5, "center_y": .5}
+        size_hint: .95,.95
+        padding: dp(38)
+        MDLabel:
+            halign: "center"
+            font_size : dp(30)
+            size_hint_y: .1
+            text: "Registrar Servicios Diarios"
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            
+            MDList:
+                MDTextField:
+                    hint_text: "Nombre:"
+                    id: nombre
+                MDRaisedButton:
+                    id: id_estado
+                    text: "Estados"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+                    on_release: root.desplegar_menu()
+                MDTextField:
+                    hint_text: "Precio:"
+                    id:precio
+                    input_filter: 'int'
+
+                MDGridLayout:
+                    cols: 2
+                    size_hint_y: None
+                    height: dp(350)
+                    MDLabel:
+                        text: "Lunes"
+                    MDCheckbox:
+                    MDLabel:
+                        text: "Martes"
+                    MDCheckbox:
+                    MDLabel:
+                        text: "Miercoles"
+                    MDCheckbox:
+                    MDLabel:
+                        text: "Jueves"
+                    MDCheckbox:
+                    MDLabel:
+                        text: "Viernes"
+                    MDCheckbox:
+                    MDLabel:
+                        text: "Sabado"
+                    MDCheckbox:
+                    MDLabel:
+                        text: "Domingo"
+                    MDCheckbox:
+                MDBoxLayout:
+                    orientation: "horizontal"
+                    size_hint_y: None
+                    height: dp(45)
+                    MDLabel:
+                        text: "Todas las Semanas?"
+                    MDCheckbox:
+
+                MDTextField:
+                    hint_text: "URL Posicion Geografica"
+                MDTextField:
+                    hint_text: "Ubicacion de el servicio: Ejemplo Av TU hermana 156942"
+                MDRaisedButton:
+                    text: "ID Producto:"
+                    size_hint_x: None
+                    height: dp(45)
+                MDRaisedButton:
+                    text: "Rut Cliente:"
+                    size_hint_x: None
+                    height: dp(45)
+                MDRaisedButton:
+                    text: "Rut Trabajador:"
+                    size_hint_x: None
+                    height: dp(45)
+
+                MDTextField:
+                    hint_text: "Cantidad"
+                    filter_int: "int"
+
+                MDTextField:
+                    id:descr
+                    hint_text: "Descripcion:"
+                    multiline: True
+            
+            
+        MDFloatingActionButtonSpeedDial:
+            size_hint_y: .2
+            id: botones_servicios
+            callback: root.accion_boton
+            root_button_anim: True
+
+                

@@ -95,6 +95,10 @@ class ServidorNetwork(Thread):
 
             if datos.get("estado") == "listadoproductos":
                 self.listado_productos()
+
+            if datos.get("estado") == "estadoservicios":
+                # Se procede a enviar informacion de los estados
+                self.enviar(self.querys.solicitar_estados_servicios())
             if datos.get("estado") == "cierreAbrupto":
                 print(
                     "Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")

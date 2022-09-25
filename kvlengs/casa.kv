@@ -28,8 +28,11 @@
                 halign: 'center'
             MDList:
                 OneLineListItem:
-                    text: "Crear Servicios"
+                    text: "Crear Servicios Mensuales"
                     on_release: root.cambiar_ventanta("servicios")
+                OneLineListItem:
+                    text: "Crear Servicios Diarios"
+                    on_release: root.cambiar_ventanta("serviciosdiarios")
                 OneLineListItem:
                     text: "Crear Usuarios"
                     on_release: root.cambiar_ventanta("personas")

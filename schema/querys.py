@@ -110,3 +110,7 @@ class Querys():
     def solicitar_lista_productos(self):
         querys = f'SELECT ID_PRODUCTO, NOMBRE_PRODUCTO, CANTIDAD FROM productos;'
         return self.bd.consultar(querys, all=True)
+
+    def solicitar_estados_servicios(self):
+        querys = f'SELECT ID_ESTADO, NOMBRE FROM ESTADOS;'
+        return self.bd.consultar(querys, all=True)

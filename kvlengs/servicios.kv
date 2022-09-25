@@ -34,10 +34,11 @@
                 MDTextField:
                     hint_text: "Nombre:"
                     id: nombre
-                MDTextField:
-                    id:id_estado
-                    hint_text: "Estado:"
-                    input_filter: 'int'
+                MDRaisedButton:
+                    id: id_estado
+                    text: "Estados"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+                    on_release: root.desplegar_menu()
                 MDTextField:
                     hint_text: "Precio:"
                     id:precio
