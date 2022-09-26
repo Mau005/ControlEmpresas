@@ -10,13 +10,15 @@ class ClienteNetwork:
     def __init__(self):
         self.socket = None
         self.__estado = False
-        self.ip = "192.168.100.4"
+        self.ip = "localhost"
         self.iniciar()
 
     def iniciar(self, *args):
         try:
             self.socket = socket.socket()
+            self.socket.settimeout(10)
             self.socket.connect((self.ip, PORT))
+            self.socket.settimeout(None)
             self.__estado = True
             Logger.info("Se ha conectado con exito")
             return self.socket
@@ -33,6 +35,7 @@ class ClienteNetwork:
                 self.socket.send(her.empaquetar(datos))
             except BrokenPipeError as error:
                 print(f"Caida abrupta del sistema")
+        return {"estado": False, "condicion": "NETWORK"}
 
     def recibir(self):
         if self.__estado:

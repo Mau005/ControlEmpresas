@@ -1,13 +1,5 @@
 
 
-<PreButton@Button>:
-    size_hint: None, None
-    size: "125dp", "45dp"
-
-<PreLabel@MDLabel>:
-    size_hint_x: .2
-
-
 <VServiciosDiarios>:
     nombre:nombre
     descr:descr
@@ -32,6 +24,7 @@
             do_scroll_y: True
             
             MDList:
+                spacing: dp(10)
                 MDTextField:
                     hint_text: "Nombre:"
                     id: nombre
@@ -46,7 +39,7 @@
                     input_filter: 'int'
 
                 MDGridLayout:
-                    cols: 2
+                    cols: 4
                     size_hint_y: None
                     height: dp(350)
                     MDLabel:
@@ -82,22 +75,13 @@
                     hint_text: "URL Posicion Geografica"
                 MDTextField:
                     hint_text: "Ubicacion de el servicio: Ejemplo Av TU hermana 156942"
-                MDRaisedButton:
-                    text: "ID Producto:"
-                    size_hint_x: None
-                    height: dp(45)
+
                 MDRaisedButton:
                     text: "Rut Cliente:"
-                    size_hint_x: None
-                    height: dp(45)
                 MDRaisedButton:
                     text: "Rut Trabajador:"
-                    size_hint_x: None
-                    height: dp(45)
-
                 MDTextField:
                     hint_text: "Cantidad"
-                    filter_int: "int"
 
                 MDTextField:
                     id:descr

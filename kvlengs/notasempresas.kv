@@ -14,32 +14,24 @@
             cols: 2
             size_hint_y: .7
 
-            PreLabel:
-                text: "ID Notas"
             MDTextField:
-                hint_text: "Se activara cuando sea necesario"
+                hint_text: "ID Notas"
                 disabled: True
 
-            PreLabel:
-                text: "Rut Empresa"
             MDTextField:
-                hint_text: "Se activara cuando sea necesario"
+                hint_text: "Rut Empresa"
                 disable: True
 
-            PreLabel:
-                text: "Correo"
             MDTextField:
+                hint_text: "Correo"
 
-            PreLabel:
-                text: "Fecha Creacion"
             MDTextField:
-                hint_text: "Se activara cuando sea necesario"
+                hint_text: "Fecha Creacion"
                 disabled: True
-                
-            PreLabel:
-                text: "Nota"
+
             MDTextField:
                 size_hint_y : None
+                hint_text: "Nota"
                 height: dp(300)
                 multiline: True
 
@@ -48,4 +40,5 @@
     MDFloatingActionButtonSpeedDial:
         callback: root.accion_boton
         id: botones
+        size_hint_y: .1
         root_button_anim: True

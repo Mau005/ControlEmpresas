@@ -29,9 +29,7 @@ class ControlEmpresas(MDApp):
         self.theme_cls.primary_palette = "BlueGray"
         self.network = ClienteNetwork()
         self.manejador = MDScreenManager()
-
         self.__cargar_ventanas()
-
         Clock.schedule_interval(self.actualizar, 1)
 
     def __cargar_ventanas(self):

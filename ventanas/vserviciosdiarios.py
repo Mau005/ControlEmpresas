@@ -1,9 +1,7 @@
 from kivymd.uix.bottomsheet import MDListBottomSheet
 
-from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion
-from kivymd.uix.pickers import MDDatePicker
+from ventanas.widgets_predefinidos import MDScreenAbstrac
 from kivy.properties import ObjectProperty
-from entidades.registroservicio import RegistroServicios
 from core.constantes import BUTTONCREATE
 
 
@@ -36,7 +34,7 @@ class VServiciosDiarios(MDScreenAbstrac):
             self.botones_servicios.on_close()
             self.siguiente()
         if arg.icon == "pencil":
-           pass
+            pass
 
     def formatear(self):
         self.nombre.text = ""
@@ -44,7 +42,7 @@ class VServiciosDiarios(MDScreenAbstrac):
         self.descr.text = ""
         self.precio.text = ""
 
-    def activar(self):
+    def activar_estados(self):
         self.lista_estados.clear()  # limpiamos el menu de informacion clonada
         self.network.enviar({"estado": "estadoservicios"})
         info = self.network.recibir()
@@ -52,6 +50,9 @@ class VServiciosDiarios(MDScreenAbstrac):
         for elementos in info.get("datos"):
             objeto = MenuItemEstado(elementos[0], elementos[1])
             self.lista_estados.update({objeto.nombre: objeto})
+
+    def activar(self):
+        self.activar_estados()
         super().activar()
 
     def callback_menu(self, arg):
