@@ -114,3 +114,11 @@ class Querys():
     def solicitar_estados_servicios(self):
         querys = f'SELECT ID_ESTADO, NOMBRE FROM ESTADOS;'
         return self.bd.consultar(querys, all=True)
+
+    def registrar_servicio_diario(self):
+        querys = '''
+        ID_SERVICIOS_DIARIOS	NOMBRE_SERVICIO	ID_ESTADO	PRECIO	FECHA_SEMANA	URL_POSICION	UBICACION	RUT_USUARIO	RUT_TRABAJADOR	DESCR	TODA_SEMANA
+        INSERT INTO serviciosdiarios(NOMBRE_SERVICIO, ID_ESTADO, PRECIO, FECHA_SEMANA, URL_POSICION, UBICACION, RUT_USUARIO, RUT_TRABAJADOR, DESCR, TODA_SEMANA)
+        VALUES("{0}", {}, {}, "{}", "{}", "{}", "{}", "{}", "{}", {});
+        '''.format()
+        return self.bd.insertar(querys)

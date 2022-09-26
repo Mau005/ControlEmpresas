@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost
--- Tiempo de generación: 20-09-2022 a las 02:14:38
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 26-09-2022 a las 15:20:44
 -- Versión del servidor: 10.4.24-MariaDB
--- Versión de PHP: 8.1.6
+-- Versión de PHP: 7.4.29
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,16 +18,16 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `CE`
+-- Base de datos: `ce`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ACCESOS`
+-- Estructura de tabla para la tabla `accesos`
 --
 
-CREATE TABLE `ACCESOS` (
+CREATE TABLE `accesos` (
   `CORREO` varchar(150) NOT NULL,
   `CREAR` tinyint(1) NOT NULL DEFAULT 0,
   `EDITAR` tinyint(1) NOT NULL DEFAULT 0,
@@ -35,19 +35,19 @@ CREATE TABLE `ACCESOS` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `ACCESOS`
+-- Volcado de datos para la tabla `accesos`
 --
 
-INSERT INTO `ACCESOS` (`CORREO`, `CREAR`, `EDITAR`, `BANEAR`) VALUES
+INSERT INTO `accesos` (`CORREO`, `CREAR`, `EDITAR`, `BANEAR`) VALUES
 ('mpino1701@gmail.com', 0, 0, 0);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `EMPRESAS`
+-- Estructura de tabla para la tabla `empresas`
 --
 
-CREATE TABLE `EMPRESAS` (
+CREATE TABLE `empresas` (
   `RUT_EMPRESA` varchar(12) NOT NULL,
   `NOMBRE_EMPRESA` varchar(150) NOT NULL,
   `GIRO_EMPRESA` varchar(150) NOT NULL,
@@ -59,37 +59,28 @@ CREATE TABLE `EMPRESAS` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `EMPRESAS`
+-- Volcado de datos para la tabla `empresas`
 --
 
-INSERT INTO `EMPRESAS` (`RUT_EMPRESA`, `NOMBRE_EMPRESA`, `GIRO_EMPRESA`, `DIRECCION`, `TELEFONO`, `CORREO_EMPRESA`, `CORREO_RESPALDO`, `CELULAR_EMPRESA`) VALUES
-('11.111.111-1', '123123', '11.111.111-1', '11.111.111-1', '11.111.111-1', 'ejemplo@tudominio.cl', 'ejemplo@tudominio.cl', '11.111.111-1'),
-('11.111.111-2', 'juansico', 'prueba1', 'prueba1', 'prueba12', 'ejemplo@ejemplo.cl', 'ejemplo@ejemplo.cl', 'prueba12'),
-('11.112.111-2', 'pedritospa', 'prueba1', 'prueba1', 'prueba12', 'ejemplo@ejemplo.cl', 'ejemplo@ejemplo.cl', 'prueba12'),
-('11.113.111-2', 'twitch', 'prueba1', 'prueba1', 'prueba12', 'ejemplo@ejemplo.cl', 'ejemplo@ejemplo.cl', 'prueba12'),
-('11.114.111-2', 'sdsdsde', 'prueba1', 'prueba1', 'prueba12', 'ejemplo@ejemplo.cl', 'ejemplo@ejemplo.cl', 'prueba12'),
-('11.115.111-2', 'None123123', 'prueba1', 'prueba1', 'prueba12', 'ejemplo@ejemplo.cl', 'ejemplo@ejemplo.cl', 'prueba12'),
-('44444444-8', 'qweqeqeqweqwe', 'qweqweqweqwewqeqw', 'eqweqweqweqwe', 'qwewqeewq', 'qweqweqweq@eqweqwe', '', 'qweqweqwe'),
-('76.634.406-2', 'Los Tres Pinos SPA', 'Arriendo y venta de baños quimicos', 'Michimalongo 14600, la pintana, santiago', '213123123123', 'ventas@lostrespinos.cl', 'ventas@lostrespinos.cl', '+569999999'),
-('78845972-4', 'Empresa de Serviciios de tu hermana', 'Arriendo y venta de tu hermana', 'En Av Me importa un Pico', '111111111', 'sdsd@sdadas.cl', '', '11111111'),
-('90.440.445-0', 'Roblex Drops', 'Venta de servicios de cuerpos humanos', 'a lado de mi vecina', '', 'tes@roblex.cl', '', '+56940403020');
+INSERT INTO `empresas` (`RUT_EMPRESA`, `NOMBRE_EMPRESA`, `GIRO_EMPRESA`, `DIRECCION`, `TELEFONO`, `CORREO_EMPRESA`, `CORREO_RESPALDO`, `CELULAR_EMPRESA`) VALUES
+('Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `ESTADOS`
+-- Estructura de tabla para la tabla `estados`
 --
 
-CREATE TABLE `ESTADOS` (
+CREATE TABLE `estados` (
   `ID_ESTADO` int(11) NOT NULL,
   `NOMBRE` varchar(80) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `ESTADOS`
+-- Volcado de datos para la tabla `estados`
 --
 
-INSERT INTO `ESTADOS` (`ID_ESTADO`, `NOMBRE`) VALUES
+INSERT INTO `estados` (`ID_ESTADO`, `NOMBRE`) VALUES
 (1, 'OPERATIVO'),
 (2, 'DETENIDO'),
 (3, 'TRANSLADO'),
@@ -98,10 +89,10 @@ INSERT INTO `ESTADOS` (`ID_ESTADO`, `NOMBRE`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `HISTORIAL_BANEOS`
+-- Estructura de tabla para la tabla `historial_baneos`
 --
 
-CREATE TABLE `HISTORIAL_BANEOS` (
+CREATE TABLE `historial_baneos` (
   `CORREO` varchar(150) NOT NULL,
   `DESCR` varchar(250) NOT NULL,
   `FECHA` datetime NOT NULL DEFAULT current_timestamp(),
@@ -111,33 +102,26 @@ CREATE TABLE `HISTORIAL_BANEOS` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `PERSONAS`
+-- Estructura de tabla para la tabla `personas`
 --
 
-CREATE TABLE `PERSONAS` (
+CREATE TABLE `personas` (
   `RUT_PERSONA` varchar(12) NOT NULL,
   `NOMBRES` varchar(150) NOT NULL,
   `APELLIDOS` varchar(150) NOT NULL,
   `TELEFONO` varchar(14) DEFAULT NULL,
   `CELULAR` varchar(14) NOT NULL,
-  `CORREO` varchar(150) NOT NULL
+  `CORREO` varchar(150) NOT NULL,
+  `RUT_EMPRESA` varchar(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `PERSONAS`
---
-
-INSERT INTO `PERSONAS` (`RUT_PERSONA`, `NOMBRES`, `APELLIDOS`, `TELEFONO`, `CELULAR`, `CORREO`) VALUES
-('11.111.111-1', '11111111-1', '11111111-1', '11111111-1', '11111111-1', '11111111-1@11111111-1'),
-('11.456.890-k', 'Culito zacallama', 'ICL creyo', '', '+56999234455', 'test@test.cl');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `PRODUCTOS`
+-- Estructura de tabla para la tabla `productos`
 --
 
-CREATE TABLE `PRODUCTOS` (
+CREATE TABLE `productos` (
   `ID_PRODUCTO` int(11) NOT NULL,
   `NOMBRE_PRODUCTO` varchar(100) NOT NULL,
   `DESCRIPCION` varchar(250) NOT NULL,
@@ -145,21 +129,13 @@ CREATE TABLE `PRODUCTOS` (
   `CANTIDAD` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Volcado de datos para la tabla `PRODUCTOS`
---
-
-INSERT INTO `PRODUCTOS` (`ID_PRODUCTO`, `NOMBRE_PRODUCTO`, `DESCRIPCION`, `FECHA_CREACION`, `CANTIDAD`) VALUES
-(1, 'Jabon Adulto', 'Muy resfaloso para que se caiga cada vez que lo tomes en el baño', '2022-09-15 03:43:08', 10),
-(2, 'probando un nuevo producto', 'sdaasdas\ndas\nd\nasd\nas\ndas\nda\nsd\nas\ndas\ndas\nd', '2022-09-15 03:51:27', 1);
-
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `REGISTRO_NOTAS_EMRPESAS`
+-- Estructura de tabla para la tabla `registro_notas_emrpesas`
 --
 
-CREATE TABLE `REGISTRO_NOTAS_EMRPESAS` (
+CREATE TABLE `registro_notas_emrpesas` (
   `ID_REGISTRO` int(11) NOT NULL,
   `NOTA` varchar(350) NOT NULL,
   `RUT_EMPRESA` varchar(12) NOT NULL,
@@ -170,10 +146,10 @@ CREATE TABLE `REGISTRO_NOTAS_EMRPESAS` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `SERVICIOS`
+-- Estructura de tabla para la tabla `servicios`
 --
 
-CREATE TABLE `SERVICIOS` (
+CREATE TABLE `servicios` (
   `ID_SERVICIO` int(11) NOT NULL,
   `NOMBRE_SERVICIO` varchar(150) NOT NULL,
   `DESCRIPCION` varchar(250) DEFAULT NULL,
@@ -183,27 +159,33 @@ CREATE TABLE `SERVICIOS` (
   `PRECIO` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- --------------------------------------------------------
+
 --
--- Volcado de datos para la tabla `SERVICIOS`
+-- Estructura de tabla para la tabla `serviciosdiarios`
 --
 
-INSERT INTO `SERVICIOS` (`ID_SERVICIO`, `NOMBRE_SERVICIO`, `DESCRIPCION`, `FECHA_INICIO`, `FECHA_TERMINO`, `ID_ESTADO`, `PRECIO`) VALUES
-(1, 'test', 'asdasdasd\nasd', '2022-09-13', '2022-09-20', 2, 213123),
-(2, 'Claudia Obra', 'Tucapel 13623423', '2022-09-27', '2022-10-27', 2, 90000),
-(3, 'Pelao Juanita', 'Ferias keodhaskdjapsd', '2022-09-23', '2022-12-30', 2, 9000),
-(4, 'Vanessa', 'asdasd', '2022-09-14', '2022-09-21', 1, 9000),
-(5, 'patoods', 'Un usuario de twith', '2022-09-12', '2022-10-12', 1, 90000),
-(6, 'sadasd', 'sadasdasd', '2022-09-01', NULL, 1, 12312),
-(7, 'asdasdasd', 'asdasdasd', '2022-09-01', NULL, 1, 2131231),
-(8, 'Servicio Nuevo en twitch', 'sadasdasd\nasd\nasd\nasd', '2022-09-06', '2022-09-22', 1, 9999999);
+CREATE TABLE `serviciosdiarios` (
+  `ID_SERVICIOS_DIARIOS` int(11) NOT NULL,
+  `NOMBRE_SERVICIO` varchar(100) NOT NULL,
+  `ID_ESTADO` int(1) NOT NULL,
+  `PRECIO` int(11) NOT NULL,
+  `FECHA_SEMANA` varchar(6) NOT NULL,
+  `URL_POSICION` varchar(250) NOT NULL,
+  `UBICACION` varchar(250) NOT NULL,
+  `RUT_USUARIO` varchar(12) NOT NULL,
+  `RUT_TRABAJADOR` varchar(12) NOT NULL,
+  `DESCR` varchar(250) NOT NULL,
+  `TODA_SEMANA` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `USUARIOS`
+-- Estructura de tabla para la tabla `usuarios`
 --
 
-CREATE TABLE `USUARIOS` (
+CREATE TABLE `usuarios` (
   `CORREO` varchar(150) NOT NULL,
   `CONTRASEÑA` varchar(150) NOT NULL,
   `FECHA_CREACION` date NOT NULL DEFAULT current_timestamp(),
@@ -212,72 +194,79 @@ CREATE TABLE `USUARIOS` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Volcado de datos para la tabla `USUARIOS`
+-- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `USUARIOS` (`CORREO`, `CONTRASEÑA`, `FECHA_CREACION`, `ESTADO`, `GRUPOS`) VALUES
-('mpino1701@gmail.com', '8dbef3d81542a4ed6f4f7c36e6bcb7c2e16ee9b1', '2022-09-16', 1, 4);
+INSERT INTO `usuarios` (`CORREO`, `CONTRASEÑA`, `FECHA_CREACION`, `ESTADO`, `GRUPOS`) VALUES
+('mpino1701@gmail.com', '8dbef3d81542a4ed6f4f7c36e6bcb7c2e16ee9b1', '2022-09-16', 1, 5);
 
 --
 -- Índices para tablas volcadas
 --
 
 --
--- Indices de la tabla `ACCESOS`
+-- Indices de la tabla `accesos`
 --
-ALTER TABLE `ACCESOS`
+ALTER TABLE `accesos`
   ADD PRIMARY KEY (`CORREO`);
 
 --
--- Indices de la tabla `EMPRESAS`
+-- Indices de la tabla `empresas`
 --
-ALTER TABLE `EMPRESAS`
+ALTER TABLE `empresas`
   ADD PRIMARY KEY (`RUT_EMPRESA`);
 
 --
--- Indices de la tabla `ESTADOS`
+-- Indices de la tabla `estados`
 --
-ALTER TABLE `ESTADOS`
+ALTER TABLE `estados`
   ADD PRIMARY KEY (`ID_ESTADO`);
 
 --
--- Indices de la tabla `HISTORIAL_BANEOS`
+-- Indices de la tabla `historial_baneos`
 --
-ALTER TABLE `HISTORIAL_BANEOS`
+ALTER TABLE `historial_baneos`
   ADD PRIMARY KEY (`CORREO`);
 
 --
--- Indices de la tabla `PERSONAS`
+-- Indices de la tabla `personas`
 --
-ALTER TABLE `PERSONAS`
+ALTER TABLE `personas`
   ADD PRIMARY KEY (`RUT_PERSONA`),
-  ADD KEY `PERSONAS_USUARIOS` (`CORREO`);
+  ADD KEY `PERSONAS_USUARIOS` (`CORREO`),
+  ADD KEY `rut_empresas_personas_empresas` (`RUT_EMPRESA`);
 
 --
--- Indices de la tabla `PRODUCTOS`
+-- Indices de la tabla `productos`
 --
-ALTER TABLE `PRODUCTOS`
+ALTER TABLE `productos`
   ADD PRIMARY KEY (`ID_PRODUCTO`);
 
 --
--- Indices de la tabla `REGISTRO_NOTAS_EMRPESAS`
+-- Indices de la tabla `registro_notas_emrpesas`
 --
-ALTER TABLE `REGISTRO_NOTAS_EMRPESAS`
+ALTER TABLE `registro_notas_emrpesas`
   ADD PRIMARY KEY (`ID_REGISTRO`),
   ADD KEY `NOTAS_EMRPESAS` (`RUT_EMPRESA`),
   ADD KEY `NOTAS_USUARIOS` (`CORREO`);
 
 --
--- Indices de la tabla `SERVICIOS`
+-- Indices de la tabla `servicios`
 --
-ALTER TABLE `SERVICIOS`
+ALTER TABLE `servicios`
   ADD PRIMARY KEY (`ID_SERVICIO`),
   ADD KEY `SERVICIOS_ESTADOS` (`ID_ESTADO`);
 
 --
--- Indices de la tabla `USUARIOS`
+-- Indices de la tabla `serviciosdiarios`
 --
-ALTER TABLE `USUARIOS`
+ALTER TABLE `serviciosdiarios`
+  ADD PRIMARY KEY (`ID_SERVICIOS_DIARIOS`);
+
+--
+-- Indices de la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`CORREO`);
 
 --
@@ -285,57 +274,69 @@ ALTER TABLE `USUARIOS`
 --
 
 --
--- AUTO_INCREMENT de la tabla `ESTADOS`
+-- AUTO_INCREMENT de la tabla `estados`
 --
-ALTER TABLE `ESTADOS`
+ALTER TABLE `estados`
   MODIFY `ID_ESTADO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT de la tabla `PRODUCTOS`
+-- AUTO_INCREMENT de la tabla `productos`
 --
-ALTER TABLE `PRODUCTOS`
+ALTER TABLE `productos`
   MODIFY `ID_PRODUCTO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de la tabla `REGISTRO_NOTAS_EMRPESAS`
+-- AUTO_INCREMENT de la tabla `registro_notas_emrpesas`
 --
-ALTER TABLE `REGISTRO_NOTAS_EMRPESAS`
+ALTER TABLE `registro_notas_emrpesas`
   MODIFY `ID_REGISTRO` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT de la tabla `SERVICIOS`
+-- AUTO_INCREMENT de la tabla `servicios`
 --
-ALTER TABLE `SERVICIOS`
-  MODIFY `ID_SERVICIO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+ALTER TABLE `servicios`
+  MODIFY `ID_SERVICIO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT de la tabla `serviciosdiarios`
+--
+ALTER TABLE `serviciosdiarios`
+  MODIFY `ID_SERVICIOS_DIARIOS` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
 --
 
 --
--- Filtros para la tabla `ACCESOS`
+-- Filtros para la tabla `accesos`
 --
-ALTER TABLE `ACCESOS`
-  ADD CONSTRAINT `ACCESOS_USUARIOS` FOREIGN KEY (`CORREO`) REFERENCES `USUARIOS` (`CORREO`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `accesos`
+  ADD CONSTRAINT `ACCESOS_USUARIOS` FOREIGN KEY (`CORREO`) REFERENCES `usuarios` (`CORREO`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `HISTORIAL_BANEOS`
+-- Filtros para la tabla `historial_baneos`
 --
-ALTER TABLE `HISTORIAL_BANEOS`
-  ADD CONSTRAINT `BANEOS_USUARIOS` FOREIGN KEY (`CORREO`) REFERENCES `USUARIOS` (`CORREO`) ON DELETE CASCADE ON UPDATE NO ACTION;
+ALTER TABLE `historial_baneos`
+  ADD CONSTRAINT `BANEOS_USUARIOS` FOREIGN KEY (`CORREO`) REFERENCES `usuarios` (`CORREO`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
--- Filtros para la tabla `REGISTRO_NOTAS_EMRPESAS`
+-- Filtros para la tabla `personas`
 --
-ALTER TABLE `REGISTRO_NOTAS_EMRPESAS`
-  ADD CONSTRAINT `NOTAS_EMRPESAS` FOREIGN KEY (`RUT_EMPRESA`) REFERENCES `EMPRESAS` (`RUT_EMPRESA`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  ADD CONSTRAINT `NOTAS_USUARIOS` FOREIGN KEY (`CORREO`) REFERENCES `USUARIOS` (`CORREO`) ON DELETE CASCADE;
+ALTER TABLE `personas`
+  ADD CONSTRAINT `rut_empresas_personas_empresas` FOREIGN KEY (`RUT_EMPRESA`) REFERENCES `empresas` (`RUT_EMPRESA`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `SERVICIOS`
+-- Filtros para la tabla `registro_notas_emrpesas`
 --
-ALTER TABLE `SERVICIOS`
-  ADD CONSTRAINT `SERVICIOS_ESTADOS` FOREIGN KEY (`ID_ESTADO`) REFERENCES `ESTADOS` (`ID_ESTADO`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE `registro_notas_emrpesas`
+  ADD CONSTRAINT `NOTAS_EMRPESAS` FOREIGN KEY (`RUT_EMPRESA`) REFERENCES `empresas` (`RUT_EMPRESA`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  ADD CONSTRAINT `NOTAS_USUARIOS` FOREIGN KEY (`CORREO`) REFERENCES `usuarios` (`CORREO`) ON DELETE CASCADE;
+
+--
+-- Filtros para la tabla `servicios`
+--
+ALTER TABLE `servicios`
+  ADD CONSTRAINT `SERVICIOS_ESTADOS` FOREIGN KEY (`ID_ESTADO`) REFERENCES `estados` (`ID_ESTADO`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
