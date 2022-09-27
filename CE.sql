@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 26-09-2022 a las 15:20:44
+-- Tiempo de generación: 27-09-2022 a las 22:04:50
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 7.4.29
 
@@ -20,26 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `ce`
 --
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `accesos`
---
-
-CREATE TABLE `accesos` (
-  `CORREO` varchar(150) NOT NULL,
-  `CREAR` tinyint(1) NOT NULL DEFAULT 0,
-  `EDITAR` tinyint(1) NOT NULL DEFAULT 0,
-  `BANEAR` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `accesos`
---
-
-INSERT INTO `accesos` (`CORREO`, `CREAR`, `EDITAR`, `BANEAR`) VALUES
-('mpino1701@gmail.com', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -89,14 +69,14 @@ INSERT INTO `estados` (`ID_ESTADO`, `NOMBRE`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `historial_baneos`
+-- Estructura de tabla para la tabla `locales`
 --
 
-CREATE TABLE `historial_baneos` (
-  `CORREO` varchar(150) NOT NULL,
-  `DESCR` varchar(250) NOT NULL,
-  `FECHA` datetime NOT NULL DEFAULT current_timestamp(),
-  `IP` varchar(15) NOT NULL
+CREATE TABLE `locales` (
+  `ID_LOCAL` int(11) NOT NULL,
+  `NOMBRE_LOCAL` varchar(150) NOT NULL,
+  `TELEFONO_LOCAL` varchar(14) NOT NULL,
+  `DIRECCION` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -106,7 +86,7 @@ CREATE TABLE `historial_baneos` (
 --
 
 CREATE TABLE `personas` (
-  `RUT_PERSONA` varchar(12) NOT NULL,
+  `RUT` varchar(12) NOT NULL,
   `NOMBRES` varchar(150) NOT NULL,
   `APELLIDOS` varchar(150) NOT NULL,
   `TELEFONO` varchar(14) DEFAULT NULL,
@@ -132,10 +112,10 @@ CREATE TABLE `productos` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `registro_notas_emrpesas`
+-- Estructura de tabla para la tabla `registro_notas_empresas`
 --
 
-CREATE TABLE `registro_notas_emrpesas` (
+CREATE TABLE `registro_notas_empresas` (
   `ID_REGISTRO` int(11) NOT NULL,
   `NOTA` varchar(350) NOT NULL,
   `RUT_EMPRESA` varchar(12) NOT NULL,
@@ -182,6 +162,19 @@ CREATE TABLE `serviciosdiarios` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `trabajadores`
+--
+
+CREATE TABLE `trabajadores` (
+  `RUT` varchar(12) NOT NULL,
+  `ID_LOCAL` int(11) NOT NULL,
+  `SUELDO` int(8) NOT NULL,
+  `DIA_PAGO` int(2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `usuarios`
 --
 
@@ -205,12 +198,6 @@ INSERT INTO `usuarios` (`CORREO`, `CONTRASEÑA`, `FECHA_CREACION`, `ESTADO`, `GR
 --
 
 --
--- Indices de la tabla `accesos`
---
-ALTER TABLE `accesos`
-  ADD PRIMARY KEY (`CORREO`);
-
---
 -- Indices de la tabla `empresas`
 --
 ALTER TABLE `empresas`
@@ -223,16 +210,16 @@ ALTER TABLE `estados`
   ADD PRIMARY KEY (`ID_ESTADO`);
 
 --
--- Indices de la tabla `historial_baneos`
+-- Indices de la tabla `locales`
 --
-ALTER TABLE `historial_baneos`
-  ADD PRIMARY KEY (`CORREO`);
+ALTER TABLE `locales`
+  ADD PRIMARY KEY (`ID_LOCAL`);
 
 --
 -- Indices de la tabla `personas`
 --
 ALTER TABLE `personas`
-  ADD PRIMARY KEY (`RUT_PERSONA`),
+  ADD PRIMARY KEY (`RUT`),
   ADD KEY `PERSONAS_USUARIOS` (`CORREO`),
   ADD KEY `rut_empresas_personas_empresas` (`RUT_EMPRESA`);
 
@@ -243,9 +230,9 @@ ALTER TABLE `productos`
   ADD PRIMARY KEY (`ID_PRODUCTO`);
 
 --
--- Indices de la tabla `registro_notas_emrpesas`
+-- Indices de la tabla `registro_notas_empresas`
 --
-ALTER TABLE `registro_notas_emrpesas`
+ALTER TABLE `registro_notas_empresas`
   ADD PRIMARY KEY (`ID_REGISTRO`),
   ADD KEY `NOTAS_EMRPESAS` (`RUT_EMPRESA`),
   ADD KEY `NOTAS_USUARIOS` (`CORREO`);
@@ -264,6 +251,13 @@ ALTER TABLE `serviciosdiarios`
   ADD PRIMARY KEY (`ID_SERVICIOS_DIARIOS`);
 
 --
+-- Indices de la tabla `trabajadores`
+--
+ALTER TABLE `trabajadores`
+  ADD KEY `TRABAJADORES_PERSONAS` (`RUT`),
+  ADD KEY `TRABAJADORES_LOCALES` (`ID_LOCAL`);
+
+--
 -- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
@@ -280,15 +274,21 @@ ALTER TABLE `estados`
   MODIFY `ID_ESTADO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- AUTO_INCREMENT de la tabla `locales`
+--
+ALTER TABLE `locales`
+  MODIFY `ID_LOCAL` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
   MODIFY `ID_PRODUCTO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT de la tabla `registro_notas_emrpesas`
+-- AUTO_INCREMENT de la tabla `registro_notas_empresas`
 --
-ALTER TABLE `registro_notas_emrpesas`
+ALTER TABLE `registro_notas_empresas`
   MODIFY `ID_REGISTRO` int(11) NOT NULL AUTO_INCREMENT;
 
 --
@@ -308,27 +308,15 @@ ALTER TABLE `serviciosdiarios`
 --
 
 --
--- Filtros para la tabla `accesos`
---
-ALTER TABLE `accesos`
-  ADD CONSTRAINT `ACCESOS_USUARIOS` FOREIGN KEY (`CORREO`) REFERENCES `usuarios` (`CORREO`) ON DELETE CASCADE ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `historial_baneos`
---
-ALTER TABLE `historial_baneos`
-  ADD CONSTRAINT `BANEOS_USUARIOS` FOREIGN KEY (`CORREO`) REFERENCES `usuarios` (`CORREO`) ON DELETE CASCADE ON UPDATE NO ACTION;
-
---
 -- Filtros para la tabla `personas`
 --
 ALTER TABLE `personas`
   ADD CONSTRAINT `rut_empresas_personas_empresas` FOREIGN KEY (`RUT_EMPRESA`) REFERENCES `empresas` (`RUT_EMPRESA`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Filtros para la tabla `registro_notas_emrpesas`
+-- Filtros para la tabla `registro_notas_empresas`
 --
-ALTER TABLE `registro_notas_emrpesas`
+ALTER TABLE `registro_notas_empresas`
   ADD CONSTRAINT `NOTAS_EMRPESAS` FOREIGN KEY (`RUT_EMPRESA`) REFERENCES `empresas` (`RUT_EMPRESA`) ON DELETE CASCADE ON UPDATE NO ACTION,
   ADD CONSTRAINT `NOTAS_USUARIOS` FOREIGN KEY (`CORREO`) REFERENCES `usuarios` (`CORREO`) ON DELETE CASCADE;
 
@@ -337,6 +325,13 @@ ALTER TABLE `registro_notas_emrpesas`
 --
 ALTER TABLE `servicios`
   ADD CONSTRAINT `SERVICIOS_ESTADOS` FOREIGN KEY (`ID_ESTADO`) REFERENCES `estados` (`ID_ESTADO`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `trabajadores`
+--
+ALTER TABLE `trabajadores`
+  ADD CONSTRAINT `TRABAJADORES_LOCALES` FOREIGN KEY (`ID_LOCAL`) REFERENCES `locales` (`ID_LOCAL`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `TRABAJADORES_PERSONAS` FOREIGN KEY (`RUT`) REFERENCES `personas` (`RUT`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

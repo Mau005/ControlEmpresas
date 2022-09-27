@@ -74,7 +74,7 @@ class Querys():
 
     def registrar_usuarios(self, rut_persona, nombres, apellidos, telefono, celular, correo):
         querys = '''
-        INSERT INTO PERSONAS(RUT_PERSONA, NOMBRES, APELLIDOS, TELEFONO, CELULAR, CORREO)
+        INSERT INTO PERSONAS(RUT, NOMBRES, APELLIDOS, TELEFONO, CELULAR, CORREO)
         VALUES("{}", "{}", "{}" , "{}" , "{}" , "{}" ); 
         '''.format(rut_persona, nombres, apellidos, telefono, celular, correo)
 
