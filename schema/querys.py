@@ -72,11 +72,11 @@ class Querys():
                    objeto.celular_empresa)
         return self.bd.insertar(querys)
 
-    def registrar_usuarios(self, rut_persona, nombres, apellidos, telefono, celular, correo):
+    def registrar_usuarios(self, rut_persona, nombres, apellidos, telefono, celular, correo, rut_empresa):
         querys = '''
-        INSERT INTO PERSONAS(RUT, NOMBRES, APELLIDOS, TELEFONO, CELULAR, CORREO)
-        VALUES("{}", "{}", "{}" , "{}" , "{}" , "{}" ); 
-        '''.format(rut_persona, nombres, apellidos, telefono, celular, correo)
+        INSERT INTO PERSONAS(RUT, NOMBRES, APELLIDOS, TELEFONO, CELULAR, CORREO, RUT_EMPRESA)
+        VALUES("{}", "{}", "{}" , "{}" , "{}" , "{}", "{}"); 
+        '''.format(rut_persona, nombres, apellidos, telefono, celular, correo, rut_empresa)
 
         return self.bd.insertar(querys)
 
@@ -122,3 +122,13 @@ class Querys():
         VALUES("{0}", {}, {}, "{}", "{}", "{}", "{}", "{}", "{}", {});
         '''.format()
         return self.bd.insertar(querys)
+
+    def lista_empresas(self):
+        querys = '''
+        select RUT_EMPRESA, NOMBRE_EMPRESA  from empresas;
+        '''
+        return self.bd.consultar(querys, all=True)
+
+    def consultar_correo_existente(self, correo):
+        querys = f'select CORREO  from usuarios where CORREO = "{correo}";'
+        return self.bd.consultar(querys)

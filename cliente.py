@@ -1,3 +1,6 @@
+from kivy.core.window import Window
+
+Window.size = (350, 600)
 from kivymd.app import MDApp
 from kivymd.uix.screenmanager import MDScreenManager
 from kivy.lang import Builder
@@ -34,7 +37,7 @@ class ControlEmpresas(MDApp):
 
     def __cargar_ventanas(self):
         self.login = Entrada(self.network, self.manejador, "entrada", siguiente="casa")
-        self.casa = Casa(self.network, self.manejador, "casa", volver= "entrada")
+        self.casa = Casa(self.network, self.manejador, "casa", volver="entrada")
         self.vservicios = VServicios(self.network, self.manejador, "servicios", siguiente="casa")
         self.vpersonas = VPersonas(self.network, self.manejador, "personas", siguiente="casa")
         self.vempresas = VEmpresas(self.network, self.manejador, "empresas", siguiente="casa")
@@ -43,8 +46,8 @@ class ControlEmpresas(MDApp):
         self.vlistaservicios = VListadoServicios(self.network, self.manejador, "listaservicios", siguiente="casa")
         self.vproductos = VProductos(self.network, self.manejador, "productos", siguiente="casa")
         self.vrecuperacion = VRecuperacion(self.network, self.manejador, "recuperacion", volver="entrada")
-        self.vlistaproductos = VListaProductos(self.network, self.manejador, "listaproductos", siguiente = "casa")
-        self.vserviciosdiarios = VServiciosDiarios(self.network, self.manejador, "serviciosdiarios", siguiente= "casa")
+        self.vlistaproductos = VListaProductos(self.network, self.manejador, "listaproductos", siguiente="casa")
+        self.vserviciosdiarios = VServiciosDiarios(self.network, self.manejador, "serviciosdiarios", siguiente="casa")
         self.manejador.add_widget(self.login)
         self.manejador.add_widget(self.casa)
         self.manejador.add_widget(self.vservicios)

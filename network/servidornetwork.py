@@ -96,6 +96,9 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "listadoproductos":
                 self.listado_productos()
 
+            if datos.get("estado") == "lista_empresas":
+                self.listado_empresas()
+
             if datos.get("estado") == "estadoservicios":
                 # Se procede a enviar informacion de los estados
                 self.enviar(self.querys.solicitar_estados_servicios())
@@ -106,6 +109,10 @@ class ServidorNetwork(Thread):
                 break
         self.cerrar()
 
+    def listado_empresas(self):
+        if self.grupos.get(str(self.usuario.grupos)).get("VerEmpresas"):
+            return self.enviar(self.querys.lista_empresas())
+        return self.enviar({"estado": False, "condicion": "privilegios"})
     def listado_productos(self):
         if self.grupos.get(str(self.usuario.grupos)).get("VerProductos"):
             return self.enviar(self.querys.solicitar_lista_productos())
@@ -189,7 +196,9 @@ class ServidorNetwork(Thread):
 
     def registrar_persona(self, datos):
         datos = self.querys.registrar_usuarios(datos.rut_persona, datos.nombres, datos.apellidos, datos.telefono,
-                                               datos.celular, datos.correo_sistema)
+                                               datos.celular, datos.correo.lower(), datos.rut_empresa)
+
+        return self.enviar(datos)
 
     def registro_servicios(self, datos):
         if self.grupos.get(str(self.usuario.grupos)).get("CrearServicios"):
