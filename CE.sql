@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-09-2022 a las 09:09:13
+-- Tiempo de generación: 28-09-2022 a las 23:57:28
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 7.4.29
 
@@ -79,6 +79,13 @@ CREATE TABLE `locales` (
   `TELEFONO_LOCAL` varchar(14) NOT NULL,
   `DIRECCION` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `locales`
+--
+
+INSERT INTO `locales` (`ID_LOCAL`, `NOMBRE_LOCAL`, `TELEFONO_LOCAL`, `DIRECCION`) VALUES
+(1, 'Principal', '+565656', 'Av Tusca con Chetes');
 
 -- --------------------------------------------------------
 
@@ -262,7 +269,7 @@ ALTER TABLE `serviciosdiarios`
 -- Indices de la tabla `trabajadores`
 --
 ALTER TABLE `trabajadores`
-  ADD KEY `TRABAJADORES_PERSONAS` (`RUT`),
+  ADD PRIMARY KEY (`RUT`),
   ADD KEY `TRABAJADORES_LOCALES` (`ID_LOCAL`);
 
 --
@@ -285,7 +292,7 @@ ALTER TABLE `estados`
 -- AUTO_INCREMENT de la tabla `locales`
 --
 ALTER TABLE `locales`
-  MODIFY `ID_LOCAL` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_LOCAL` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
