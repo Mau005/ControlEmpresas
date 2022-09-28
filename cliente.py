@@ -18,6 +18,7 @@ from ventanas.vlistaempresa import VListasEmpresas
 from ventanas.vrecuperacion import VRecuperacion
 from ventanas.vlistaproductos import VListaProductos
 from ventanas.vserviciosdiarios import VServiciosDiarios
+from ventanas.vtrabajadores import VTrabajadores
 from kivy.clock import Clock
 
 Builder.load_file("kvlengs/root.kv")
@@ -28,8 +29,6 @@ class ControlEmpresas(MDApp):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.theme_cls.theme_style = "Dark"
-        self.theme_cls.primary_palette = "BlueGray"
         self.network = ClienteNetwork()
         self.manejador = MDScreenManager()
         self.__cargar_ventanas()
@@ -48,6 +47,7 @@ class ControlEmpresas(MDApp):
         self.vrecuperacion = VRecuperacion(self.network, self.manejador, "recuperacion", volver="entrada")
         self.vlistaproductos = VListaProductos(self.network, self.manejador, "listaproductos", siguiente="casa")
         self.vserviciosdiarios = VServiciosDiarios(self.network, self.manejador, "serviciosdiarios", siguiente="casa")
+        self.vtrabajadores = VTrabajadores(self.network, self.manejador, "trabajadores", siguiente="casa")
         self.manejador.add_widget(self.login)
         self.manejador.add_widget(self.casa)
         self.manejador.add_widget(self.vservicios)
@@ -60,6 +60,7 @@ class ControlEmpresas(MDApp):
         self.manejador.add_widget(self.vrecuperacion)
         self.manejador.add_widget(self.vlistaproductos)
         self.manejador.add_widget(self.vserviciosdiarios)
+        self.manejador.add_widget(self.vtrabajadores)
         self.login.activar()
 
     def actualizar(self, dt):

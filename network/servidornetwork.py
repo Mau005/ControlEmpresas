@@ -1,6 +1,7 @@
 from threading import Thread
 from core.constantes import TAMANIO_PAQUETE, ERRORPRIVILEGIOS, TIMEPOESPERAUSUARIO
 from core.herramientas import Herramientas as her
+from entidades.registrotrabajador import RegistroTrabajador
 from network.recuperacion_cuenta import RecuperacionCuenta
 
 from entidades.registrousaurios import RegistroUsuarios
@@ -103,13 +104,29 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "estadoservicios":
                 # Se procede a enviar informacion de los estados
                 self.enviar(self.querys.solicitar_estados_servicios())
+
+            if datos.get("estado") == "menupersonas":
+                self.enviar(self.querys.lista_personas())
+
+            if datos.get("estado") == "menulocales":
+                self.enviar(self.querys.lista_locales())
+
+            if datos.get("estado") == "registrartrabajador":
+                self.registrar_trabajador(datos.get("contenido"))
+
             if datos.get("estado") == "cierreAbrupto":
                 print(
                     "Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
                 self.control_network.pendientes_desconexion.append(self.usuario.correo)
                 break
         self.cerrar()
-
+    def registrar_trabajador(self, contenido):
+        objeto = RegistroTrabajador()
+        objeto.__dict__ = contenido.__dict__
+        if self.grupos.get(str(self.usuario.grupos)).get("RegistrarTrabajadores"):
+            info = self.querys.registrar_trabajador(objeto.rut, objeto.id_local, objeto.sueldo, objeto.dia_pago)
+            return self.enviar(info)
+        return self.enviar({"estado":False, "condicion":"privilegios"})
     def listado_empresas(self):
         if self.grupos.get(str(self.usuario.grupos)).get("VerEmpresas"):
             return self.enviar(self.querys.lista_empresas())

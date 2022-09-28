@@ -8,68 +8,86 @@
             name: 'screen 1'
             text: 'Mis Notificaciones'
             icon: 'note'
-            #badge_icon: "numeric-1"
-
-            MDLabel:
-                text: 'Mail'
-                halign: 'center'
-            MDList:
-                OneLineListItem:
-                    text: "pruba"
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                MDList:
+                    padding: dp(35)
+                    spacing: dp(20)
+                    MDLabel:
+                        font_size: dp(45)
+                        text: "Mis Notificaciones"
+                        halign: "center"
 
         MDBottomNavigationItem:
             name: 'screen 2'
             text: 'Herramientas'
             icon: 'tools'
-            #badge_icon: "numeric-5"
 
-            MDLabel:
-                text: 'Herramientas'
-                halign: 'center'
-            MDList:
-                OneLineListItem:
-                    text: "Crear Servicios Mensuales"
-                    on_release: root.cambiar_ventanta("servicios")
-                OneLineListItem:
-                    text: "Crear Servicios Diarios"
-                    on_release: root.cambiar_ventanta("serviciosdiarios")
-                OneLineListItem:
-                    text: "Crear Usuarios"
-                    on_release: root.cambiar_ventanta("personas")
-                OneLineListItem:
-                    text: "Crear Empresas"
-                    on_release: root.cambiar_ventanta("empresas")
-                OneLineListItem:
-                    text: "Crear Notas Empresas"
-                    on_release: root.cambiar_ventanta("notasempresas")
-                OneLineListItem:
-                    text: "Crear Productos"
-                    on_release: root.cambiar_ventanta("productos")
-                OneLineListItem:
-                    text: "Listado De Empresas"
-                    on_release: root.cambiar_ventanta("listaempresas")
-                OneLineListItem:
-                    text: "Listado De Servicios"
-                    on_release: root.cambiar_ventanta("listaservicios")
-                OneLineListItem:
-                    text: "Listado De Productos"
-                    on_release: root.cambiar_ventanta("listaproductos")
-
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                MDList:
+                    padding: dp(35)
+                    spacing: dp(20)
+                    MDLabel:
+                        text: 'Herramientas'
+                        halign: 'center'
+                        font_size: dp(45)
+                    OneLineListItem:
+                        text: "Crear Servicios Mensuales"
+                        on_release: root.cambiar_ventanta("servicios")
+                    OneLineListItem:
+                        text: "Crear Servicios Diarios"
+                        on_release: root.cambiar_ventanta("serviciosdiarios")
+                    OneLineListItem:
+                        text: "Crear Usuarios"
+                        on_release: root.cambiar_ventanta("personas")
+                    OneLineListItem:
+                        text: "Crear Empresas"
+                        on_release: root.cambiar_ventanta("empresas")
+                    OneLineListItem:
+                        text: "Crear Notas Empresas"
+                        on_release: root.cambiar_ventanta("notasempresas")
+                    OneLineListItem:
+                        text: "Crear Productos"
+                        on_release: root.cambiar_ventanta("productos")
+                    OneLineListItem:
+                        text: "Asignar Trabajador"
+                        on_release: root.cambiar_ventanta("trabajadores")
+                    OneLineListItem:
+                        text: "Listado De Empresas"
+                        on_release: root.cambiar_ventanta("listaempresas")
+                    OneLineListItem:
+                        text: "Listado De Servicios"
+                        on_release: root.cambiar_ventanta("listaservicios")
+                    OneLineListItem:
+                        text: "Listado De Productos"
+                        on_release: root.cambiar_ventanta("listaproductos")
 
         MDBottomNavigationItem:
             name: 'Configuraciòn'
             text: "Configuracion"
             icon: 'account'
 
-            MDList:
-                id: lista_productos
-                OneLineListItem:
-                    text: "Mi Cuenta"
-                OneLineListItem:
-                    text: "Themas"
-                OneLineListItem:
-                    text: "Ayuda"
-                OneLineListItem:
-                    text: "Salir"
-                    on_release: root.salir()
-                
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                MDList:
+                    id: lista_productos
+                    padding: dp(35)
+                    spacing: dp(20)
+                    MDLabel:
+                        text: "Configuración"
+                        halign: "center"
+                        font_size: dp(45)
+                    OneLineListItem:
+                        text: "Mi Cuenta"
+                    OneLineListItem:
+                        text: "Themas"
+                    OneLineListItem:
+                        text: "Ayuda"
+                    OneLineListItem:
+                        text: "Salir"
+                        on_release: root.salir()
+

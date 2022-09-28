@@ -139,3 +139,18 @@ class Querys():
     def consultar_correo_existente(self, correo):
         querys = f'select CORREO  from usuarios where CORREO = "{correo}";'
         return self.bd.consultar(querys)
+
+    def lista_personas(self):
+        querys = "SELECT RUT, NOMBRES FROM personas;"
+        return self.bd.consultar(querys, all=True)
+
+    def lista_locales(self):
+        querys = "SELECT ID_LOCAL, NOMBRE_LOCAL	FROM locales;"
+        return self.bd.consultar(querys, all=True)
+
+    def registrar_trabajador(self, rut, id_local, sueldo, dia_pago):
+        querys = '''
+        INSERT INTO trabajadores(RUT, ID_LOCAL, SUELDO, DIA_PAGO)
+        VALUES("{}", {}, {}, {});
+        '''.format(rut, id_local, sueldo, dia_pago)
+        return self.bd.insertar(querys)
