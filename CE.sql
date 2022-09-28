@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-09-2022 a las 22:04:50
+-- Tiempo de generación: 28-09-2022 a las 09:09:13
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 7.4.29
 
@@ -43,6 +43,7 @@ CREATE TABLE `empresas` (
 --
 
 INSERT INTO `empresas` (`RUT_EMPRESA`, `NOMBRE_EMPRESA`, `GIRO_EMPRESA`, `DIRECCION`, `TELEFONO`, `CORREO_EMPRESA`, `CORREO_RESPALDO`, `CELULAR_EMPRESA`) VALUES
+('76634406-2', 'Servicio Integrales Los Tres Pinos', 'Compra y venta de baños quimicos', 'michimalongo 14600', '', 'administracion@lostrespinos.cl', '', '+56945415455'),
 ('Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa');
 
 -- --------------------------------------------------------
@@ -139,6 +140,13 @@ CREATE TABLE `servicios` (
   `PRECIO` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `servicios`
+--
+
+INSERT INTO `servicios` (`ID_SERVICIO`, `NOMBRE_SERVICIO`, `DESCRIPCION`, `FECHA_INICIO`, `FECHA_TERMINO`, `ID_ESTADO`, `PRECIO`) VALUES
+(10, 'Mamá esta presa', 'Alguina descripcion que quiera', '2022-09-27', '2022-10-27', 2, 90000);
+
 -- --------------------------------------------------------
 
 --
@@ -191,7 +199,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`CORREO`, `CONTRASEÑA`, `FECHA_CREACION`, `ESTADO`, `GRUPOS`) VALUES
-('mpino1701@gmail.com', '8dbef3d81542a4ed6f4f7c36e6bcb7c2e16ee9b1', '2022-09-16', 1, 5);
+('mpino1701@gmail.com', 'dd3105f5a40070eaff30001b545b224bce14eaba', '2022-09-16', 1, 5);
 
 --
 -- Índices para tablas volcadas
@@ -295,7 +303,7 @@ ALTER TABLE `registro_notas_empresas`
 -- AUTO_INCREMENT de la tabla `servicios`
 --
 ALTER TABLE `servicios`
-  MODIFY `ID_SERVICIO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ID_SERVICIO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `serviciosdiarios`
@@ -311,6 +319,7 @@ ALTER TABLE `serviciosdiarios`
 -- Filtros para la tabla `personas`
 --
 ALTER TABLE `personas`
+  ADD CONSTRAINT `personas_usuarios_correo` FOREIGN KEY (`CORREO`) REFERENCES `usuarios` (`CORREO`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `rut_empresas_personas_empresas` FOREIGN KEY (`RUT_EMPRESA`) REFERENCES `empresas` (`RUT_EMPRESA`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
