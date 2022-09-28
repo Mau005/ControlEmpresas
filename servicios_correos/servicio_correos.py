@@ -50,7 +50,12 @@ class Servicio_Correos():
 
     def enviar_mensaje(self, correo_destino, titulo, mensaje):
         objeto = EstructurasCorreos(self.correo_sistema, correo_destino, titulo)
-        self.__mail_server.sendmail(self.correo_sistema, correo_destino, objeto.preparar_envio(mensaje).as_string())
+        try:
+            self.__mail_server.sendmail(self.correo_sistema, correo_destino, objeto.preparar_envio(mensaje).as_string())
+        except smtplib.SMTPServerDisconnected as error:
+            pass
+
+
 
 if __name__ == "__main__":
     mensaje = """
