@@ -1,6 +1,9 @@
 from abc import abstractmethod
+
+from kivy.properties import StringProperty
 from kivymd.uix.card import MDCard
-from kivymd.uix.behaviors import CircularElevationBehavior
+from kivymd.uix.behaviors import CircularElevationBehavior,RectangularElevationBehavior
+from kivymd.uix.relativelayout import MDRelativeLayout
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDRoundFlatButton
@@ -43,9 +46,8 @@ class MDTwoLine(TwoLineListItem):
         self.network = network
 
 
-class MDCardPre(MDCard, CircularElevationBehavior):
+class MDCardPre(MDCard, RectangularElevationBehavior):
     pass
-
 
 class NotificacionText(MDDialog):
 

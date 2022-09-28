@@ -19,7 +19,14 @@ class Calendario_Notificaciones():
     def actualizar(self, dt):
         self.dia_actual = DIA_SEMANA[datetime.isoweekday(datetime.now())]
 
+class Testeo:
+
+    def __init__(self, **kargs):
+        self.nombre = kargs.get("nombre")
+
+    def __eq__(self, other):
+        self.nombre = other.nombre
+
+
 if __name__ == "__main__":
-    test = Calendario_Notificaciones()
-    print(test.dia_actual)
-    print(test.consultar_fechas(datetime(2021,9,25), datetime(2022,9,30)))
+    pass

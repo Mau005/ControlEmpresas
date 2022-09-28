@@ -1,6 +1,6 @@
 from kivy.core.window import Window
 
-Window.size = (350, 600)
+Window.size = (400, 625)
 from kivymd.app import MDApp
 from kivymd.uix.screenmanager import MDScreenManager
 from kivy.lang import Builder
