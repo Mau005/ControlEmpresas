@@ -101,5 +101,4 @@ class Herramientas:
     
 if __name__ == "__main__":
     test = Herramientas()
-    x = {1:"hola"}
-    test.escribir_json(x, "uno.json")
+    print(test.verificar_rut("18881888-2"))

@@ -3,9 +3,10 @@ class Querys():
     def __init__(self, bd):
         self.bd = bd
 
-    def existe_usuario(self,correo):
+    def existe_usuario(self, correo):
         querys = f'SELECT * FROM USUARIOS WHERE CORREO = "{correo}";'
         return self.bd.consultar(querys)
+
     def consultar_usuario(self, correo, contraseña):
         querys = f'SELECT * FROM USUARIOS WHERE CORREO = "{correo}" AND CONTRASEÑA = "{contraseña}";'
         datos = self.bd.consultar(querys)
@@ -17,16 +18,7 @@ class Querys():
 
     def registrar_usuario(self, correo, contraseña):
         querys = f'INSERT INTO USUARIOS(CORREO,CONTRASEÑA) VALUES("{correo}", SHA({contraseña}));'
-        condicion = self.bd.insertar(querys)
-
-        if condicion["estado"]:
-            return self.__registrar_accesos(correo)
-
-        return condicion  # retorna usuario existente un dic
-
-    def __registrar_accesos(self, correo):
-        querys = f'INSERT INTO ACCESOS(CORREO) VALUES("{correo}")'
-        return self.bd.insertar(querys)
+        return self.bd.insertar(querys)  # retorna usuario existente un dic
 
     def solicitar_estados(self):
         querys = f'SELECT * FROM ESTADOS;'
@@ -72,7 +64,22 @@ class Querys():
                    objeto.celular_empresa)
         return self.bd.insertar(querys)
 
-    def registrar_usuarios(self, rut_persona, nombres, apellidos, telefono, celular, correo, rut_empresa):
+    def registrar_personas(self, rut_persona, nombres, apellidos, telefono, celular, correo, rut_empresa):
+        """
+        Methodo utilizado para que gestione la creacion de usuarios nuevos
+        comprobare si el correo existe, si no existe lo creara con default de password
+        """
+        consulta_correo = self.consultar_correo_existente(correo)
+
+        msj_error = {"estado": False, "condicion": "correo"}
+        if consulta_correo.get("estado"):
+            return msj_error
+
+        registro_persona = self.registrar_usuario(correo, "12345")
+
+        if not registro_persona.get("estado"):
+            return msj_error
+
         querys = '''
         INSERT INTO PERSONAS(RUT, NOMBRES, APELLIDOS, TELEFONO, CELULAR, CORREO, RUT_EMPRESA)
         VALUES("{}", "{}", "{}" , "{}" , "{}" , "{}", "{}"); 
@@ -80,7 +87,7 @@ class Querys():
 
         return self.bd.insertar(querys)
 
-    #ID_REGISTRO	RUT_EMPRESA	CORREO	FECHA_CREACION
+    # ID_REGISTRO	RUT_EMPRESA	CORREO	FECHA_CREACION
     def registrar_notas_empresas(self, nota, rut_empresa, correo):
         querys = '''
         INSERT INTO REGISTRO_NOTAS_EMRPESAS(NOTA, RUT_EMPRESA, CORREO)

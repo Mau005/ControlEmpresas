@@ -108,7 +108,7 @@ class VPersonas(MDScreenAbstrac):
                     self.formatear()
                     self.siguiente()
                 else:
-                    noti.text = "No se ha podido registrar este usuario, el rut ya existe"
+                    noti.text = "No se ha podido registrar este usuario, el rut ya existe o el correo ya se encuentra registrado"
             noti.open()
 
     def actualizar(self, dt):

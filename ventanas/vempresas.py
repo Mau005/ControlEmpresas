@@ -39,11 +39,11 @@ class VEmpresas(MDScreenAbstrac):
                 noti.text += "El Correo de la empresa debe tener almenos un @\n"
                 estado = False
             if estado:
-                vericando_rut = her.verificar_rut(self.ids.rut_empresa.text)
+                verificando_rut = her.verificar_rut(self.ids.rut_empresa.text)
 
-                if vericando_rut[0]:
+                if verificando_rut[0]:
                     objeto = RegistroEmpresas(
-                        rut_empresa=self.ids.rut_empresa.text,
+                        rut_empresa=verificando_rut[1],
                         nombre_empresa=self.ids.nombre_empresa.text,
                         giro_empresa=self.ids.giro_empresa.text,
                         direccion_empresa=self.ids.direccion_empresa.text,

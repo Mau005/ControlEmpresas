@@ -28,7 +28,7 @@ class RecuperacionCuenta():
         self.digito = str(her.numero_aleatorio())
         self.tiempo_recuperacion = TIEMPOESPERADIGITO
         mensaje = her.cargar_archivo("data/correos/Recuperacion_Cuenta.msg", "Se cargo mensaje correo")
-        self.servicio_correos.enviar_mensaje(self.correo, mensaje.format(self.correo, self.digito))
+        self.servicio_correos.enviar_mensaje(self.correo, "kastachana: Recuperación de Cuenta", mensaje.format(self.correo, self.digito))
         self.control_network.agregar_control_recuperacion(self.correo, self.digito)
 
     def actualizar(self):

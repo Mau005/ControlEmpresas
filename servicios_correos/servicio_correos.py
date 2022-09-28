@@ -48,8 +48,8 @@ class Servicio_Correos():
         mail_server.login(self.correo_sistema, self.__contrasenia)
         return mail_server
 
-    def enviar_mensaje(self, correo_destino, mensaje):
-        objeto = EstructurasCorreos(self.correo_sistema, correo_destino, "Un Titulo rapido")
+    def enviar_mensaje(self, correo_destino, titulo, mensaje):
+        objeto = EstructurasCorreos(self.correo_sistema, correo_destino, titulo)
         self.__mail_server.sendmail(self.correo_sistema, correo_destino, objeto.preparar_envio(mensaje).as_string())
 
 if __name__ == "__main__":

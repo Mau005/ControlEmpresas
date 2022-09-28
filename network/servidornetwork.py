@@ -4,6 +4,7 @@ from core.herramientas import Herramientas as her
 from network.recuperacion_cuenta import RecuperacionCuenta
 
 from entidades.registrousaurios import RegistroUsuarios
+from servicios_correos.base_correos import  Base_Correos
 
 
 class ServidorNetwork(Thread):
@@ -17,8 +18,8 @@ class ServidorNetwork(Thread):
         self.info = info
         self.grupos = grupos
         self.control_network = control_network
-        self.servicio_correos = servicio_correos
-        self.recuperacion_cuenta = RecuperacionCuenta(self.servicio_correos, self.control_network)
+        self.base_correo = Base_Correos(servicio_correos)
+        self.recuperacion_cuenta = RecuperacionCuenta(servicio_correos, self.control_network)
 
     def __variable_usuarios(self):
         self.ventana_actual = "entrada"
@@ -195,10 +196,13 @@ class ServidorNetwork(Thread):
             return self.enviar({"estado": False, "condicion": "contraseñas"})
 
     def registrar_persona(self, datos):
-        datos = self.querys.registrar_usuarios(datos.rut_persona, datos.nombres, datos.apellidos, datos.telefono,
+        datos_procesados = self.querys.registrar_personas(datos.rut_persona, datos.nombres, datos.apellidos, datos.telefono,
                                                datos.celular, datos.correo.lower(), datos.rut_empresa)
 
-        return self.enviar(datos)
+        if datos_procesados.get("estado"):
+            self.base_correo.Correo_Bienvenida(datos.nombres, datos.correo.lower(), "12345")
+
+        return self.enviar(datos_procesados)
 
     def registro_servicios(self, datos):
         if self.grupos.get(str(self.usuario.grupos)).get("CrearServicios"):
