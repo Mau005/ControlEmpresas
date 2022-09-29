@@ -1,6 +1,7 @@
 from threading import Thread
 from core.constantes import TAMANIO_PAQUETE, ERRORPRIVILEGIOS, TIMEPOESPERAUSUARIO
 from core.herramientas import Herramientas as her
+from entidades.registrarlocales import RegistrarLocales
 from entidades.registrotrabajador import RegistroTrabajador
 from network.recuperacion_cuenta import RecuperacionCuenta
 
@@ -114,12 +115,26 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "registrartrabajador":
                 self.registrar_trabajador(datos.get("contenido"))
 
+            if datos.get("estado") == "registrarlocal":
+                self.registrar_local(datos.get("contenido"))
+
             if datos.get("estado") == "cierreAbrupto":
                 print(
                     "Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
                 self.control_network.pendientes_desconexion.append(self.usuario.correo)
                 break
         self.cerrar()
+
+    def registrar_local(self, contenido):
+        objeto = RegistrarLocales()
+        objeto.__dict__ = contenido.__dict__
+
+        if self.grupos.get(str(self.usuario.grupos)).get("RegistrarLocales"):
+            info = self.querys.registrar_locales(objeto.nombre_local, objeto.telefono_local, objeto.direccion)
+            if info.get("estado"):
+                return self.enviar(info)
+        return self.enviar({"estado":False, "condicion": "privilegios"})
+
     def registrar_trabajador(self, contenido):
         objeto = RegistroTrabajador()
         objeto.__dict__ = contenido.__dict__

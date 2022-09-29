@@ -1,5 +1,7 @@
 from kivy.core.window import Window
 
+from ventanas.vlocales import VLocales
+
 Window.size = (400, 625)
 from kivymd.app import MDApp
 from kivymd.uix.screenmanager import MDScreenManager
@@ -48,6 +50,7 @@ class ControlEmpresas(MDApp):
         self.vlistaproductos = VListaProductos(self.network, self.manejador, "listaproductos", siguiente="casa")
         self.vserviciosdiarios = VServiciosDiarios(self.network, self.manejador, "serviciosdiarios", siguiente="casa")
         self.vtrabajadores = VTrabajadores(self.network, self.manejador, "trabajadores", siguiente="casa")
+        self.vlocales = VLocales(self.network, self.manejador, "locales", siguiente = "casa")
         self.manejador.add_widget(self.login)
         self.manejador.add_widget(self.casa)
         self.manejador.add_widget(self.vservicios)
@@ -61,6 +64,7 @@ class ControlEmpresas(MDApp):
         self.manejador.add_widget(self.vlistaproductos)
         self.manejador.add_widget(self.vserviciosdiarios)
         self.manejador.add_widget(self.vtrabajadores)
+        self.manejador.add_widget(self.vlocales)
         self.login.activar()
 
     def actualizar(self, dt):

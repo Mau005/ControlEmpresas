@@ -25,7 +25,8 @@
             "ModificarServicios": true,
             "VerProductos": true,
             "VerEmpresas": true,
-            "RegistrarTrabajadores": true
+            "RegistrarTrabajadores": true,
+            "RegistrarLocales": true
             
         }
     }

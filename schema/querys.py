@@ -154,3 +154,10 @@ class Querys():
         VALUES("{}", {}, {}, {});
         '''.format(rut, id_local, sueldo, dia_pago)
         return self.bd.insertar(querys)
+
+    def registrar_locales(self, nombre, telefono, direccion):
+        querys = '''
+        INSERT INTO locales(NOMBRE_LOCAL, TELEFONO_LOCAL, DIRECCION)
+        VALUES("{}","{}","{}")
+        '''.format(nombre, telefono, direccion)
+        return self.bd.insertar(querys)

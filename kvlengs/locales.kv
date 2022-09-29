@@ -1,0 +1,38 @@
+
+
+
+<VLocales>:
+    botones_locales:botones_locales
+    MDCardPre:
+        size_hint: .95, .95
+        adaptive_size: True
+        elevation: 40
+        pos_hint: {"center_x": .5, "center_y": .5}
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            MDList:
+                padding: dp(30)
+                spacing: dp(25)
+                MDLabel:
+                    text: "Crear Locales"
+                    font_size: dp(25)
+                    haling: "center"
+                MDTextField:
+                    hint_text: "Nombre Local"
+                    id:nombre_local
+                    helper_text: "max 100 caracteres"
+                MDTextField:
+                    id: telefono
+                    hint_text: "Telefono: "
+                    helper_text: "max 12 caracteres"
+                MDTextField:
+                    id: direccion
+                    hint_text: "Direccion"
+                    helper_text: "calle numero, comuna"
+
+    MDFloatingActionButtonSpeedDial:
+        size_hint_y: .1
+        id: botones_locales
+        callback: root.accion_boton
+        root_button_anim: True
