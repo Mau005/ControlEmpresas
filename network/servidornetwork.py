@@ -2,11 +2,12 @@ from threading import Thread
 from core.constantes import TAMANIO_PAQUETE, ERRORPRIVILEGIOS, TIMEPOESPERAUSUARIO
 from core.herramientas import Herramientas as her
 from entidades.registrarlocales import RegistrarLocales
+from entidades.registroserviciosdiarios import RegistroServiciosDiarios
 from entidades.registrotrabajador import RegistroTrabajador
 from network.recuperacion_cuenta import RecuperacionCuenta
 
 from entidades.registrousaurios import RegistroUsuarios
-from servicios_correos.base_correos import  Base_Correos
+from servicios_correos.base_correos import Base_Correos
 
 
 class ServidorNetwork(Thread):
@@ -102,12 +103,12 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "lista_empresas":
                 self.listado_empresas()
 
-            if datos.get("estado") == "estadoservicios":
+            if datos.get("estado") == "menu_estado":
                 # Se procede a enviar informacion de los estados
-                self.enviar(self.querys.solicitar_estados_servicios())
+                self.enviar(self.querys.lista_menu_estados())
 
-            if datos.get("estado") == "menupersonas":
-                self.enviar(self.querys.lista_personas())
+            if datos.get("estado") == "menu_personas":
+                self.enviar(self.querys.lista_menu_personas())
 
             if datos.get("estado") == "menulocales":
                 self.enviar(self.querys.lista_locales())
@@ -118,12 +119,27 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "registrarlocal":
                 self.registrar_local(datos.get("contenido"))
 
+            if datos.get("estado") == "menu_trabajadores":
+                self.enviar(self.querys.lista_menu_trabajadores())
+
+            if datos.get("estado") == "menu_productos":
+                self.enviar(self.querys.lista_menu_productos())
+
+            if datos.get("estado") == "registro_servicio_diario":
+                self.registro_servicio_diario(datos.get("contenido"))
+
             if datos.get("estado") == "cierreAbrupto":
                 print(
                     "Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
                 self.control_network.pendientes_desconexion.append(self.usuario.correo)
                 break
         self.cerrar()
+
+    def registro_servicio_diario(self, contenido):
+        info = self.querys.registrar_servicio_diario(contenido)
+        if info.get("estado"):
+            return self.enviar(info)
+        return self.enviar({"estado": False, "condicion": "REGISTRO"})
 
     def registrar_local(self, contenido):
         objeto = RegistrarLocales()
@@ -133,7 +149,7 @@ class ServidorNetwork(Thread):
             info = self.querys.registrar_locales(objeto.nombre_local, objeto.telefono_local, objeto.direccion)
             if info.get("estado"):
                 return self.enviar(info)
-        return self.enviar({"estado":False, "condicion": "privilegios"})
+        return self.enviar({"estado": False, "condicion": "privilegios"})
 
     def registrar_trabajador(self, contenido):
         objeto = RegistroTrabajador()
@@ -141,15 +157,17 @@ class ServidorNetwork(Thread):
         if self.grupos.get(str(self.usuario.grupos)).get("RegistrarTrabajadores"):
             info = self.querys.registrar_trabajador(objeto.rut, objeto.id_local, objeto.sueldo, objeto.dia_pago)
             return self.enviar(info)
-        return self.enviar({"estado":False, "condicion":"privilegios"})
+        return self.enviar({"estado": False, "condicion": "privilegios"})
+
     def listado_empresas(self):
         if self.grupos.get(str(self.usuario.grupos)).get("VerEmpresas"):
             return self.enviar(self.querys.lista_empresas())
         return self.enviar({"estado": False, "condicion": "privilegios"})
+
     def listado_productos(self):
         if self.grupos.get(str(self.usuario.grupos)).get("VerProductos"):
             return self.enviar(self.querys.solicitar_lista_productos())
-        return self.enviar({"estado":False, "condicion":"privilegios"})
+        return self.enviar({"estado": False, "condicion": "privilegios"})
 
     def desconectar(self):
         self.control_network.hilos_cliente.pop(self.usuario.correo)
@@ -228,8 +246,9 @@ class ServidorNetwork(Thread):
             return self.enviar({"estado": False, "condicion": "contraseñas"})
 
     def registrar_persona(self, datos):
-        datos_procesados = self.querys.registrar_personas(datos.rut_persona, datos.nombres, datos.apellidos, datos.telefono,
-                                               datos.celular, datos.correo.lower(), datos.rut_empresa)
+        datos_procesados = self.querys.registrar_personas(datos.rut_persona, datos.nombres, datos.apellidos,
+                                                          datos.telefono,
+                                                          datos.celular, datos.correo.lower(), datos.rut_empresa)
 
         if datos_procesados.get("estado"):
             self.base_correo.Correo_Bienvenida(datos.nombres, datos.correo.lower(), "12345")

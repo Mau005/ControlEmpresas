@@ -32,10 +32,18 @@
                     id: id_estado
                     text: "Estados"
                     pos_hint: {"center_x": .5, "center_y": .5}
-                    on_release: root.desplegar_menu()
+                MDRaisedButton:
+                    text: "Id Producto: "
+                    id: menu_producto
+
                 MDTextField:
-                    hint_text: "Precio:"
-                    id:precio
+                    hint_text: "Cantidad de productos: "
+                    input_filter : "int"
+                    id: cantidad_productos
+
+                MDTextField:
+                    hint_text: "Precio Unitario:"
+                    id: precio
                     input_filter: 'int'
 
                 MDGridLayout:
@@ -45,24 +53,31 @@
                     MDLabel:
                         text: "Lunes"
                     MDCheckbox:
+                        id: lunes
                     MDLabel:
                         text: "Martes"
                     MDCheckbox:
+                        id: martes
                     MDLabel:
                         text: "Miercoles"
                     MDCheckbox:
+                        id: miercoles
                     MDLabel:
                         text: "Jueves"
                     MDCheckbox:
+                        id: jueves
                     MDLabel:
                         text: "Viernes"
                     MDCheckbox:
+                        id: viernes
                     MDLabel:
                         text: "Sabado"
                     MDCheckbox:
+                        id: sabado
                     MDLabel:
                         text: "Domingo"
                     MDCheckbox:
+                        id: domingo
                 MDBoxLayout:
                     orientation: "horizontal"
                     size_hint_y: None
@@ -70,27 +85,27 @@
                     MDLabel:
                         text: "Todas las Semanas?"
                     MDCheckbox:
+                        id: toda_semana
 
                 MDTextField:
                     hint_text: "URL Posicion Geografica"
+                    id: url_posicion
                 MDTextField:
                     hint_text: "Ubicacion de el servicio: Ejemplo Av TU hermana 156942"
-
+                    id: ubicacion
                 MDRaisedButton:
                     text: "Rut Cliente:"
+                    id: botton_rut_accion
 
                 MDRaisedButton:
                     text: "Rut Trabajador:"
-
-                MDTextField:
-                    hint_text: "Cantidad"
+                    id : botton_rut_trabajador
 
                 MDTextField:
                     id:descr
                     hint_text: "Descripcion:"
                     multiline: True
-            
-            
+
         MDFloatingActionButtonSpeedDial:
             size_hint_y: .2
             id: botones_servicios

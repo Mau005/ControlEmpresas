@@ -14,6 +14,8 @@ class RegistroServiciosDiarios():
         self.rut_trabajador = kargs.get("rut_trabajador")
         self.descr = kargs.get("descr")
         self.toda_semana = kargs.get("toda_semana")
+        self.id_producto = kargs.get("id_producto")
+        self.cantidad = kargs.get("cantidad")
         # ID_SERVICIOS_DIARIOS	NOMBRE_SERVICIO	ID_ESTADO	PRECIO	FECHA_SEMANA
         # #URL_POSICION	UBICACION	RUT_USUARIO	RUT_TRABAJADOR	DESCR	TODA_SEMANA
 
@@ -30,10 +32,12 @@ class RegistroServiciosDiarios():
         Rut Trabajador: {}
         Descr: {}
         Toda Semana: {}
+        Id Producto: {}
+        Cantidad: {}
         """.format(self.id_servicios_diarios, self.nombre_servicio, self.id_estado, self.precio, self.fecha_semana,
                    self.url_posicion, self.ubicacion, self.rut_usuario, self.rut_trabajador, self.descr,
-                   self.toda_semana)
+                   self.toda_semana, self.id_producto, self.cantidad)
 
     def preparar(self):
-        return {"estado":"registroserviciodiario", "contenido": self}
+        return {"estado":"registro_servicio_diario", "contenido": self}
 

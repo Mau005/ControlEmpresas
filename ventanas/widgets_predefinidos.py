@@ -1,15 +1,74 @@
 from abc import abstractmethod
 
-from kivy.properties import StringProperty
+from kivymd.uix.bottomsheet import MDListBottomSheet
 from kivymd.uix.card import MDCard
-from kivymd.uix.behaviors import CircularElevationBehavior,RectangularElevationBehavior
-from kivymd.uix.relativelayout import MDRelativeLayout
+from kivymd.uix.behaviors import RectangularElevationBehavior
+
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDRoundFlatButton
 from kivymd.uix.list import TwoLineListItem, ThreeLineListItem
 from kivymd.uix.textfield import MDTextField
-from kivymd.uix.button import MDFloatingActionButtonSpeedDial
+
+from entidades.menuitems import MenuGlobal
+
+
+class MenuEntidades:
+
+    def __init__(self, network, nombre_boton, nombre_busqueda, boton_modificar, filtro="str"):
+        """
+        Clase definida para crear multiples consulta de botones para seleccionar
+        cosas, soporta 2 argumentos de retorno
+        """
+        self.nombre_boton = nombre_boton
+        self.nombre_busqueda = nombre_busqueda
+        self.network = network
+        self.boton_modificar = boton_modificar
+        self.listados = {}
+        self.dato_guardar = None
+        self.filtro = filtro
+
+    def __limpiada(self):
+        self.listados.clear()
+
+    def __conversion(self):
+        if self.filtro == "int":
+            self.dato_guardar = int(self.dato_guardar)
+        elif self.filtro == "float":
+            self.dato_guardar = float(self.dato_guardar)
+        elif self.filtro == "bool":
+            self.dato_guardar = bool(self.dato_guardar)
+        elif self.filtro == "str":
+            if isinstance(self.dato_guardar, str):
+                if len(self.dato_guardar) == 0:
+                    self.dato_guardar = None
+
+    def callback(self, arg):
+        procesar = arg.text.split(":")
+        identificador = procesar[1].split("\n")
+
+        objeto = self.listados.get(identificador[0].replace(" ", ""))
+        self.dato_guardar = objeto.identificador
+        self.boton_modificar.text = f"{self.nombre_boton} {identificador[0]}\n{identificador[1]}"
+        self.__conversion()
+
+    def desplegar_menu(self, *args):
+        bottom_sheet_menu = MDListBottomSheet()
+        for objetos in self.listados.values():
+            bottom_sheet_menu.add_item(f"{self.nombre_busqueda} {objetos.identificador}\n{objetos.nombre}",
+                                       self.callback)
+        bottom_sheet_menu.open()
+
+    def generar_consulta(self, consultar):
+        self.__limpiada()
+        self.network.enviar({"estado": consultar})
+        info = self.network.recibir()
+        if info.get("estado"):
+            for elementos in info.get("datos"):
+                objeto = MenuGlobal(str(elementos[0]), elementos[1])
+                self.listados.update({objeto.identificador: objeto})
+            return {"estado": True}
+        return {"estado": False, "condicion": "CONSULTA"}
 
 
 class MDTreeLine(ThreeLineListItem):
@@ -25,9 +84,7 @@ class MDTreeLine(ThreeLineListItem):
         self.tertiary_text = f"Cantidad: {self.cantidad}"
         self.procesar_colores(cantidad)
 
-
-
-    def procesar_colores(self,cantidad):
+    def procesar_colores(self, cantidad):
         self.tertiary_theme_text_color = "Custom"
         if cantidad >= 0 and cantidad <= 3:
             self.tertiary_text_color = [1, 0, 0, 1]
@@ -35,7 +92,6 @@ class MDTreeLine(ThreeLineListItem):
             self.tertiary_text_color = [0, .5, 0, 1]
         elif cantidad >= 11:
             self.tertiary_text_color = [0, 1, 0, 1]
-
 
 
 class MDTwoLine(TwoLineListItem):
@@ -48,6 +104,7 @@ class MDTwoLine(TwoLineListItem):
 
 class MDCardPre(MDCard, RectangularElevationBehavior):
     pass
+
 
 class NotificacionText(MDDialog):
 
@@ -110,6 +167,11 @@ class MDScreenAbstrac(MDScreen):
         for elementos in self.manager.screen_names:
             self.manager.get_screen(elementos).activo = False
 
+    def __desconectar(self):
+        self.manager.current = "entrada"
+        self.manager.get_screen("entrada").activar()
+        self.network.iniciar()
+
     @abstractmethod
     def actualizar(self, dt):
         if self.name != "entrada" and self.activo:
@@ -118,9 +180,7 @@ class MDScreenAbstrac(MDScreen):
             if not info.get("estado"):
                 noti = Notificacion("Error", info.get("contenido"))
                 noti.open()
-                self.manager.current = "entrada"
-                self.manager.get_screen("entrada").activar()
-                self.network.iniciar()
+                self.__desconectar()
 
     @abstractmethod
     def siguiente(self, *dt):

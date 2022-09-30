@@ -3,7 +3,7 @@ import sys
 from core.constantes import PROTOCOLOERROR, PROTOCOLOAFIRMATIVO
 
 
-class BaseDatos():
+class BaseDatos:
     def __init__(self, estrucura):
         self.estructura = estrucura
         self.conec = None
@@ -32,7 +32,8 @@ class BaseDatos():
             self.cursor.execute(querys)
             self.conec.commit()
             return {"estado": True, "condicion": PROTOCOLOAFIRMATIVO["INSERTAR"]}
-        except mysql.connector.errors.IntegrityError:
+        except mysql.connector.errors.IntegrityError as error:
+            print(error)
             return {"estado": False, "condicion": PROTOCOLOERROR["INSERTAR"]}
         finally:
             self.__cerrar()

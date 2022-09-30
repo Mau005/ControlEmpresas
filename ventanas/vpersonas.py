@@ -4,13 +4,7 @@ from entidades.registropersonas import RegistroPersonas
 from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion
 from kivy.properties import ObjectProperty
 from core.herramientas import Herramientas as her
-from kivy.logger import Logger
-
-
-class Contenedor_Rut():
-    def __init__(self, rut_empresa, nombre):
-        self.rut_empresa = rut_empresa
-        self.nombre = nombre
+from entidades.menuitems import MenuItemPersonas
 
 
 class VPersonas(MDScreenAbstrac):
@@ -47,7 +41,7 @@ class VPersonas(MDScreenAbstrac):
 
         if info.get("estado"):
             for elementos in info.get("datos"):
-                self.lista_botones_empresas.update({elementos[0]: Contenedor_Rut(elementos[0], elementos[1])})
+                self.lista_botones_empresas.update({elementos[0]: MenuItemPersonas(elementos[0], elementos[1])})
                 print(elementos)
         else:
             if info.get("condicion") == "privilegios":

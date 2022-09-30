@@ -1,3 +1,7 @@
+from entidades.registroserviciosdiarios import RegistroServiciosDiarios
+from core.herramientas import Herramientas as her
+
+
 class Querys():
 
     def __init__(self, bd):
@@ -118,16 +122,21 @@ class Querys():
         querys = f'SELECT ID_PRODUCTO, NOMBRE_PRODUCTO, CANTIDAD FROM productos;'
         return self.bd.consultar(querys, all=True)
 
-    def solicitar_estados_servicios(self):
+    def lista_menu_estados(self):
         querys = f'SELECT ID_ESTADO, NOMBRE FROM ESTADOS;'
         return self.bd.consultar(querys, all=True)
 
-    def registrar_servicio_diario(self):
+    def registrar_servicio_diario(self, objeto):
+        obj = RegistroServiciosDiarios()
+        obj.__dict__ = objeto.__dict__
+        obj = her.recuperacion_sentencia(obj)
         querys = '''
-        ID_SERVICIOS_DIARIOS	NOMBRE_SERVICIO	ID_ESTADO	PRECIO	FECHA_SEMANA	URL_POSICION	UBICACION	RUT_USUARIO	RUT_TRABAJADOR	DESCR	TODA_SEMANA
-        INSERT INTO serviciosdiarios(NOMBRE_SERVICIO, ID_ESTADO, PRECIO, FECHA_SEMANA, URL_POSICION, UBICACION, RUT_USUARIO, RUT_TRABAJADOR, DESCR, TODA_SEMANA)
-        VALUES("{0}", {}, {}, "{}", "{}", "{}", "{}", "{}", "{}", {});
-        '''.format()
+        INSERT INTO serviciosdiarios(NOMBRE_SERVICIO, ID_ESTADO, PRECIO, FECHA_SEMANA, URL_POSICION, UBICACION,
+        RUT_USUARIO, RUT_TRABAJADOR, DESCR, TODA_SEMANA, ID_PRODUCTO, CANTIDAD)
+        VALUES({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {});
+        '''.format(obj.nombre_servicio, obj.id_estado, obj.precio, obj.fecha_semana, obj.url_posicion, obj.ubicacion,
+                   obj.rut_usuario, obj.rut_trabajador, obj.descr, obj.toda_semana, obj.id_producto, obj.cantidad)
+        print(querys)
         return self.bd.insertar(querys)
 
     def lista_empresas(self):
@@ -140,8 +149,8 @@ class Querys():
         querys = f'select CORREO  from usuarios where CORREO = "{correo}";'
         return self.bd.consultar(querys)
 
-    def lista_personas(self):
-        querys = "SELECT RUT, NOMBRES FROM personas;"
+    def lista_menu_personas(self):
+        querys = "SELECT RUT, CONCAT(NOMBRES, ' ', APELLIDOS) as Nombres FROM personas;"
         return self.bd.consultar(querys, all=True)
 
     def lista_locales(self):
@@ -161,3 +170,15 @@ class Querys():
         VALUES("{}","{}","{}")
         '''.format(nombre, telefono, direccion)
         return self.bd.insertar(querys)
+
+    def lista_menu_trabajadores(self):
+        querys = """
+        SELECT t.RUT, CONCAT(p.NOMBRES, ' ', p.APELLIDOS) as Nombres
+        FROM trabajadores t
+        JOIN personas p ON p.RUT = t.RUT;
+        """
+        return self.bd.consultar(querys, all=True)
+
+    def lista_menu_productos(self):
+        querys = "SELECT ID_PRODUCTO, NOMBRE_PRODUCTO FROM productos;"
+        return self.bd.consultar(querys, all=True)

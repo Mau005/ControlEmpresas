@@ -4,17 +4,8 @@ from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion
 from kivy.properties import ObjectProperty
 from core.constantes import BUTTONCREATE
 from entidades.registrotrabajador import RegistroTrabajador
+from entidades.menuitems import MenuItemLocales, MenuItemPersonas
 
-
-class MenuItemPersonas():
-    def __init__(self, rut, nombre):
-        self.rut = rut
-        self.nombre = nombre
-
-class MenuItemLocales():
-    def __init__(self, id_local, nombre_local):
-        self.id_local = id_local
-        self.nombre_local = nombre_local
 
 class VTrabajadores(MDScreenAbstrac):
     botones_trabajadores = ObjectProperty()
@@ -41,17 +32,17 @@ class VTrabajadores(MDScreenAbstrac):
             self.siguiente()
         if arg.icon == "pencil":
             objeto = RegistroTrabajador(
-                rut = self.persona_actual,
-                id_local = self.local_actual,
-                sueldo = self.ids.sueldo_trabajador.text,
-                dia_pago = self.ids.dia_pago.text
+                rut=self.persona_actual,
+                id_local=self.local_actual,
+                sueldo=self.ids.sueldo_trabajador.text,
+                dia_pago=self.ids.dia_pago.text
             )
             self.network.enviar(objeto.preparar())
             info = self.network.recibir()
             print(f"Vtrabajador info : {info}")
             noti = Notificacion("Error", "Usuario ya se encuentra registrado en Trabajadores")
             if info.get("estado"):
-                noti.title= "Correcto"
+                noti.title = "Correcto"
                 noti.text = f"Se ha generado correctamente el trabajdor {self.persona_actual}"
 
             elif info.get("condicion") == "privilegios":
@@ -59,7 +50,6 @@ class VTrabajadores(MDScreenAbstrac):
 
             self.formatear()
             noti.open()
-
 
     def formatear(self):
         self.persona_actual = ""
@@ -69,7 +59,6 @@ class VTrabajadores(MDScreenAbstrac):
         self.ids.sueldo_trabajador.text = ""
         self.ids.dia_pago.text = ""
         self.activar()
-
 
     def __consultar_personas(self):
         self.lista_personas.clear()  # limpiamos el menu de informacion clonada
@@ -89,7 +78,7 @@ class VTrabajadores(MDScreenAbstrac):
         if info.get("estado"):
             for elementos in info.get("datos"):
                 objeto = MenuItemLocales(elementos[0], elementos[1])
-                self.lista_locales.update({objeto.id_local : objeto})
+                self.lista_locales.update({objeto.id_local: objeto})
 
     def activar(self):
         self.__consultar_personas()

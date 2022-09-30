@@ -49,8 +49,22 @@ class Herramientas:
             archivo = open(ruta,"w", encoding = "utf-8")
             contenido = json.dump(contenido, archivo, ensure_ascii=False)
             archivo.close()
-            
-            
+
+    @staticmethod
+    def recuperacion_sentencia(objeto):
+        for elementos in objeto.__dict__.keys():
+            if isinstance(objeto.__dict__[elementos], str):
+                if objeto.__dict__[elementos] == "":
+                    objeto.__dict__[elementos] = "NULL"
+                else:
+                    objeto.__dict__[elementos] = f'"{objeto.__dict__[elementos]}"'
+            if isinstance(objeto.__dict__[elementos], int) or isinstance(objeto.__dict__[elementos], bool) \
+                    or isinstance(objeto.__dict__[elementos], float):
+                objeto.__dict__[elementos] = f"{objeto.__dict__[elementos]}"
+            if objeto.__dict__[elementos] is None:
+                objeto.__dict__[elementos] = "NULL"
+        return objeto
+
     @staticmethod
     def verificar_rut(rut):
         """Methodo usado para verificacion de rut, procesando cada segmento divido en 2
