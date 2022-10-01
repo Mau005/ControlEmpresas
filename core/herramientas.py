@@ -37,17 +37,17 @@ class Herramientas:
         return contenido.hexdigest()
     
     @staticmethod
-    def cargar_json(ruta, mensaje):
+    def cargar_json(ruta):
         if os.path.exists(ruta):
             archivo = open(ruta, "r" , encoding = "utf-8")
-            print(f"[OK] {mensaje}")
             return json.load(archivo)
+        return None
         
     @staticmethod
     def escribir_json(contenido, ruta):
         if os.path.exists(ruta):
             archivo = open(ruta,"w", encoding = "utf-8")
-            contenido = json.dump(contenido, archivo, ensure_ascii=False)
+            json.dump(contenido, archivo, ensure_ascii=False)
             archivo.close()
 
     @staticmethod

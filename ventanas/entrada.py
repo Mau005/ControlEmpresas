@@ -13,8 +13,8 @@ class Entrada(MDScreenAbstrac):
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.contenido_usuario = her.cargar_json("data/ConfiguracionCliente.json", "Se carga configuración del cliente")
-        self.noti_network = NotificacionText("Configura la IP", "127.0.0.1", aceptar=self.func_concurrente_notificacion)
+        self.contenido_usuario = her.cargar_json("data/ConfiguracionCliente.json")
+        self.noti_network = NotificacionText("Configuración de IP y Puerto", "Ejemplo: 127.0.0.1:7171", aceptar=self.func_concurrente_notificacion)
 
         self.noti_recuperacion = NotificacionText("Indique correo electronico: ", "ejemplo@tudominio.cl",
                                                   aceptar=self.func_concurrente_recuperacion)
@@ -29,8 +29,16 @@ class Entrada(MDScreenAbstrac):
         self.ids.usuario_guardar.active = self.contenido_usuario["Usuario"]["boton"]
 
     def func_concurrente_notificacion(self, args):
-        self.network.ip = self.noti_network.campo.text
-        self.network.iniciar()
+        ip, puerto = self.noti_network.campo.text.split(":")
+        print(f"Ip: {ip} Port: {puerto}")
+        try:
+            self.network.ip = ip
+            self.network.port = int(puerto)
+            self.network.iniciar()
+        except ValueError:
+            noti = Notificacion("Error en puerto", "El puerto solo debe tener numeros no letras")
+            noti.open()
+
 
     def func_concurrente_recuperacion(self, args):
         self.network.enviar({"estado": "recuperacion", "contenido": self.noti_recuperacion.campo.text})

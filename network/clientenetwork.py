@@ -1,4 +1,4 @@
-from core.constantes import PORT, TAMANIO_PAQUETE
+from core.constantes import TAMANIO_PAQUETE
 from core.herramientas import Herramientas as her
 from kivy.logger import Logger
 from ventanas.widgets_predefinidos import Notificacion
@@ -10,15 +10,25 @@ class ClienteNetwork:
     def __init__(self):
         self.socket = None
         self.__estado = False
-        self.ip = "localhost"
+        self.configuracion = self.cargar_json()
+        self.ip = self.configuracion["Servidor"]["ip"]
+        self.port = self.configuracion["Servidor"]["port"]
         self.iniciar()
 
+    def cargar_json(self, actualizar = False):
+        configuracion = her.cargar_json("data/ConfiguracionCliente.json")
+        if actualizar:
+            configuracion["Servidor"]["ip"] = self.ip
+            configuracion["Servidor"]["port"] = self.port
+            her.escribir_json(configuracion, "data/ConfiguracionCliente.json")
+        return configuracion
     def iniciar(self, *args):
         try:
             self.socket = socket.socket()
             self.socket.settimeout(10)
-            self.socket.connect((self.ip, PORT))
+            self.socket.connect((self.ip, self.port))
             self.socket.settimeout(None)
+            self.configuracion = self.cargar_json(actualizar=True)
             self.__estado = True
             Logger.info("Se ha conectado con exito")
             return self.socket

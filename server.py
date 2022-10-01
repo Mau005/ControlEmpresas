@@ -27,8 +27,10 @@ class Server:
         self.tiempo_inicial = time.time()
 
     def __iniciar_variables(self):
-        self.info = her.cargar_json("data/ConfiguracionServidor.json", "Se Cargan Variables")
-        self.grupos = her.cargar_json("data/Grupos.json", "Se cargan los Grupos")["Grupos"]
+        self.info = her.cargar_json("data/ConfiguracionServidor.json")
+        print("[OK] Se Cargan Variables")
+        self.grupos = her.cargar_json("data/Grupos.json")["Grupos"]
+        print("[OK] Se cargan los Grupos")
         self.servicio_correos = Servicio_Correos(self.info["Correo"]["correo"],
                                                  self.info["Correo"]["contraseña"],
                                                  self.info["Correo"]["host"],
