@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-09-2022 a las 23:57:28
+-- Tiempo de generación: 01-10-2022 a las 02:14:37
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 7.4.29
 
@@ -65,7 +65,8 @@ INSERT INTO `estados` (`ID_ESTADO`, `NOMBRE`) VALUES
 (1, 'OPERATIVO'),
 (2, 'DETENIDO'),
 (3, 'TRANSLADO'),
-(4, 'SINIESTRADO');
+(4, 'SINIESTRADO'),
+(5, 'PREPARACIÓN');
 
 -- --------------------------------------------------------
 
@@ -85,7 +86,8 @@ CREATE TABLE `locales` (
 --
 
 INSERT INTO `locales` (`ID_LOCAL`, `NOMBRE_LOCAL`, `TELEFONO_LOCAL`, `DIRECCION`) VALUES
-(1, 'Principal', '+565656', 'Av Tusca con Chetes');
+(1, 'Principal', '+565656', 'Av Tusca con Chetes'),
+(7, 'Los Tres Pinos santiago', '', 'michimalongo 14600 la pintana');
 
 -- --------------------------------------------------------
 
@@ -103,6 +105,13 @@ CREATE TABLE `personas` (
   `RUT_EMPRESA` varchar(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `personas`
+--
+
+INSERT INTO `personas` (`RUT`, `NOMBRES`, `APELLIDOS`, `TELEFONO`, `CELULAR`, `CORREO`, `RUT_EMPRESA`) VALUES
+('18.881.495-6', 'Mauricio Andres', 'Pino Gonzalez', '', '+56946141941', 'arkinommo@gmail.com', 'Sin Empresa');
+
 -- --------------------------------------------------------
 
 --
@@ -116,6 +125,14 @@ CREATE TABLE `productos` (
   `FECHA_CREACION` datetime NOT NULL DEFAULT current_timestamp(),
   `CANTIDAD` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `productos`
+--
+
+INSERT INTO `productos` (`ID_PRODUCTO`, `NOMBRE_PRODUCTO`, `DESCRIPCION`, `FECHA_CREACION`, `CANTIDAD`) VALUES
+(3, 'Baños Sanitarios Estandar', 'Baño estandar sin ningun tipo de materiales extra', '2022-09-30 02:08:24', 50),
+(4, 'Baños Sanitarios Ejecutivo', 'Baño ejecutivo con lavamanos y confort industrial,', '2022-09-30 02:08:51', 24);
 
 -- --------------------------------------------------------
 
@@ -166,13 +183,23 @@ CREATE TABLE `serviciosdiarios` (
   `ID_ESTADO` int(1) NOT NULL,
   `PRECIO` int(11) NOT NULL,
   `FECHA_SEMANA` varchar(6) NOT NULL,
-  `URL_POSICION` varchar(250) NOT NULL,
+  `URL_POSICION` varchar(250) DEFAULT NULL,
   `UBICACION` varchar(250) NOT NULL,
   `RUT_USUARIO` varchar(12) NOT NULL,
   `RUT_TRABAJADOR` varchar(12) NOT NULL,
-  `DESCR` varchar(250) NOT NULL,
-  `TODA_SEMANA` tinyint(1) NOT NULL DEFAULT 1
+  `DESCR` varchar(250) DEFAULT NULL,
+  `TODA_SEMANA` tinyint(1) NOT NULL DEFAULT 1,
+  `ID_PRODUCTO` int(11) NOT NULL,
+  `CANTIDAD` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `serviciosdiarios`
+--
+
+INSERT INTO `serviciosdiarios` (`ID_SERVICIOS_DIARIOS`, `NOMBRE_SERVICIO`, `ID_ESTADO`, `PRECIO`, `FECHA_SEMANA`, `URL_POSICION`, `UBICACION`, `RUT_USUARIO`, `RUT_TRABAJADOR`, `DESCR`, `TODA_SEMANA`, `ID_PRODUCTO`, `CANTIDAD`) VALUES
+(2, 'Tongoy', 1, 9000, '27', NULL, 'av matta', '18.881.495-6', '18.881.495-6', NULL, 1, 3, 4),
+(3, 'San Miguel', 3, 12000, '234567', NULL, 'av chiloe ', '18.881.495-6', '18.881.495-6', NULL, 1, 3, 10);
 
 -- --------------------------------------------------------
 
@@ -186,6 +213,13 @@ CREATE TABLE `trabajadores` (
   `SUELDO` int(8) NOT NULL,
   `DIA_PAGO` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Volcado de datos para la tabla `trabajadores`
+--
+
+INSERT INTO `trabajadores` (`RUT`, `ID_LOCAL`, `SUELDO`, `DIA_PAGO`) VALUES
+('18.881.495-6', 7, 550000, 1);
 
 -- --------------------------------------------------------
 
@@ -206,6 +240,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`CORREO`, `CONTRASEÑA`, `FECHA_CREACION`, `ESTADO`, `GRUPOS`) VALUES
+('arkinommo@gmail.com', '8cb2237d0679ca88db6464eac60da96345513964', '2022-09-29', 1, 1),
 ('mpino1701@gmail.com', 'dd3105f5a40070eaff30001b545b224bce14eaba', '2022-09-16', 1, 5);
 
 --
@@ -263,7 +298,11 @@ ALTER TABLE `servicios`
 -- Indices de la tabla `serviciosdiarios`
 --
 ALTER TABLE `serviciosdiarios`
-  ADD PRIMARY KEY (`ID_SERVICIOS_DIARIOS`);
+  ADD PRIMARY KEY (`ID_SERVICIOS_DIARIOS`),
+  ADD KEY `SERVICIOS_DIARIOS_PRODUCTOS` (`ID_PRODUCTO`),
+  ADD KEY `SERVICIOS_DIARIOS_ESTADOS` (`ID_ESTADO`),
+  ADD KEY `SERVICIOS_DIARIOS_TRABAJADOR` (`RUT_TRABAJADOR`),
+  ADD KEY `SERVICIOS_DARIOS_PERSONAS` (`RUT_USUARIO`);
 
 --
 -- Indices de la tabla `trabajadores`
@@ -286,19 +325,19 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `estados`
 --
 ALTER TABLE `estados`
-  MODIFY `ID_ESTADO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID_ESTADO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `locales`
 --
 ALTER TABLE `locales`
-  MODIFY `ID_LOCAL` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `ID_LOCAL` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `ID_PRODUCTO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID_PRODUCTO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `registro_notas_empresas`
@@ -316,7 +355,7 @@ ALTER TABLE `servicios`
 -- AUTO_INCREMENT de la tabla `serviciosdiarios`
 --
 ALTER TABLE `serviciosdiarios`
-  MODIFY `ID_SERVICIOS_DIARIOS` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_SERVICIOS_DIARIOS` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Restricciones para tablas volcadas
@@ -341,6 +380,15 @@ ALTER TABLE `registro_notas_empresas`
 --
 ALTER TABLE `servicios`
   ADD CONSTRAINT `SERVICIOS_ESTADOS` FOREIGN KEY (`ID_ESTADO`) REFERENCES `estados` (`ID_ESTADO`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Filtros para la tabla `serviciosdiarios`
+--
+ALTER TABLE `serviciosdiarios`
+  ADD CONSTRAINT `SERVICIOS_DARIOS_PERSONAS` FOREIGN KEY (`RUT_USUARIO`) REFERENCES `personas` (`RUT`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `SERVICIOS_DIARIOS_ESTADOS` FOREIGN KEY (`ID_ESTADO`) REFERENCES `estados` (`ID_ESTADO`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `SERVICIOS_DIARIOS_PRODUCTOS` FOREIGN KEY (`ID_PRODUCTO`) REFERENCES `productos` (`ID_PRODUCTO`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `SERVICIOS_DIARIOS_TRABAJADOR` FOREIGN KEY (`RUT_TRABAJADOR`) REFERENCES `trabajadores` (`RUT`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `trabajadores`
