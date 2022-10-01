@@ -9,7 +9,6 @@ import threading, time
 from servicios_correos.servicio_correos import Servicio_Correos
 
 
-
 class Server:
     # Kastachaña: ordenar separar en idioma aymara
 
@@ -35,13 +34,15 @@ class Server:
                                                  self.info["Correo"]["contraseña"],
                                                  self.info["Correo"]["host"],
                                                  self.info["Correo"]["port"])
+        print("[OK] Se cargan Información del correo electronico no-reply")
+
         self.bd = BaseDatos(self.info.get("Mysql"))
         self.querys = Querys(self.bd)
         self.control_network = Control_Network()
 
     def __configurar_servidor(self):
         self.socket = socket.socket()
-        self.socket.bind((IP, PORT))
+        self.socket.bind((self.info["Servidor"]["ip"], self.info["Servidor"]["port"]))
         self.socket.listen(0)
 
     def actualizar(self):
@@ -55,14 +56,13 @@ class Server:
         self.tiempo.join()
 
     def iniciar(self):
-        print("[OK] Servidor Iniciado")
+        print("[OK] Servidor Iniciado: {}:{}".format(self.info["Servidor"]["ip"], self.info["Servidor"]["port"]))
         while self.enfuncionamiento:
             cliente, direccion = self.socket.accept()
             objeto_cliente = ServidorNetwork(cliente, direccion, self.querys, self.info, self.grupos,
                                              self.control_network, self.servicio_correos)
             print(f"Se ha conectado: {direccion}")
             objeto_cliente.start()
-
         self.cerrar()
 
 
