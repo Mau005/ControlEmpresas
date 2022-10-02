@@ -1,6 +1,5 @@
 from kivymd.uix.bottomsheet import MDListBottomSheet
 
-from entidades.menuitems import MenuItemEstado, MenuItemPersonas
 from entidades.registroserviciosdiarios import RegistroServiciosDiarios
 from ventanas.widgets_predefinidos import MDScreenAbstrac, MenuEntidades, Notificacion
 from kivy.properties import ObjectProperty

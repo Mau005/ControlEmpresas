@@ -1,6 +1,6 @@
 
 
-class RegistrarLocales():
+class RegistrarLocales:
 #ID_LOCAL, NOMBRE_LOCAL, TELEFONO_LOCAL, DIRECCION
 
     def __init__(self, **kargs):

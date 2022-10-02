@@ -1,6 +1,6 @@
 
 
-class RegistroPersonas():
+class RegistroPersonas:
     #RUT_PERSONA	NOMBRES	APELLIDOS	TELEFONO	CELULAR	CORREO RUT_EMPRESA
     def __init__(self, **kargs):
         self.rut_persona = kargs.get("rut_persona")

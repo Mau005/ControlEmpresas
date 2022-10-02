@@ -1,6 +1,6 @@
 
 
-class RegistroProductos():
+class RegistroProductos:
     
     def __init__(self, **kargs):
         self.id_producto = kargs.get("id_producto")

@@ -1,6 +1,6 @@
 
 
-class RegistroEmpresas():
+class RegistroEmpresas:
     
     def __init__(self, **kargs):
         self.rut_empresa = kargs.get("rut_empresa")
