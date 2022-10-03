@@ -1,6 +1,6 @@
 from kivymd.uix.bottomsheet import MDListBottomSheet
 
-from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion
+from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion, MenuEntidades
 from kivymd.uix.pickers import MDDatePicker
 from kivy.properties import ObjectProperty
 from entidades.registroservicio import RegistroServicios
@@ -27,17 +27,18 @@ class VServicios(MDScreenAbstrac):
         self.fecha_termino = None
         self.botones_servicios.data = self.data
         self.correo = "prueba"
-        self.servicio_actual = 1  # por defecto bd es operativo
-        self.lista_estados = {}
+        self.colecciones_estado = MenuEntidades(self.network, "Estados:", "Id:", self.ids.id_estado, filtro="int")
 
     def accion_boton(self, arg):
         print(arg.icon)
         if arg.icon == "delete":
             self.formatear()
+            self.botones_servicios.close_stack()
         if arg.icon == "exit-run":
-            self.botones_servicios.on_close()
+            self.botones_servicios.close_stack()
             self.siguiente()
         if arg.icon == "pencil":
+            self.botones_servicios.close_stack()
             if self.fecha_inicio is None:
                 noti = Notificacion("ERROR", "Alemenos debe indicar la fecha de inicio.")
                 noti.open()
@@ -48,8 +49,7 @@ class VServicios(MDScreenAbstrac):
                                         descr=self.descr.text,
                                         fecha_inicio=str(self.fecha_inicio),
                                         fecha_termino=str(self.fecha_termino),
-                                        correo=self.correo,
-                                        id_estado=str(self.servicio_actual),
+                                        id_estado=self.colecciones_estado.dato_guardar,
                                         precio=self.precio.text
                                         )
                 self.network.enviar(obj.preparar())
@@ -58,38 +58,25 @@ class VServicios(MDScreenAbstrac):
                     test = Notificacion("Exito", datos.get("condicion"))
                     test.open()
                     self.formatear()
-                else:
-                    test = Notificacion("Error", datos.get("condicion"))
+                    return
+                if datos.get("condicion") == "privilegios":
+                    test = Notificacion("Error",
+                                        datos.get("No tienes los privilegios suficientes para crear servicios!"))
                     test.open()
 
     def formatear(self):
         self.fecha_termino = None
         self.fecha_termino = None
         self.nombre.text = ""
-        self.id_estado.text = "Estado"
+        self.id_estado.text = "Estado:"
+        self.colecciones_estado.dato_guardar = None
         self.descr.text = ""
         self.precio.text = ""
         self.ids.btn_fecha.text = "00/00/00 al 00/00/00"
 
     def activar(self):
-        self.lista_estados.clear()  # limpiamos el menu de informacion clonada
-        self.network.enviar({"estado": "menu_estado"})
-        info = self.network.recibir()
-
-        for elementos in info.get("datos"):
-            objeto = MenuItemEstado(elementos[0], elementos[1])
-            self.lista_estados.update({objeto.nombre: objeto})
+        self.colecciones_estado.generar_consulta("menu_estado")
         super().activar()
-
-    def callback_menu(self, arg):
-        self.servicio_actual = self.lista_estados[arg.text].id_estado
-        self.id_estado.text = f"Estado: {arg.text}"
-
-    def desplegar_menu(self):
-        bottom_sheet_menu = MDListBottomSheet()
-        for objetos in self.lista_estados.keys():
-            bottom_sheet_menu.add_item(objetos, self.callback_menu)
-        bottom_sheet_menu.open()
 
     def abrir_fecha(self):
         date_dialog = MDDatePicker(mode="range")
