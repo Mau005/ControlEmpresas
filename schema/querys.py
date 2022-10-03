@@ -1,3 +1,4 @@
+from entidades.registroservicio import RegistroServicios
 from entidades.registroserviciosdiarios import RegistroServiciosDiarios
 from core.herramientas import Herramientas as her
 
@@ -44,17 +45,16 @@ class Querys():
         return self.bd.insertar(querys)
 
     def registrar_servicios(self, datos):
-        fecha_termino = datos.get("fecha_termino")
-        if fecha_termino == "NULL":
-            querys = f'''
-            INSERT INTO SERVICIOS(NOMBRE_SERVICIO, DESCRIPCION, FECHA_INICIO, PRECIO, ID_ESTADO)
-            VALUES("{datos.get("nombre")}", "{datos.get("descr")}","{datos.get("fecha_inicio")}", {int(datos.get("precio"))}, {int(datos.get("id_estado"))});
-            '''
-        else:
-            querys = f'''
-            INSERT INTO SERVICIOS(NOMBRE_SERVICIO, DESCRIPCION, FECHA_INICIO, FECHA_TERMINO, PRECIO, ID_ESTADO)
-            VALUES("{datos.get("nombre")}", "{datos.get("descr")}","{datos.get("fecha_inicio")}","{fecha_termino}", {int(datos.get("precio"))}, {int(datos.get("id_estado"))});
-            '''
+        objeto = RegistroServicios()
+        objeto.__dict__ = her.recuperacion_sentencia(datos).__dict__
+        print(objeto)
+        querys = f'''
+        INSERT INTO SERVICIOS(NOMBRE_SERVICIO, DESCRIPCION, FECHA_INICIO, FECHA_TERMINO, 
+        ID_ESTADO, RUT_TRABAJADOR, RUT_PERSONA)
+        VALUES({objeto.nombre}, {objeto.descr}, {objeto.fecha_inicio}, {objeto.fecha_termino},
+        {objeto.id_estado}, {objeto.rut_trabajador}, {objeto.rut_persona})
+        '''
+        print(querys)
 
         return self.bd.insertar(querys)
 

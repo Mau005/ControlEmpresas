@@ -75,8 +75,8 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "nueva_contraseña":
                 self.nueva_contraseña(datos.get("contenido"))
 
-            if datos.get("estado") == "registroservicio":
-                self.registro_servicios(datos)
+            if datos.get("estado") == "registro_servicio":
+                self.registro_servicios(datos.get("contenido"))
 
             if datos.get("estado") == "registroempresa":
                 self.registroempresas(datos.get("contenido"))
@@ -266,10 +266,8 @@ class ServidorNetwork(Thread):
 
     def registro_servicios(self, datos):
         if self.consultar_privilegios("CrearServicios"):
-            estado = self.querys.registrar_servicios(datos)
-            self.enviar(estado)
-        else:
-            self.enviar({"estado": False, "condicion": ERRORPRIVILEGIOS})
+            return self.enviar(self.querys.registrar_servicios(datos))
+        return self.enviar({"estado": False, "condicion": ERRORPRIVILEGIOS})
 
     def registroempresas(self, empresa):
         if self.consultar_privilegios("CrearEmpresas"):
@@ -279,7 +277,7 @@ class ServidorNetwork(Thread):
             self.enviar({"estado": False, "condicion": ERRORPRIVILEGIOS})
 
     def saludo(self):
-        self.enviar({"estado": "saludo", "contenido": "Hola fdp del servidor"})
+        self.enviar({"estado": "saludo", "contenido": "Primer Mensaje"})
 
     def actualizar_ventanas(self, contenido):
         if self.tiempo_actividad >= TIMEPOESPERAUSUARIO:
