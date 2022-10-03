@@ -5,6 +5,7 @@ from kivy.properties import ObjectProperty
 from core.constantes import BUTTONCREATE
 from entidades.registrotrabajador import RegistroTrabajador
 from entidades.menuitems import MenuItemLocales, MenuItemPersonas
+from ventanas.widgets_predefinidos import MenuEntidades
 
 
 class VTrabajadores(MDScreenAbstrac):
@@ -22,6 +23,10 @@ class VTrabajadores(MDScreenAbstrac):
         self.lista_personas = {}
         self.lista_locales = {}
 
+        self.colecciones_personas = MenuEntidades(self.network, "Rut:", "Rut:", self.ids.botton_rut_accion)
+        self.colecciones_locales = MenuEntidades(self.network, "Local:", "Local:", self.ids.botton_id_local,
+                                                 filtro="int")
+
     def accion_boton(self, arg):
         print(arg.icon)
         if arg.icon == "delete":
@@ -32,14 +37,13 @@ class VTrabajadores(MDScreenAbstrac):
             self.siguiente()
         if arg.icon == "pencil":
             objeto = RegistroTrabajador(
-                rut=self.persona_actual,
-                id_local=self.local_actual,
-                sueldo=self.ids.sueldo_trabajador.text,
-                dia_pago=self.ids.dia_pago.text
+                rut=self.colecciones_personas.dato_guardar,
+                id_local=self.colecciones_locales.dato_guardar,
+                sueldo=int(self.ids.sueldo_trabajador.text),
+                dia_pago=int(self.ids.dia_pago.text)
             )
             self.network.enviar(objeto.preparar())
             info = self.network.recibir()
-            print(f"Vtrabajador info : {info}")
             noti = Notificacion("Error", "Usuario ya se encuentra registrado en Trabajadores")
             if info.get("estado"):
                 noti.title = "Correcto"
@@ -60,29 +64,9 @@ class VTrabajadores(MDScreenAbstrac):
         self.ids.dia_pago.text = ""
         self.activar()
 
-    def __consultar_personas(self):
-        self.lista_personas.clear()  # limpiamos el menu de informacion clonada
-        self.network.enviar({"estado": "menupersonas"})
-        info = self.network.recibir()
-
-        if info.get("estado"):
-            for elementos in info.get("datos"):
-                objeto = MenuItemPersonas(elementos[0], elementos[1])
-                self.lista_personas.update({objeto.rut: objeto})
-
-    def __consultar_locales(self):
-        self.lista_locales.clear()
-        self.network.enviar({"estado": "menulocales"})
-        info = self.network.recibir()
-
-        if info.get("estado"):
-            for elementos in info.get("datos"):
-                objeto = MenuItemLocales(elementos[0], elementos[1])
-                self.lista_locales.update({objeto.id_local: objeto})
-
     def activar(self):
-        self.__consultar_personas()
-        self.__consultar_locales()
+        self.colecciones_personas.generar_consulta("menu_personas")
+        self.colecciones_locales.generar_consulta("menu_locales")
         super().activar()
 
     def callback_menu_personas(self, arg):
@@ -96,18 +80,6 @@ class VTrabajadores(MDScreenAbstrac):
         objeto_procesar = self.lista_locales[int(objeto[0])]
         self.local_actual = objeto_procesar.id_local
         self.ids.botton_id_local.text = f"Local: {objeto_procesar.nombre_local}"
-
-    def desplegar_menu_local(self):
-        botton_sheet_menu = MDListBottomSheet()
-        for objetos in self.lista_locales.values():
-            botton_sheet_menu.add_item(f"{objetos.id_local}: {objetos.nombre_local}", self.callback_menu_locales)
-        botton_sheet_menu.open()
-
-    def desplegar_menu(self):
-        bottom_sheet_menu = MDListBottomSheet()
-        for objetos in self.lista_personas.values():
-            bottom_sheet_menu.add_item(f"Rut: {objetos.rut}", self.callback_menu_personas)
-        bottom_sheet_menu.open()
 
     def actualizar(self, *dt):
         return super().actualizar(*dt)

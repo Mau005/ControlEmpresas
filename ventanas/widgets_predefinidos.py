@@ -27,6 +27,7 @@ class MenuEntidades:
         self.listados = {}
         self.dato_guardar = None
         self.filtro = filtro
+        self.boton_modificar.bind(on_release=self.desplegar_menu)
 
     def __limpiada(self):
         self.listados.clear()

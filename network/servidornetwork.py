@@ -2,10 +2,9 @@ from threading import Thread
 from core.constantes import TAMANIO_PAQUETE, ERRORPRIVILEGIOS, TIMEPOESPERAUSUARIO
 from core.herramientas import Herramientas as her
 from entidades.registrarlocales import RegistrarLocales
-from entidades.registroserviciosdiarios import RegistroServiciosDiarios
+from entidades.registro_notas_empresas import Registro_Notas_Empresas
 from entidades.registrotrabajador import RegistroTrabajador
 from network.recuperacion_cuenta import RecuperacionCuenta
-
 from entidades.registrousaurios import RegistroUsuarios
 from servicios_correos.base_correos import Base_Correos
 
@@ -110,8 +109,8 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "menu_personas":
                 self.enviar(self.querys.lista_menu_personas())
 
-            if datos.get("estado") == "menulocales":
-                self.enviar(self.querys.lista_locales())
+            if datos.get("estado") == "menu_locales":
+                self.enviar(self.querys.lista_menu_locales())
 
             if datos.get("estado") == "registrartrabajador":
                 self.registrar_trabajador(datos.get("contenido"))
@@ -124,6 +123,9 @@ class ServidorNetwork(Thread):
 
             if datos.get("estado") == "menu_productos":
                 self.enviar(self.querys.lista_menu_productos())
+
+            if datos.get("estado") == "menu_empresas":
+                self.enviar(self.querys.lista_menu_empresas())
 
             if datos.get("estado") == "registro_servicio_diario":
                 self.registro_servicio_diario(datos.get("contenido"))
@@ -145,10 +147,10 @@ class ServidorNetwork(Thread):
         objeto = RegistrarLocales()
         objeto.__dict__ = contenido.__dict__
 
-        if self.grupos.get(str(self.usuario.grupos)).get("RegistrarLocales"):
+        if self.consultar_privilegios("RegistrarLocales"):
             info = self.querys.registrar_locales(objeto.nombre_local, objeto.telefono_local, objeto.direccion)
-            if info.get("estado"):
-                return self.enviar(info)
+
+            return self.enviar(info)
         return self.enviar({"estado": False, "condicion": "privilegios"})
 
     def registrar_trabajador(self, contenido):
@@ -189,9 +191,7 @@ class ServidorNetwork(Thread):
             self.enviar({"estado": False, "condicion": "desde recuperacion_digito"})
 
     def nueva_contraseña(self, contraseña_nueva):
-        print(f"Se intenta cambia la contraseña nueva: {contraseña_nueva}")
         info = self.querys.nueva_contraseña(self.usuario.correo, contraseña_nueva)
-        print(f"informacion recupilada por el cambio de contraseña {info}")
         if info.get("estado"):
             self.enviar({"estado": True})
         else:
@@ -215,8 +215,16 @@ class ServidorNetwork(Thread):
         datos = self.querys.solicitar_lista_empresas()
         self.enviar(datos)
 
-    def registro_notas_empresas(self, notas):
-        self.querys.registrar_notas_empresas(notas.notas, notas.rut_empresa, self.usuario.correo, )
+    def registro_notas_empresas(self, contenido):
+        if self.consultar_privilegios("CrearNotaEmpresa"):
+            notas = Registro_Notas_Empresas()
+            notas.__dict__ = contenido.__dict__
+            datos = self.querys.registrar_notas_empresas(notas.notas, notas.rut_empresa,
+                                                         self.usuario.correo,
+                                                         )
+            return self.enviar(datos)
+        return self.enviar({"estado":False, "condicion":"privilegios"})
+
 
     def login(self, datos):
         self.usuario = RegistroUsuarios()
@@ -244,6 +252,7 @@ class ServidorNetwork(Thread):
         else:
             self.usuario = RegistroUsuarios()
             return self.enviar({"estado": False, "condicion": "contraseñas"})
+            return self.enviar({"estado": False, "condicion": "contraseñas"})
 
     def registrar_persona(self, datos):
         datos_procesados = self.querys.registrar_personas(datos.rut_persona, datos.nombres, datos.apellidos,
@@ -256,14 +265,14 @@ class ServidorNetwork(Thread):
         return self.enviar(datos_procesados)
 
     def registro_servicios(self, datos):
-        if self.grupos.get(str(self.usuario.grupos)).get("CrearServicios"):
+        if self.consultar_privilegios("CrearServicios"):
             estado = self.querys.registrar_servicios(datos)
             self.enviar(estado)
         else:
             self.enviar({"estado": False, "condicion": ERRORPRIVILEGIOS})
 
     def registroempresas(self, empresa):
-        if self.grupos.get(str(self.usuario.grupos)).get("CrearEmpresas"):
+        if self.consultar_privilegios("CrearEmpresas"):
             estado = self.querys.registrar_empresas(empresa)
             self.enviar(estado)
         else:
@@ -282,3 +291,6 @@ class ServidorNetwork(Thread):
             self.ventana_actual = contenido
             self.tiempo_actividad = 0
             self.enviar({"estado": True})
+
+    def consultar_privilegios(self, consulta):
+        return self.grupos.get(str(self.usuario.grupos)).get(consulta)

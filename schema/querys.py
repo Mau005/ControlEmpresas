@@ -94,7 +94,7 @@ class Querys():
     # ID_REGISTRO	RUT_EMPRESA	CORREO	FECHA_CREACION
     def registrar_notas_empresas(self, nota, rut_empresa, correo):
         querys = '''
-        INSERT INTO REGISTRO_NOTAS_EMRPESAS(NOTA, RUT_EMPRESA, CORREO)
+        INSERT INTO registro_notas_empresas(NOTA, RUT_EMPRESA, CORREO)
         VALUES("{}", "{}", "{}")
         '''.format(nota, rut_empresa, correo)
         return self.bd.insertar(querys)
@@ -153,7 +153,7 @@ class Querys():
         querys = "SELECT RUT, CONCAT(NOMBRES, ' ', APELLIDOS) as Nombres FROM personas;"
         return self.bd.consultar(querys, all=True)
 
-    def lista_locales(self):
+    def lista_menu_locales(self):
         querys = "SELECT ID_LOCAL, NOMBRE_LOCAL	FROM locales;"
         return self.bd.consultar(querys, all=True)
 
@@ -181,4 +181,8 @@ class Querys():
 
     def lista_menu_productos(self):
         querys = "SELECT ID_PRODUCTO, NOMBRE_PRODUCTO FROM productos;"
+        return self.bd.consultar(querys, all=True)
+
+    def lista_menu_empresas(self):
+        querys = "SELECT RUT_EMPRESA, NOMBRE_EMPRESA FROM empresas;"
         return self.bd.consultar(querys, all=True)

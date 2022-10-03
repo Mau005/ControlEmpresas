@@ -73,7 +73,7 @@ class VServicios(MDScreenAbstrac):
 
     def activar(self):
         self.lista_estados.clear()  # limpiamos el menu de informacion clonada
-        self.network.enviar({"estado": "estadoservicios"})
+        self.network.enviar({"estado": "menu_estado"})
         info = self.network.recibir()
 
         for elementos in info.get("datos"):

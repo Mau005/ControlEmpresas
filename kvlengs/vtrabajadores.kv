@@ -20,22 +20,21 @@
                 MDRaisedButton:
                     text: "Rut: "
                     id: botton_rut_accion
-                    on_release: root.desplegar_menu()
 
                 MDRaisedButton:
                     text: "Local: "
                     id: botton_id_local
-                    on_release: root.desplegar_menu_local()
 
                 MDTextField:
                     hint_text: "Sueldo"
                     input_filter: "int"
                     id: sueldo_trabajador
+
                 MDTextField:
                     id: dia_pago
                     hint_text: "Día de Pago: "
                     helper_text: "dias del mes entre 1 y 31"
-                    input_fitler: "int"
+                    input_filter: "int"
 
     MDFloatingActionButtonSpeedDial:
         size_hint_y: .1
