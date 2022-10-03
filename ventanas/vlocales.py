@@ -3,6 +3,7 @@ from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion
 from kivy.properties import ObjectProperty
 from core.constantes import BUTTONCREATE
 
+
 class VLocales(MDScreenAbstrac):
     botones_locales = ObjectProperty()
 
@@ -17,6 +18,7 @@ class VLocales(MDScreenAbstrac):
         self.ids.direccion.text = ""
 
     def accion_boton(self, arg):
+        self.botones_locales.close_stack()
         if arg.icon == "exit-run":
             self.siguiente()
 
@@ -25,8 +27,8 @@ class VLocales(MDScreenAbstrac):
 
         if arg.icon == "pencil":
             objeto = RegistrarLocales(
-                nombre_local = self.ids.nombre_local.text,
-                telefono_local = self.ids.telefono.text,
+                nombre_local=self.ids.nombre_local.text,
+                telefono_local=self.ids.telefono.text,
                 direccion=self.ids.direccion.text
             )
             self.network.enviar(objeto.preparar())
@@ -34,7 +36,7 @@ class VLocales(MDScreenAbstrac):
             noti = Notificacion("Error", "")
             print(f"Datos procesados es: {info}")
             if info.get("estado"):
-                noti.title= "Correcto"
+                noti.title = "Correcto"
                 noti.text = "Se ha registrado correctamente"
             else:
                 if info.get("condicion") == "privilegios":
@@ -45,9 +47,9 @@ class VLocales(MDScreenAbstrac):
                     noti.text = f"Error desconocido {info.get('condicion')}"
             noti.open()
 
-
     def activar(self):
         super().activar()
+
     def siguiente(self, *dt):
         return super().siguiente(*dt)
 

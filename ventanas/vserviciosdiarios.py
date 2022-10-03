@@ -17,13 +17,6 @@ class VServiciosDiarios(MDScreenAbstrac):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
         self.data = BUTTONCREATE
         self.botones_servicios.data = self.data
-        self.correo = "prueba"
-        self.servicio_actual = 1  # por defecto bd es operativo
-        self.lista_estados = {}
-        self.lista_personas = {}
-        self.lista_trabajadores = {}
-        self.cliente_actual = ""
-        self.trabajador_actual = ""
         self.toda_la_semana = False
         self.coleccion_menu_estados = MenuEntidades(self.network, "Estado:", "Estado:", self.ids.id_estado, filtro="int")
         self.coleccion_menu_personas = MenuEntidades(self.network, "Rut Cliente:", "Rut:", self.ids.botton_rut_accion)
@@ -123,28 +116,11 @@ class VServiciosDiarios(MDScreenAbstrac):
 
     def activar(self):
         super().activar()
-        condicion = self.coleccion_menu_estados.generar_consulta("menu_estado")
-        if condicion.get("estado"):
-            self.ids.id_estado.bind(on_release=self.coleccion_menu_estados.desplegar_menu)
+        self.coleccion_menu_estados.generar_consulta("menu_estado")
+        self.coleccion_menu_personas.generar_consulta("menu_personas")
+        self.coleccion_menu_trabajadores.generar_consulta("menu_trabajadores")
+        self.coleccion_menu_productos.generar_consulta("menu_productos")
 
-        condicion = self.coleccion_menu_personas.generar_consulta("menu_personas")
-        if condicion.get("estado"):
-            self.ids.botton_rut_accion.bind(on_release=self.coleccion_menu_personas.desplegar_menu)
-
-        condicion = self.coleccion_menu_trabajadores.generar_consulta("menu_trabajadores")
-        if condicion.get("estado"):
-            self.ids.botton_rut_trabajador.bind(on_release=self.coleccion_menu_trabajadores.desplegar_menu)
-
-        condicion = self.coleccion_menu_productos.generar_consulta("menu_productos")
-        if condicion.get("estado"):
-            self.ids.menu_producto.bind(on_release=self.coleccion_menu_productos.desplegar_menu)
-        print("Condicion en servicios diarios, ", condicion)
-
-    def desplegar_menu(self):
-        bottom_sheet_menu = MDListBottomSheet()
-        for objetos in self.lista_estados.keys():
-            bottom_sheet_menu.add_item(objetos, self.callback_menu)
-        bottom_sheet_menu.open()
 
     def actualizar(self, *dt):
         return super().actualizar(*dt)

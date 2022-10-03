@@ -18,6 +18,7 @@ class VProductos(MDScreenAbstrac):
         self.ids.cantidad.text = ""
 
     def accion_boton(self, arg):
+        arg.close_stack()
         if arg.icon == "exit-run":
             self.siguiente()
 

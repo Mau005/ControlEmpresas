@@ -1,10 +1,8 @@
-from kivymd.uix.bottomsheet import MDListBottomSheet
-
 from entidades.registropersonas import RegistroPersonas
-from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion
+from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion, MenuEntidades
 from kivy.properties import ObjectProperty
 from core.herramientas import Herramientas as her
-from entidades.menuitems import MenuItemPersonas
+from core.constantes import BUTTONCREATE
 
 
 class VPersonas(MDScreenAbstrac):
@@ -12,43 +10,12 @@ class VPersonas(MDScreenAbstrac):
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.data = {
-            'Crear': 'pencil',
-            'Formatear': 'delete',
-            'Salir': 'exit-run',
-        }
-        self.lista_botones_empresas = {}
+        self.data = BUTTONCREATE
         self.botones.data = self.data
-        self.seleccion_empresa = "Sin Empresa"
-        self.correo_activo = False
-
-    def buscar_empresas(self):
-        bottom_sheet_menu = MDListBottomSheet()
-        for nombre_key in self.lista_botones_empresas.keys():
-            bottom_sheet_menu.add_item(f"{nombre_key}: {self.lista_botones_empresas.get(nombre_key).nombre}",
-                                       self.callback_menu)
-        bottom_sheet_menu.open()
-
-    def callback_menu(self, arg):
-        formato = arg.text.split(":")
-        self.seleccion_empresa = formato[0]
-        self.ids.boton_rut_empresas.text = f"Empresa: {formato[1]}"
+        self.colecciones_empresas = MenuEntidades(self.network, "Empresa:", "Empresa:", self.ids.boton_rut_empresas)
 
     def activar(self):
-        self.lista_botones_empresas.clear()
-        self.network.enviar({"estado": "lista_empresas"})
-        info = self.network.recibir()
-
-        if info.get("estado"):
-            for elementos in info.get("datos"):
-                self.lista_botones_empresas.update({elementos[0]: MenuItemPersonas(elementos[0], elementos[1])})
-                print(elementos)
-        else:
-            if info.get("condicion") == "privilegios":
-                noti = Notificacion("Error", "No se ha podido cargar la lista de empresas dado que no tienes los "
-                                             "privilegios "
-                                             "correspondientes")
-                noti.open()
+        self.colecciones_empresas.generar_consulta("menu_empresas")
         super().activar()
 
     def formatear(self):
@@ -58,9 +25,11 @@ class VPersonas(MDScreenAbstrac):
         self.ids.telefono.text = ""
         self.ids.celular.text = ""
         self.ids.correo_sistema.text = ""
+        self.ids.boton_rut_empresas.text = "Empresa:"
+        self.colecciones_empresas.dato_guardar = None
 
     def accion_boton(self, args):
-
+        self.botones.close_stack()
         if args.icon == "exit-run":
             self.siguiente()
 
@@ -90,12 +59,9 @@ class VPersonas(MDScreenAbstrac):
                                           telefono=self.ids.telefono.text,
                                           celular=self.ids.celular.text,
                                           correo=self.ids.correo_sistema.text,
-                                          rut_empresa=self.seleccion_empresa)
+                                          rut_empresa=self.colecciones_empresas.dato_guardar)
                 self.network.enviar(objeto.preparar())
-                print(objeto)
                 info = self.network.recibir()
-
-                print(f"Datos que me envio el servidor: {info}")
                 if info.get("estado"):
                     noti.title = "Exito"
                     noti.text = "Usuario ingresado correctamente"

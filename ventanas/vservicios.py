@@ -30,15 +30,13 @@ class VServicios(MDScreenAbstrac):
         self.colecciones_estado = MenuEntidades(self.network, "Estados:", "Id:", self.ids.id_estado, filtro="int")
 
     def accion_boton(self, arg):
-        print(arg.icon)
+        self.botones_servicios.close_stack()
         if arg.icon == "delete":
             self.formatear()
-            self.botones_servicios.close_stack()
+
         if arg.icon == "exit-run":
-            self.botones_servicios.close_stack()
             self.siguiente()
         if arg.icon == "pencil":
-            self.botones_servicios.close_stack()
             if self.fecha_inicio is None:
                 noti = Notificacion("ERROR", "Alemenos debe indicar la fecha de inicio.")
                 noti.open()

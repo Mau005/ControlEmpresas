@@ -20,7 +20,7 @@ class VListaProductos(MDScreenAbstrac):
         self.listas_widget.clear()
 
     def accion_boton(self, arg):
-
+        self.botones.close_stack()
         if arg.icon == "delete":
             pass
 

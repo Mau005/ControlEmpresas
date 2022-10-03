@@ -4,7 +4,6 @@ from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion
 from kivy.properties import ObjectProperty
 from core.constantes import BUTTONCREATE
 from entidades.registrotrabajador import RegistroTrabajador
-from entidades.menuitems import MenuItemLocales, MenuItemPersonas
 from ventanas.widgets_predefinidos import MenuEntidades
 
 
@@ -17,11 +16,6 @@ class VTrabajadores(MDScreenAbstrac):
         self.fecha_inicio = None
         self.fecha_termino = None
         self.botones_trabajadores.data = self.data
-        self.correo = "prueba"
-        self.persona_actual = ""
-        self.local_actual = ""
-        self.lista_personas = {}
-        self.lista_locales = {}
 
         self.colecciones_personas = MenuEntidades(self.network, "Rut:", "Rut:", self.ids.botton_rut_accion)
         self.colecciones_locales = MenuEntidades(self.network, "Local:", "Local:", self.ids.botton_id_local,
@@ -31,11 +25,14 @@ class VTrabajadores(MDScreenAbstrac):
         print(arg.icon)
         if arg.icon == "delete":
             self.formatear()
+            arg.close_stack()
             self.botones_trabajadores.on_close()
         if arg.icon == "exit-run":
             self.botones_trabajadores.on_close()
             self.siguiente()
+            arg.close_stack()
         if arg.icon == "pencil":
+            arg.close_stack()
             objeto = RegistroTrabajador(
                 rut=self.colecciones_personas.dato_guardar,
                 id_local=self.colecciones_locales.dato_guardar,
@@ -56,8 +53,6 @@ class VTrabajadores(MDScreenAbstrac):
             noti.open()
 
     def formatear(self):
-        self.persona_actual = ""
-        self.local_actual = ""
         self.ids.botton_rut_accion.text = "Rut: "
         self.ids.botton_id_local.text = "Local: "
         self.ids.sueldo_trabajador.text = ""
@@ -68,18 +63,6 @@ class VTrabajadores(MDScreenAbstrac):
         self.colecciones_personas.generar_consulta("menu_personas")
         self.colecciones_locales.generar_consulta("menu_locales")
         super().activar()
-
-    def callback_menu_personas(self, arg):
-        procesar = arg.text.split(":")
-        objeto = self.lista_personas[procesar[1].replace(" ", "")]
-        self.persona_actual = objeto.rut
-        self.ids.botton_rut_accion.text = f"Rut:  {self.persona_actual} {objeto.nombre}"
-
-    def callback_menu_locales(self, arg):
-        objeto = arg.text.split(":")
-        objeto_procesar = self.lista_locales[int(objeto[0])]
-        self.local_actual = objeto_procesar.id_local
-        self.ids.botton_id_local.text = f"Local: {objeto_procesar.nombre_local}"
 
     def actualizar(self, *dt):
         return super().actualizar(*dt)
