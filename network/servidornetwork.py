@@ -130,9 +130,12 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "registro_servicio_diario":
                 self.registro_servicio_diario(datos.get("contenido"))
 
+            if datos.get("estado") == "listado_notas_empresa_especifica":
+                self.enviar(self.querys.listado_notas_empresa_especifica(datos.get("contenido")))
+
             if datos.get("estado") == "cierreAbrupto":
-                print(
-                    "Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar salir seccion")
+                print("Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar "
+                      "salir seccion")
                 self.control_network.pendientes_desconexion.append(self.usuario.correo)
                 break
         self.cerrar()
@@ -223,8 +226,7 @@ class ServidorNetwork(Thread):
                                                          self.usuario.correo,
                                                          )
             return self.enviar(datos)
-        return self.enviar({"estado":False, "condicion":"privilegios"})
-
+        return self.enviar({"estado": False, "condicion": "privilegios"})
 
     def login(self, datos):
         self.usuario = RegistroUsuarios()
@@ -252,7 +254,6 @@ class ServidorNetwork(Thread):
         else:
             self.usuario = RegistroUsuarios()
             return self.enviar({"estado": False, "condicion": "contraseñas"})
-            return self.enviar({"estado": False, "condicion": "contraseñas"})
 
     def registrar_persona(self, datos):
         datos_procesados = self.querys.registrar_personas(datos.rut_persona, datos.nombres, datos.apellidos,
@@ -267,7 +268,7 @@ class ServidorNetwork(Thread):
     def registro_servicios(self, datos):
         if self.consultar_privilegios("CrearServicios"):
             return self.enviar(self.querys.registrar_servicios(datos))
-        return self.enviar({"estado": False, "condicion": ERRORPRIVILEGIOS})
+        return self.enviar({"estado": False, "condicion": "privilegios"})
 
     def registroempresas(self, empresa):
         if self.consultar_privilegios("CrearEmpresas"):
@@ -277,7 +278,7 @@ class ServidorNetwork(Thread):
             self.enviar({"estado": False, "condicion": ERRORPRIVILEGIOS})
 
     def saludo(self):
-        self.enviar({"estado": "saludo", "contenido": "Primer Mensaje"})
+        self.enviar({"estado": "saludo", "contenido": "Mensaje desde el servidor FDP"})
 
     def actualizar_ventanas(self, contenido):
         if self.tiempo_actividad >= TIMEPOESPERAUSUARIO:
@@ -292,3 +293,5 @@ class ServidorNetwork(Thread):
 
     def consultar_privilegios(self, consulta):
         return self.grupos.get(str(self.usuario.grupos)).get(consulta)
+
+

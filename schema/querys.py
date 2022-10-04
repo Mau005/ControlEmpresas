@@ -186,3 +186,7 @@ class Querys():
     def lista_menu_empresas(self):
         querys = "SELECT RUT_EMPRESA, NOMBRE_EMPRESA FROM empresas;"
         return self.bd.consultar(querys, all=True)
+
+    def listado_notas_empresa_especifica(self, contenido):
+        querys = f'select * from registro_notas_empresas where RUT_EMPRESA = "{contenido}";'
+        return self.bd.consultar(querys, all=True)

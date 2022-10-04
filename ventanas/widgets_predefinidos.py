@@ -28,6 +28,7 @@ class MenuEntidades:
         self.dato_guardar = None
         self.filtro = filtro
         self.boton_modificar.bind(on_release=self.desplegar_menu)
+        self.actualizado = False
 
     def __limpiada(self):
         self.listados.clear()
@@ -44,6 +45,10 @@ class MenuEntidades:
                 if len(self.dato_guardar) == 0:
                     self.dato_guardar = None
 
+    def formateo(self):
+        self.actualizado = False
+        self.dato_guardar = None
+
     def callback(self, arg):
         procesar = arg.text.split(":")
         identificador = procesar[1].split("\n")
@@ -52,6 +57,7 @@ class MenuEntidades:
         self.dato_guardar = objeto.identificador
         self.boton_modificar.text = f"{self.nombre_boton} {identificador[0]}\n{identificador[1]}"
         self.__conversion()
+        self.actualizado = True
 
     def desplegar_menu(self, *args):
         bottom_sheet_menu = MDListBottomSheet()

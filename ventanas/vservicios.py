@@ -1,5 +1,3 @@
-from kivymd.uix.bottomsheet import MDListBottomSheet
-
 from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion, MenuEntidades
 from kivymd.uix.pickers import MDDatePicker
 from kivy.properties import ObjectProperty

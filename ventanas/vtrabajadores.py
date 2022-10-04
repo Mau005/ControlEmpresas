@@ -25,14 +25,10 @@ class VTrabajadores(MDScreenAbstrac):
         print(arg.icon)
         if arg.icon == "delete":
             self.formatear()
-            arg.close_stack()
-            self.botones_trabajadores.on_close()
         if arg.icon == "exit-run":
-            self.botones_trabajadores.on_close()
             self.siguiente()
-            arg.close_stack()
         if arg.icon == "pencil":
-            arg.close_stack()
+
             objeto = RegistroTrabajador(
                 rut=self.colecciones_personas.dato_guardar,
                 id_local=self.colecciones_locales.dato_guardar,
@@ -44,14 +40,14 @@ class VTrabajadores(MDScreenAbstrac):
             noti = Notificacion("Error", "Usuario ya se encuentra registrado en Trabajadores")
             if info.get("estado"):
                 noti.title = "Correcto"
-                noti.text = f"Se ha generado correctamente el trabajdor {self.persona_actual}"
+                noti.text = f"Se ha generado correctamente el trabajdor"
 
             elif info.get("condicion") == "privilegios":
                 noti.tex = "Lo lamento no tienes los privilegios suficientes para crear un trabajador"
 
             self.formatear()
             noti.open()
-
+        self.botones_trabajadores.close_stack()
     def formatear(self):
         self.ids.botton_rut_accion.text = "Rut: "
         self.ids.botton_id_local.text = "Local: "

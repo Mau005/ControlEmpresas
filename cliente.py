@@ -1,5 +1,6 @@
 from kivy.core.window import Window
 
+from ventanas.VListaNotasEmpresas import VListaNotasEmpresas
 from ventanas.vlocales import VLocales
 
 Window.size = (400, 625)
@@ -50,7 +51,8 @@ class ControlEmpresas(MDApp):
         self.vlistaproductos = VListaProductos(self.network, self.manejador, "listaproductos", siguiente="casa")
         self.vserviciosdiarios = VServiciosDiarios(self.network, self.manejador, "serviciosdiarios", siguiente="casa")
         self.vtrabajadores = VTrabajadores(self.network, self.manejador, "trabajadores", siguiente="casa")
-        self.vlocales = VLocales(self.network, self.manejador, "locales", siguiente = "casa")
+        self.vlocales = VLocales(self.network, self.manejador, "locales", siguiente="casa")
+        self.vlistanotasempresas = VListaNotasEmpresas(self.network, self.manejador, "lista_menu_empresas", siguiente="casa")
         self.manejador.add_widget(self.login)
         self.manejador.add_widget(self.casa)
         self.manejador.add_widget(self.vservicios)
@@ -65,6 +67,7 @@ class ControlEmpresas(MDApp):
         self.manejador.add_widget(self.vserviciosdiarios)
         self.manejador.add_widget(self.vtrabajadores)
         self.manejador.add_widget(self.vlocales)
+        self.manejador.add_widget(self.vlistanotasempresas)
         self.login.activar()
 
     def actualizar(self, dt):

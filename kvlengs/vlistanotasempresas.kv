@@ -1,0 +1,28 @@
+
+
+<VListaNotasEmpresas>:
+    contenedor_registros:contenedor_registros
+
+    MDBoxLayout:
+        orientation: "vertical"
+        padding: dp(10)
+        spacing: dp(15)
+        MDCardPre:
+            size_hint_y: .15
+            elevation: 30
+            pos_hint: {"center_x": .5, "center_y": .5}
+            orientation: "horizontal"
+            padding: dp(10)
+            spacing: dp(15)
+            MDLabel:
+                text: "Buscar: "
+            MDRectangleFlatButton:
+                text: "Rut Empresa"
+                pos_hint: {'center_x': 0.5}
+                id: rut_empresa
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            MDList:
+                id: contenedor_registros
+
