@@ -53,7 +53,9 @@ class ServidorNetwork(Thread):
     def run(self):
         while self.enfuncionamiento:
             datos = self.recibir()
-            print(f"Recibo de datos del servidor: {datos}")
+            if not datos.get("estado") == "actualizar":
+                print(f"Recibo de datos del servidor: {datos}")
+
             if datos.get("estado") == "saludo":
                 self.saludo()
 

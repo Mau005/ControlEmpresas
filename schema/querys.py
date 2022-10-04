@@ -1,3 +1,4 @@
+from entidades.registro_notas_empresas import Registro_Notas_Empresas
 from entidades.registroservicio import RegistroServicios
 from entidades.registroserviciosdiarios import RegistroServiciosDiarios
 from core.herramientas import Herramientas as her
@@ -188,5 +189,16 @@ class Querys():
         return self.bd.consultar(querys, all=True)
 
     def listado_notas_empresa_especifica(self, contenido):
-        querys = f'select * from registro_notas_empresas where RUT_EMPRESA = "{contenido}";'
-        return self.bd.consultar(querys, all=True)
+        querys = """
+        SELECT * FROM registro_notas_empresas
+        WHERE RUT_EMPRESA = '{}'
+        GROUP BY FECHA_CREACION DESC;
+        """.format(contenido)
+        datos = self.bd.consultar(querys, all=True)
+        lista_notas = []
+        for nota in datos.get("datos"):
+            lista_notas.append(Registro_Notas_Empresas(id_registro=nota[0], notas=nota[1],
+                                                       rut_empresa=nota[2], correo=nota[3],
+                                                       fecha_creacion=nota[4]))
+        datos.update({"datos": lista_notas})
+        return datos

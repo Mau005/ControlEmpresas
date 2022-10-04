@@ -1,5 +1,6 @@
 from abc import abstractmethod
 
+from kivy.uix.scrollview import ScrollView
 from kivymd.uix.bottomsheet import MDListBottomSheet
 from kivymd.uix.card import MDCard
 from kivymd.uix.behaviors import RectangularElevationBehavior
@@ -7,10 +8,11 @@ from kivymd.uix.behaviors import RectangularElevationBehavior
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDRoundFlatButton
-from kivymd.uix.list import TwoLineListItem, ThreeLineListItem
+from kivymd.uix.list import TwoLineListItem, ThreeLineListItem, MDList
 from kivymd.uix.textfield import MDTextField
 
 from entidades.menuitems import MenuGlobal
+from entidades.registro_notas_empresas import Registro_Notas_Empresas
 
 
 class MenuEntidades:
@@ -200,3 +202,39 @@ class MDScreenAbstrac(MDScreen):
         if self.nombre_volver:
             self.manejador.get_screen(self.nombre_volver).activar()
             self.manager.current = self.nombre_volver
+
+
+class ItemCard(MDCardPre):
+    def __init__(self, **kargs):
+        super().__init__(**kargs)
+        self.elevation = 15
+        self.orientation = 'vertical'
+        self.size_hint_y = None
+        self.height = 340
+        self.padding = "20dp"
+        self.scroll = ScrollView(do_scroll_x=False, do_scroll_y=True)
+        self.contenedor = MDList(size_hint_y=None, size = self.size )
+        self.scroll.add_widget(self.contenedor)
+        self.add_widget(self.scroll)
+
+
+
+class ItemNotaEmpresa(ItemCard):
+    def __init__(self, network, objeto, **kargs):
+        super().__init__(**kargs)
+
+        maqueta = Registro_Notas_Empresas()
+        maqueta.__dict__ = objeto.__dict__
+        self.network = network
+
+        self.id_registro = MDTextField(hint_text="ID Registro", text=str(maqueta.id_registro), disabled=True, mode= "fill")
+        self.nota = MDTextField(hint_text="Nota....", text=maqueta.notas, multiline=True)
+        self.rut_empresa = MDTextField(hint_text="Rut Empresa:", text=maqueta.rut_empresa, disabled=True)
+        self.correo = MDTextField(hint_text="Correo", text=maqueta.correo, disabled=True)
+        self.fecha_creacion = MDTextField(hint_text="Fecha Creacion", text=str(maqueta.fecha_creacion), disabled=True)
+
+        self.contenedor.add_widget(self.id_registro)
+        self.contenedor.add_widget(self.nota)
+        self.contenedor.add_widget(self.rut_empresa)
+        self.contenedor.add_widget(self.correo)
+        self.contenedor.add_widget(self.fecha_creacion)

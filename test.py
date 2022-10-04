@@ -1,44 +1,95 @@
-from entidades.registroserviciosdiarios import RegistroServiciosDiarios
+from kivy.lang import Builder
+from kivy.properties import StringProperty
+from kivy.uix.screenmanager import Screen
 
-objeto = RegistroServiciosDiarios(
-    nombre_servicio="Prueba de Nombre",
-    id_estado= 1,
-    precio=55,
-    fecha_semana="135",
-    url_posicion=None,
-    ubicacion="Av mama esta presa",
-    rut_usuario="18.881.495-6",
-    rut_trabajador="18.881.495-6",
-    descr=None,
-    toda_semana=True,
-    id_producto=4,
-    cantidad=4
+from kivymd.icon_definitions import md_icons
+from kivymd.app import MDApp
+from kivymd.uix.list import OneLineIconListItem
+
+
+Builder.load_string(
+    '''
+#:import images_path kivymd.images_path
+
+
+<CustomOneLineIconListItem>
+
+    IconLeftWidget:
+        icon: root.icon
+
+
+<PreviousMDIcons>
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        spacing: dp(10)
+        padding: dp(20)
+
+        MDBoxLayout:
+            adaptive_height: True
+
+            MDIconButton:
+                icon: 'magnify'
+
+            MDTextField:
+                id: search_field
+                hint_text: 'Search icon'
+                on_text: root.set_list_md_icons(self.text, True)
+
+        RecycleView:
+            id: rv
+            key_viewclass: 'viewclass'
+            key_size: 'height'
+
+            RecycleBoxLayout:
+                padding: dp(10)
+                default_size: None, dp(48)
+                default_size_hint: 1, None
+                size_hint_y: None
+                height: self.minimum_height
+                orientation: 'vertical'
+'''
 )
 
-def recuperacion_sentencia(objeto):
-    for elementos in objeto.__dict__.keys():
-        if isinstance(objeto.__dict__[elementos], str):
-            objeto.__dict__[elementos] = f'"{objeto.__dict__[elementos]}"'
-        if isinstance(objeto.__dict__[elementos],int) or isinstance(objeto.__dict__[elementos], bool) \
-                or isinstance(objeto.__dict__[elementos], float):
-            objeto.__dict__[elementos] = f"{objeto.__dict__[elementos]}"
-        if objeto.__dict__[elementos] is None:
-            objeto.__dict__[elementos] =  "NULL"
-    return objeto
+
+class CustomOneLineIconListItem(OneLineIconListItem):
+    icon = StringProperty()
 
 
+class PreviousMDIcons(Screen):
 
-def registrar_servicio_diario(objeto):
-    obj = RegistroServiciosDiarios()
-    obj.__dict__ = objeto.__dict__
-    obj = recuperacion_sentencia(obj)
-    querys = '''
-    INSERT INTO serviciosdiarios(NOMBRE_SERVICIO, ID_ESTADO, PRECIO, FECHA_SEMANA, URL_POSICION, UBICACION,
-    RUT_USUARIO, RUT_TRABAJADOR, DESCR, TODA_SEMANA, ID_PRODUCTO, CANTIDAD)
-    VALUES({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {});
-    '''.format(obj.nombre_servicio, obj.id_estado, obj.precio, obj.fecha_semana, obj.url_posicion, obj.ubicacion,
-               obj.rut_usuario, obj.rut_trabajador, obj.descr, obj.toda_semana, obj.id_producto, obj.cantidad)
-    print(querys)
+    def set_list_md_icons(self, text="", search=False):
+        '''Builds a list of icons for the screen MDIcons.'''
+
+        def add_icon_item(name_icon):
+            self.ids.rv.data.append(
+                {
+                    "viewclass": "CustomOneLineIconListItem",
+                    "icon": name_icon,
+                    "text": name_icon,
+                    "callback": lambda x: x,
+                }
+            )
+
+        self.ids.rv.data = []
+        for name_icon in md_icons.keys():
+            if search:
+                if text in name_icon:
+                    add_icon_item(name_icon)
+            else:
+                add_icon_item(name_icon)
 
 
-print(registrar_servicio_diario(objeto))
+class MainApp(MDApp):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.screen = PreviousMDIcons()
+
+    def build(self):
+        return self.screen
+
+    def on_start(self):
+        self.screen.set_list_md_icons()
+
+
+MainApp().run()
