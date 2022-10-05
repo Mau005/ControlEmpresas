@@ -53,7 +53,8 @@ class Servicio_Correos():
         try:
             self.__mail_server.sendmail(self.correo_sistema, correo_destino, objeto.preparar_envio(mensaje).as_string())
         except smtplib.SMTPServerDisconnected as error:
-            print("Error de ssl en conexion smpt servidor desconectado")
+            self.__preparar_servidor()
+            print(f"Servidor preparado por caida")
 
 
 

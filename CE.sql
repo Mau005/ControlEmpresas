@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-10-2022 a las 02:14:37
+-- Tiempo de generación: 05-10-2022 a las 12:36:10
 -- Versión del servidor: 10.4.24-MariaDB
 -- Versión de PHP: 7.4.29
 
@@ -43,8 +43,8 @@ CREATE TABLE `empresas` (
 --
 
 INSERT INTO `empresas` (`RUT_EMPRESA`, `NOMBRE_EMPRESA`, `GIRO_EMPRESA`, `DIRECCION`, `TELEFONO`, `CORREO_EMPRESA`, `CORREO_RESPALDO`, `CELULAR_EMPRESA`) VALUES
-('76634406-2', 'Servicio Integrales Los Tres Pinos', 'Compra y venta de baños quimicos', 'michimalongo 14600', '', 'administracion@lostrespinos.cl', '', '+56945415455'),
-('Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa');
+('11.111.111-1', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa', 'Sin Empresa'),
+('76.634.406-2', 'Servicicios Integrales Los Tres Pinos SPA', 'Ventas y arriendo de baños quimicos', 'michimalongo 14600', '', 'adminsitracion@lostrespinos.cl', '', '+56946141941');
 
 -- --------------------------------------------------------
 
@@ -86,8 +86,7 @@ CREATE TABLE `locales` (
 --
 
 INSERT INTO `locales` (`ID_LOCAL`, `NOMBRE_LOCAL`, `TELEFONO_LOCAL`, `DIRECCION`) VALUES
-(1, 'Principal', '+565656', 'Av Tusca con Chetes'),
-(7, 'Los Tres Pinos santiago', '', 'michimalongo 14600 la pintana');
+(8, 'Los Tres Pinos SPA', 'No Tiene', 'Michimalongo 14600, la pintana santiago');
 
 -- --------------------------------------------------------
 
@@ -110,7 +109,10 @@ CREATE TABLE `personas` (
 --
 
 INSERT INTO `personas` (`RUT`, `NOMBRES`, `APELLIDOS`, `TELEFONO`, `CELULAR`, `CORREO`, `RUT_EMPRESA`) VALUES
-('18.881.495-6', 'Mauricio Andres', 'Pino Gonzalez', '', '+56946141941', 'arkinommo@gmail.com', 'Sin Empresa');
+('10.111.111-2', 'Juanito Peres', 'Tontata', '12321321213', '21312321321', 'arkinommo@gmail.cl', '11.111.111-1'),
+('10.735.450-6', 'Mauricio Del Carmen', 'Pino Gallardo', '', '+566565656', 'mpinogallardo@gmail.com', '11.111.111-1'),
+('13.283.881-k', 'Adsadas', 'sadasdasd', '+022222222', '+56912121212', 'melendez.pino.daniel@gmail.com', '11.111.111-1'),
+('18.881.495-6', 'Mauricio Andres', 'Pino Gonzalez', '', '+56946141941', 'arkinommo@gmail.com', '11.111.111-1');
 
 -- --------------------------------------------------------
 
@@ -131,8 +133,8 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`ID_PRODUCTO`, `NOMBRE_PRODUCTO`, `DESCRIPCION`, `FECHA_CREACION`, `CANTIDAD`) VALUES
-(3, 'Baños Sanitarios Estandar', 'Baño estandar sin ningun tipo de materiales extra', '2022-09-30 02:08:24', 50),
-(4, 'Baños Sanitarios Ejecutivo', 'Baño ejecutivo con lavamanos y confort industrial,', '2022-09-30 02:08:51', 24);
+(5, 'Baños Quimicos Standar', '', '2022-10-03 19:05:26', 33),
+(6, 'Confort 4', 'Confor de gran absorcion', '2022-10-04 17:12:26', 2);
 
 -- --------------------------------------------------------
 
@@ -148,6 +150,15 @@ CREATE TABLE `registro_notas_empresas` (
   `FECHA_CREACION` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Volcado de datos para la tabla `registro_notas_empresas`
+--
+
+INSERT INTO `registro_notas_empresas` (`ID_REGISTRO`, `NOTA`, `RUT_EMPRESA`, `CORREO`, `FECHA_CREACION`) VALUES
+(3, 'Crear una nota porsiacaso provando', '76.634.406-2', 'mpino1701@gmail.com', '2022-10-04 03:55:06'),
+(4, 'crear otra nota de empresas', '76.634.406-2', 'mpino1701@gmail.com', '2022-10-04 03:56:24'),
+(5, 'crear otra nota de empresas\n otra nota de empresas\n otra nota de empresas\n otra nota de empresas\n otra nota de empresas\n otra nota de empresas\n otra nota de empresas\n otra nota de empresas\n', '76.634.406-2', 'mpino1701@gmail.com', '2022-10-04 03:56:35');
+
 -- --------------------------------------------------------
 
 --
@@ -161,15 +172,17 @@ CREATE TABLE `servicios` (
   `FECHA_INICIO` date NOT NULL,
   `FECHA_TERMINO` date DEFAULT NULL,
   `ID_ESTADO` int(11) NOT NULL,
-  `PRECIO` int(11) NOT NULL
+  `PRECIO` int(11) NOT NULL,
+  `RUT_TRABAJADOR` varchar(12) NOT NULL,
+  `RUT_PERSONA` varchar(12) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Volcado de datos para la tabla `servicios`
 --
 
-INSERT INTO `servicios` (`ID_SERVICIO`, `NOMBRE_SERVICIO`, `DESCRIPCION`, `FECHA_INICIO`, `FECHA_TERMINO`, `ID_ESTADO`, `PRECIO`) VALUES
-(10, 'Mamá esta presa', 'Alguina descripcion que quiera', '2022-09-27', '2022-10-27', 2, 90000);
+INSERT INTO `servicios` (`ID_SERVICIO`, `NOMBRE_SERVICIO`, `DESCRIPCION`, `FECHA_INICIO`, `FECHA_TERMINO`, `ID_ESTADO`, `PRECIO`, `RUT_TRABAJADOR`, `RUT_PERSONA`) VALUES
+(13, 'Prueba', NULL, '2022-10-12', '2022-10-28', 1, 0, '10.735.450-6', '10.735.450-6');
 
 -- --------------------------------------------------------
 
@@ -198,8 +211,7 @@ CREATE TABLE `serviciosdiarios` (
 --
 
 INSERT INTO `serviciosdiarios` (`ID_SERVICIOS_DIARIOS`, `NOMBRE_SERVICIO`, `ID_ESTADO`, `PRECIO`, `FECHA_SEMANA`, `URL_POSICION`, `UBICACION`, `RUT_USUARIO`, `RUT_TRABAJADOR`, `DESCR`, `TODA_SEMANA`, `ID_PRODUCTO`, `CANTIDAD`) VALUES
-(2, 'Tongoy', 1, 9000, '27', NULL, 'av matta', '18.881.495-6', '18.881.495-6', NULL, 1, 3, 4),
-(3, 'San Miguel', 3, 12000, '234567', NULL, 'av chiloe ', '18.881.495-6', '18.881.495-6', NULL, 1, 3, 10);
+(4, 'Tongoy', 1, 9000, '257', 'https://goo.gl/maps/tDrKPr1pTCBSzp1YA', 'José Edwards Bello 13227-13283, La Pintana, Región Metropolitana', '18.881.495-6', '10.735.450-6', '3 baños\n1 cada cuadra\n\nas\ndas\nd\nasd\nas\nd\nasd\nas\ndasd', 1, 5, 3);
 
 -- --------------------------------------------------------
 
@@ -219,7 +231,7 @@ CREATE TABLE `trabajadores` (
 --
 
 INSERT INTO `trabajadores` (`RUT`, `ID_LOCAL`, `SUELDO`, `DIA_PAGO`) VALUES
-('18.881.495-6', 7, 550000, 1);
+('10.735.450-6', 8, 550000, 1);
 
 -- --------------------------------------------------------
 
@@ -240,8 +252,11 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`CORREO`, `CONTRASEÑA`, `FECHA_CREACION`, `ESTADO`, `GRUPOS`) VALUES
-('arkinommo@gmail.com', '8cb2237d0679ca88db6464eac60da96345513964', '2022-09-29', 1, 1),
-('mpino1701@gmail.com', 'dd3105f5a40070eaff30001b545b224bce14eaba', '2022-09-16', 1, 5);
+('arkinommo@gmail.cl', '8cb2237d0679ca88db6464eac60da96345513964', '2022-10-03', 1, 1),
+('arkinommo@gmail.com', '8cb2237d0679ca88db6464eac60da96345513964', '2022-10-03', 1, 1),
+('melendez.pino.daniel@gmail.com', '9eab102e8f9431bb23016851d11e658e0b20b730', '2022-10-04', 1, 1),
+('mpino1701@gmail.com', '8cb2237d0679ca88db6464eac60da96345513964', '2022-09-16', 1, 5),
+('mpinogallardo@gmail.com', '8cb2237d0679ca88db6464eac60da96345513964', '2022-10-03', 1, 1);
 
 --
 -- Índices para tablas volcadas
@@ -292,7 +307,9 @@ ALTER TABLE `registro_notas_empresas`
 --
 ALTER TABLE `servicios`
   ADD PRIMARY KEY (`ID_SERVICIO`),
-  ADD KEY `SERVICIOS_ESTADOS` (`ID_ESTADO`);
+  ADD KEY `SERVICIOS_ESTADOS` (`ID_ESTADO`),
+  ADD KEY `SERVICIOS_MENSUALES_PERSONAS` (`RUT_PERSONA`),
+  ADD KEY `SERVICIOS_MENSUALES_TRABAJADOR` (`RUT_TRABAJADOR`);
 
 --
 -- Indices de la tabla `serviciosdiarios`
@@ -331,31 +348,31 @@ ALTER TABLE `estados`
 -- AUTO_INCREMENT de la tabla `locales`
 --
 ALTER TABLE `locales`
-  MODIFY `ID_LOCAL` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID_LOCAL` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `productos`
 --
 ALTER TABLE `productos`
-  MODIFY `ID_PRODUCTO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID_PRODUCTO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `registro_notas_empresas`
 --
 ALTER TABLE `registro_notas_empresas`
-  MODIFY `ID_REGISTRO` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `ID_REGISTRO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `servicios`
 --
 ALTER TABLE `servicios`
-  MODIFY `ID_SERVICIO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `ID_SERVICIO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT de la tabla `serviciosdiarios`
 --
 ALTER TABLE `serviciosdiarios`
-  MODIFY `ID_SERVICIOS_DIARIOS` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `ID_SERVICIOS_DIARIOS` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restricciones para tablas volcadas
@@ -379,7 +396,9 @@ ALTER TABLE `registro_notas_empresas`
 -- Filtros para la tabla `servicios`
 --
 ALTER TABLE `servicios`
-  ADD CONSTRAINT `SERVICIOS_ESTADOS` FOREIGN KEY (`ID_ESTADO`) REFERENCES `estados` (`ID_ESTADO`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+  ADD CONSTRAINT `SERVICIOS_ESTADOS` FOREIGN KEY (`ID_ESTADO`) REFERENCES `estados` (`ID_ESTADO`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `SERVICIOS_MENSUALES_PERSONAS` FOREIGN KEY (`RUT_PERSONA`) REFERENCES `personas` (`RUT`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `SERVICIOS_MENSUALES_TRABAJADOR` FOREIGN KEY (`RUT_TRABAJADOR`) REFERENCES `trabajadores` (`RUT`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `serviciosdiarios`
