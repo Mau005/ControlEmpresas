@@ -210,7 +210,7 @@ class ItemCard(MDCardPre):
         self.elevation = 15
         self.orientation = 'vertical'
         self.size_hint_y = None
-        self.height = 340
+        self.height = 640
         self.padding = "20dp"
         self.scroll = ScrollView(do_scroll_x=False, do_scroll_y=True)
         self.contenedor = MDList(size_hint_y=None, size = self.size )
