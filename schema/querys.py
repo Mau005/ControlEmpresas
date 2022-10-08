@@ -1,4 +1,5 @@
 from entidades.registro_notas_empresas import Registro_Notas_Empresas
+from entidades.registrogrupos import RegistroGrupos
 from entidades.registroservicio import RegistroServicios
 from entidades.registroserviciosdiarios import RegistroServiciosDiarios
 from core.herramientas import Herramientas as her
@@ -202,3 +203,19 @@ class Querys():
                                                        fecha_creacion=nota[4]))
         datos.update({"datos": lista_notas})
         return datos
+
+    def registrar_grupos(self, objeto):
+        obj = RegistroGrupos()
+        obj.__dict__ = her.recuperacion_sentencia(objeto).__dict__
+        querys = """
+        INSERT INTO GRUPOS (NOMBRE_GRUPO, DESCR) 
+        VALUES ({}, {});
+        """.format(obj.nombre_grupo, obj.desc)
+        return self.bd.insertar(querys)
+
+    def asignar_grupo(self, rut_Trabajador, id_grupo):
+        querys = """
+        INSERT INTO grupos_trabajadores(ID_GRUPO, RUT_TRABAJADOR) 
+        VALUES ('{}', '{}')
+        """.format(id_grupo, rut_Trabajador)
+        return self.bd.insertar(querys)

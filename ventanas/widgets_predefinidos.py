@@ -120,7 +120,7 @@ class NotificacionText(MDDialog):
     def __init__(self, title, ayuda, aceptar=None, **kargs):
         self.auto_dismiss = True
         self.title = title
-        self.campo = MDTextField(hint_text=ayuda, size_hint_x=None, width="240")
+        self.campo = MDTextField(hint_text=ayuda, size_hint_x=None, width="350")
         self.mensaje_capturado = ""
         self.botonCancelar = MDRoundFlatButton(text="Cancelar", on_release=self.cancelar)
         self.botonAceptar = MDRoundFlatButton(text="Aceptar", on_release=self.cancelar)
