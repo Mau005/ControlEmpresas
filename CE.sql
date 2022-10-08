@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-10-2022 a las 12:36:10
--- Versión del servidor: 10.4.24-MariaDB
--- Versión de PHP: 7.4.29
+-- Tiempo de generación: 08-10-2022 a las 04:42:03
+-- Versión del servidor: 10.4.25-MariaDB
+-- Versión de PHP: 7.4.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -67,6 +67,30 @@ INSERT INTO `estados` (`ID_ESTADO`, `NOMBRE`) VALUES
 (3, 'TRANSLADO'),
 (4, 'SINIESTRADO'),
 (5, 'PREPARACIÓN');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `grupos`
+--
+
+CREATE TABLE `grupos` (
+  `ID_GRUPO` int(11) NOT NULL,
+  `NOMBRE_GRUPO` varchar(50) NOT NULL,
+  `DESCR` varchar(250) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `grupos_trabajadores`
+--
+
+CREATE TABLE `grupos_trabajadores` (
+  `ID_GRUPOS_TRABAJADORES` int(11) NOT NULL,
+  `ID_GRUPO` int(11) NOT NULL,
+  `RUT_TRABAJADOR` varchar(12) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -231,7 +255,8 @@ CREATE TABLE `trabajadores` (
 --
 
 INSERT INTO `trabajadores` (`RUT`, `ID_LOCAL`, `SUELDO`, `DIA_PAGO`) VALUES
-('10.735.450-6', 8, 550000, 1);
+('10.735.450-6', 8, 550000, 1),
+('18.881.495-6', 8, 550000, 1);
 
 -- --------------------------------------------------------
 
@@ -255,7 +280,7 @@ INSERT INTO `usuarios` (`CORREO`, `CONTRASEÑA`, `FECHA_CREACION`, `ESTADO`, `GR
 ('arkinommo@gmail.cl', '8cb2237d0679ca88db6464eac60da96345513964', '2022-10-03', 1, 1),
 ('arkinommo@gmail.com', '8cb2237d0679ca88db6464eac60da96345513964', '2022-10-03', 1, 1),
 ('melendez.pino.daniel@gmail.com', '9eab102e8f9431bb23016851d11e658e0b20b730', '2022-10-04', 1, 1),
-('mpino1701@gmail.com', '8cb2237d0679ca88db6464eac60da96345513964', '2022-09-16', 1, 5),
+('mpino1701@gmail.com', 'dd3105f5a40070eaff30001b545b224bce14eaba', '2022-09-16', 1, 5),
 ('mpinogallardo@gmail.com', '8cb2237d0679ca88db6464eac60da96345513964', '2022-10-03', 1, 1);
 
 --
@@ -273,6 +298,20 @@ ALTER TABLE `empresas`
 --
 ALTER TABLE `estados`
   ADD PRIMARY KEY (`ID_ESTADO`);
+
+--
+-- Indices de la tabla `grupos`
+--
+ALTER TABLE `grupos`
+  ADD PRIMARY KEY (`ID_GRUPO`);
+
+--
+-- Indices de la tabla `grupos_trabajadores`
+--
+ALTER TABLE `grupos_trabajadores`
+  ADD PRIMARY KEY (`ID_GRUPOS_TRABAJADORES`),
+  ADD KEY `GRUPOS_TRABAJADORES_ID` (`ID_GRUPO`),
+  ADD KEY `TRABAJADORES_GRUPOS_RUT` (`RUT_TRABAJADOR`);
 
 --
 -- Indices de la tabla `locales`
@@ -345,6 +384,18 @@ ALTER TABLE `estados`
   MODIFY `ID_ESTADO` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
+-- AUTO_INCREMENT de la tabla `grupos`
+--
+ALTER TABLE `grupos`
+  MODIFY `ID_GRUPO` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT de la tabla `grupos_trabajadores`
+--
+ALTER TABLE `grupos_trabajadores`
+  MODIFY `ID_GRUPOS_TRABAJADORES` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `locales`
 --
 ALTER TABLE `locales`
@@ -377,6 +428,13 @@ ALTER TABLE `serviciosdiarios`
 --
 -- Restricciones para tablas volcadas
 --
+
+--
+-- Filtros para la tabla `grupos_trabajadores`
+--
+ALTER TABLE `grupos_trabajadores`
+  ADD CONSTRAINT `GRUPOS_TRABAJADORES_ID` FOREIGN KEY (`ID_GRUPO`) REFERENCES `grupos` (`ID_GRUPO`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `TRABAJADORES_GRUPOS_RUT` FOREIGN KEY (`RUT_TRABAJADOR`) REFERENCES `trabajadores` (`RUT`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `personas`
