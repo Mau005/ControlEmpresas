@@ -15,13 +15,14 @@ class ClienteNetwork:
         self.port = self.configuracion["Servidor"]["port"]
         self.iniciar()
 
-    def cargar_json(self, actualizar = False):
+    def cargar_json(self, actualizar=False):
         configuracion = her.cargar_json("data/ConfiguracionCliente.json")
         if actualizar:
             configuracion["Servidor"]["ip"] = self.ip
             configuracion["Servidor"]["port"] = self.port
             her.escribir_json(configuracion, "data/ConfiguracionCliente.json")
         return configuracion
+
     def iniciar(self, *args):
         try:
             self.socket = socket.socket()
@@ -35,16 +36,13 @@ class ClienteNetwork:
         except socket.error as error:
             Logger.critical("Problemas para conectarse hacia el servidor")
             self.__estado = False
-            noti = Notificacion("Error de conexión",
-                                " Aun no se ha podido establecer la conexión al servidor, intententelo mas tarde")
-            noti.open()
 
     def enviar(self, datos):
         if self.__estado:
             try:
                 self.socket.send(her.empaquetar(datos))
             except BrokenPipeError as error:
-                print(f"Caida abrupta del sistema")
+                Logger.critical("Caida abrupta del sistema")
         return {"estado": False, "condicion": "NETWORK"}
 
     def recibir(self):

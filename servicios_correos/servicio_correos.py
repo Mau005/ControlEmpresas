@@ -54,7 +54,7 @@ class Servicio_Correos():
             self.__mail_server.sendmail(self.correo_sistema, correo_destino, objeto.preparar_envio(mensaje).as_string())
         except smtplib.SMTPServerDisconnected as error:
             self.__preparar_servidor()
-            print(f"Servidor preparado por caida")
+            print(f"Servidor preparado por caida {error}")
 
 
 

@@ -102,6 +102,7 @@ class Entrada(MDScreenAbstrac):
                 noti.text = info.get("MOTD")
                 self.siguiente()
                 noti.open()
+                return
             else:
                 condicion = info.get("condicion")
                 if condicion == "recuperacion":
@@ -110,17 +111,18 @@ class Entrada(MDScreenAbstrac):
                     noti.text = "Usuario ya se encuentra ingresado."
 
                 elif condicion == "contraseñas":
-                    noti.text = "Usuario o Contraseñas incorrectas1"
+                    noti.text = "Usuario o Contraseñas incorrectas"
 
                 elif condicion == "NETWORK":#condicion local
                     notilocal = Notificacion("Error", PROTOCOLOERROR[
                         info.get("condicion")] + " Desea intentar conectarse Nuevamente? ",
                                              funcion_concurrente=self.network.iniciar)
                     notilocal.open()
+                return
         else:
             noti.text = "tiene que tener una longitud mayor a 2"
-
         noti.open()
+        return
 
     def actualizar(self, dt):
         return super().actualizar(dt)
