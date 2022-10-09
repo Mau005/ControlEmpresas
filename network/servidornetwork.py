@@ -44,11 +44,11 @@ class ServidorNetwork(Thread):
         try:
             datos = self.cliente.recv(TAMANIO_PAQUETE)
         except ConnectionResetError:
-            return {"estado": "cierreAbrupto"}
+            return {"estado": "cierre_abrupto"}
 
         if datos != b'':
             return her.desenpaquetar(datos)
-        return {"estado": "cierreAbrupto"}
+        return {"estado": "cierre_abrupto"}
 
     def run(self):
         while self.enfuncionamiento:
@@ -135,11 +135,16 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "listado_notas_empresa_especifica":
                 self.enviar(self.querys.listado_notas_empresa_especifica(datos.get("contenido")))
 
-            if datos.get("estado") == "cierreAbrupto":
-                print("Cliente se ha desconectado de forma anormal, por que nos abe que el ctm tiene que colocar "
-                      "salir seccion")
+            if datos.get("estado") == "registrar_grupo":
+                self.enviar(self.querys.registrar_grupos(datos.get("contenido")))
+
+            if datos.get("estado") == "cierre_abrupto":
+                print(f"Se Desconecta usuario: {self.usuario.correo}")
                 self.control_network.pendientes_desconexion.append(self.usuario.correo)
                 break
+            #else:
+            #    self.enviar({"estado": False, "condicion": "datos"})
+
         self.cerrar()
 
     def registro_servicio_diario(self, contenido):

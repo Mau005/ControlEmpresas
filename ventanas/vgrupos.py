@@ -10,13 +10,11 @@ class VGrupos(MDScreenAbstrac):
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-
         self.botones.data = BUTTONCREATE
 
     def formatear(self):
-        self.ids.nombre_local.text = ""
-        self.ids.telefono.text = ""
-        self.ids.direccion.text = ""
+        self.ids.nombre_grupo.text = ""
+        self.ids.desc_grupo.text = ""
 
     def accion_boton(self, arg):
         self.botones.close_stack()
@@ -40,18 +38,16 @@ class VGrupos(MDScreenAbstrac):
             self.network.enviar(objeto.preparar())
             info = self.network.recibir()
             if info.get("estado"):
+                self.formatear()
+                noti.title = "Exito"
+                noti.text = f"Se ha registrado el grupo: {objeto.nombre_grupo}"
                 noti.open()
-                return
+                return None
             if info.get("condicion") == "NETWORK":
                 noti.text = PROTOCOLOERROR["NETWORK"]
                 noti.open()
-                return
-        Logger.critical(f"Error no contralado en VGrupos datos: {info}")
-
-    def formatear(self):
-        self.ids.nombre_grupo.text = ""
-        self.ids.desc_grupo.text = ""
-
+                return None
+            Logger.critical(f"Error no contralado en VGrupos datos: {info}")
 
     def activar(self):
         super().activar()
