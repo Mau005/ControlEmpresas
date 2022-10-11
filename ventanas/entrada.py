@@ -3,6 +3,7 @@ from kivy.properties import ObjectProperty
 
 from core.constantes import PROTOCOLOERROR
 from core.herramientas import Herramientas as her
+from entidades.registrocuentas import RegistroCuentas
 from ventanas.widgets_predefinidos import MDScreenAbstrac, NotificacionText
 from ventanas.widgets_predefinidos import Notificacion
 
@@ -14,7 +15,8 @@ class Entrada(MDScreenAbstrac):
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
         self.contenido_usuario = her.cargar_json("data/ConfiguracionCliente.json")
-        self.noti_network = NotificacionText("Configuración de IP y Puerto", "Ejemplo: 127.0.0.1:7171", aceptar=self.func_concurrente_notificacion)
+        self.noti_network = NotificacionText("Configuración de IP y Puerto", "Ejemplo: 127.0.0.1:7171",
+                                             aceptar=self.func_concurrente_notificacion)
 
         self.noti_recuperacion = NotificacionText("Indique correo electronico: ", "ejemplo@tudominio.cl",
                                                   aceptar=self.func_concurrente_recuperacion)
@@ -38,7 +40,6 @@ class Entrada(MDScreenAbstrac):
         except ValueError:
             noti = Notificacion("Error en puerto", "El puerto solo debe tener numeros no letras")
             noti.open()
-
 
     def func_concurrente_recuperacion(self, args):
         self.network.enviar({"estado": "recuperacion", "contenido": self.noti_recuperacion.campo.text})
@@ -82,7 +83,7 @@ class Entrada(MDScreenAbstrac):
             noti = Notificacion("Error", "Digito incorrecto")
             noti.open()
 
-    def ingresar_usuario(self, correo, password):
+    def ingresar_usuario(self, nombre_usuario, password):
         if self.ids.usuario_guardar.active:
             if not (self.contenido_usuario["Usuario"]["contraseña"] == password):
                 password = her.cifrado_sha1(password)
@@ -91,38 +92,40 @@ class Entrada(MDScreenAbstrac):
             self.guardado("", "", False, condicion=True)
             password = her.cifrado_sha1(password)
 
-        noti = Notificacion("Error", "")
+        if not len(nombre_usuario) >= 2 and not len(password) >= 2:
+            noti = Notificacion("Error", "La casilla de Nombre de usuario y contraseña debe tener contenido")
+            noti.open()
+            return None
 
-        if len(correo) >= 2 and len(password) >= 2:
-            estructura = {"estado": "login", "correo": correo, "password": password}
-            self.network.enviar(estructura)
-            info = self.network.recibir()
-            if info.get("estado"):
-                noti.title = f"Bienvenido {correo}"
-                noti.text = info.get("MOTD")
-                self.siguiente()
-                noti.open()
-                return
-            else:
-                condicion = info.get("condicion")
-                if condicion == "recuperacion":
-                    self.noti_recuperacion_digito.open()
-                elif condicion == "usuarioactivo":
-                    noti.text = "Usuario ya se encuentra ingresado."
+        cuenta = RegistroCuentas(
+            nombre_cuenta=nombre_usuario,
+            contraseña=password
+        )
+        cuenta = cuenta.preparar()
+        cuenta.update({"estado":"login"})# proceso se salta la creacion de un objeto de tipo cuenta
+        self.network.enviar(cuenta)
+        info = self.network.recibir()
+        if info.get("estado"):
+            noti = Notificacion(f"Bienvenido {nombre_usuario}", info.get("MOTD"))
+            self.siguiente()
+            noti.open()
+            return None
 
-                elif condicion == "contraseñas":
-                    noti.text = "Usuario o Contraseñas incorrectas"
+        if info.get("condicion") == "recuperacion":
+            self.noti_recuperacion_digito.open()
 
-                elif condicion == "NETWORK":#condicion local
-                    notilocal = Notificacion("Error", PROTOCOLOERROR[
-                        info.get("condicion")] + " Desea intentar conectarse Nuevamente? ",
-                                             funcion_concurrente=self.network.iniciar)
-                    notilocal.open()
-                return
-        else:
-            noti.text = "tiene que tener una longitud mayor a 2"
-        noti.open()
-        return
+        elif info.get("condicion") == "usuarioactivo":
+            noti = Notificacion("Error", "Usuario ya se encuentra ingresado.")
+
+        elif info.get("condicion") == "contraseñas":
+            noti = Notificacion("Error", "Usuario o Contraseñas incorrectas")
+
+        elif info.get("condicion") == "NETWORK":  # condicion local
+            noti = Notificacion("Error", PROTOCOLOERROR[
+                info.get("condicion")] + " Desea intentar conectarse Nuevamente? ",
+                                funcion_concurrente=self.network.iniciar)
+            noti.open()
+            return
 
     def actualizar(self, dt):
         return super().actualizar(dt)
