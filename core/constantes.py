@@ -1,14 +1,14 @@
 TAMANIO_PAQUETE = 1024
 IP = "localhost"
 PORT = 7171
-# PROTOCOLO = {"estado": False, "condicion": ""} integracion futura
+
 BUTTONCREATE = {'Crear': 'pencil', 'Formatear': 'delete', 'Salir': 'exit-run'}
-PROTOCOLOERROR = {"CUENTA": "Correo o Usuario son incorrectos",
-                  "INSERTAR": "Información dada no se puede almacenar",
+PROTOCOLOERROR = {"USUARIOACTIVO": "Usuario ya se encuentra activo en el sistema",
+                  "RECUPERACION": "Usuario se encuentra en un proceso de recuperacion de cuenta",
                   "NETWORK": "Sin conexión con el Servidor",
-                  "LONGITUD": "La cantidad de caracteres es incorrecta",
-                  "ERROR": "Error Inesperado, no se entiende aun la falla Error Fatal.",
-                  "FECHAS": "Necesita una fecha almenos."}
+                  "PRIVILEGIOS": "Esta cuenta no tiene los privilegios necesarios para realizar esta accion",
+                  "CONTRASEÑAS": "Usuario o Contraseñas incorrectas.",
+                  "INSERCION": "Datos no se han podido guardar por un fallo en el contenido."}
 PROTOCOLOAFIRMATIVO = {
     "INSERTAR": "Información almacenada con exito"
 }
