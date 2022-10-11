@@ -1,5 +1,8 @@
+from entidades.registrarlocales import RegistrarLocales
 from entidades.registro_notas_empresas import Registro_Notas_Empresas
-from entidades.registrogrupos import RegistroGrupos
+from entidades.registroempresas import RegistroEmpresas
+from entidades.registrardepartamento import RegistrarDepartamento
+from entidades.registroproductos import RegistroProductos
 from entidades.registroservicio import RegistroServicios
 from entidades.registroserviciosdiarios import RegistroServiciosDiarios
 from core.herramientas import Herramientas as her
@@ -10,12 +13,16 @@ class Querys():
     def __init__(self, bd):
         self.bd = bd
 
-    def existe_usuario(self, correo):
-        querys = f'SELECT * FROM USUARIOS WHERE CORREO = "{correo}";'
+    def existe_usuario(self, nombre_cuenta):
+        querys = f'SELECT * FROM cuentas WHERE nombre_cuenta = "{nombre_cuenta}";'
         return self.bd.consultar(querys)
 
-    def consultar_usuario(self, correo, contraseña):
-        querys = f'SELECT * FROM USUARIOS WHERE CORREO = "{correo}" AND CONTRASEÑA = "{contraseña}";'
+    def registrar_cuenta(self, nombre_usuario, contraseña):
+        querys = f'INSERT INTO cuentas(nombre_cuenta, contraseña) VALUES("{nombre_usuario}", SHA("{contraseña}"));'
+        return self.bd.insertar(querys)
+
+    def consultar_cuenta(self, usuario, contraseña):
+        querys = f'SELECT * FROM cuentas WHERE nombre_cuenta = "{usuario}" AND contraseña = "{contraseña}";'
         datos = self.bd.consultar(querys)
         return datos
 
@@ -23,9 +30,7 @@ class Querys():
         querys = f'UPDATE USUARIOS SET GRUPOS = {grupo} WHERE CORREO = "{correo}";'
         return self.bd.insertar(querys)
 
-    def registrar_usuario(self, correo, contraseña):
-        querys = f'INSERT INTO USUARIOS(CORREO,CONTRASEÑA) VALUES("{correo}", SHA({contraseña}));'
-        return self.bd.insertar(querys)  # retorna usuario existente un dic
+
 
     def solicitar_estados(self):
         querys = f'SELECT * FROM ESTADOS;'
@@ -61,13 +66,17 @@ class Querys():
         return self.bd.insertar(querys)
 
     def registrar_empresas(self, objeto):
+        objeto = her.recuperacion_sentencia(objeto)
+        empresa = RegistroEmpresas()
+        empresa.__dict__ = objeto.__dict__
 
+        print(empresa)
         querys = '''
-        INSERT INTO EMPRESAS(RUT_EMPRESA, NOMBRE_EMPRESA, GIRO_EMPRESA, DIRECCION, TELEFONO, CORREO_EMPRESA, CORREO_RESPALDO, CELULAR_EMPRESA)
-        VALUES("{0}", "{1}", "{2}", "{3}", "{4}", "{5}" , "{6}", "{7}");
-        '''.format(objeto.rut_empresa, objeto.nombre_empresa, objeto.giro_empresa,
-                   objeto.direccion_empresa, objeto.telefono, objeto.correo_empresa, objeto.correo_respaldo,
-                   objeto.celular_empresa)
+        INSERT INTO EMPRESAS(rut_empresa, nombre_empresa, giro_empresa, direccion_empresa, correo_empresa, 
+        correo_respaldo, telefono_empresa, celular_empresa)
+        VALUES({}, {}, {}, {}, {}, {}, {}, {});
+        '''.format(empresa.rut_empresa, empresa.nombre_empresa, empresa.giro_empresa, empresa.direccion_empresa, empresa.correo_empresa,
+                   empresa.correo_respaldo, empresa.telefono_empresa, empresa.celular_empresa)
         return self.bd.insertar(querys)
 
     def registrar_personas(self, rut_persona, nombres, apellidos, telefono, celular, correo, rut_empresa):
@@ -101,19 +110,20 @@ class Querys():
         '''.format(nota, rut_empresa, correo)
         return self.bd.insertar(querys)
 
-    def solicitar_lista_empresas(self):
-        querys = f'SELECT RUT_EMPRESA, NOMBRE_EMPRESA FROM EMPRESAS;'
-        return self.bd.consultar(querys, all=True)
-
     def solicitar_listado_servicios(self):
         querys = f'SELECT ID_SERVICIO, NOMBRE_SERVICIO FROM SERVICIOS;'
         return self.bd.consultar(querys, all=True)
 
-    def registrar_productos(self, nombre, descripcion, cantidad):
+    def registrar_productos(self, objeto):
+        objeto = her.recuperacion_sentencia(objeto)
+        productos = RegistroProductos()
+        productos.__dict__ = objeto.__dict__
+
+        print(f"Productos: {productos}")
         querys = '''
-        INSERT INTO PRODUCTOS(NOMBRE_PRODUCTO, DESCRIPCION, CANTIDAD)
-        VALUES("{}", "{}", {});
-        '''.format(nombre, descripcion, cantidad)
+        INSERT INTO productos(nombre_producto, descripcion, cantidad, id_local)
+        VALUES({}, {}, {}, {});
+        '''.format(productos.nombre_producto, productos.descripcion, productos.cantidad, productos.id_local)
         return self.bd.insertar(querys)
 
     def nueva_contraseña(self, correo, contraseña_nueva):
@@ -156,7 +166,7 @@ class Querys():
         return self.bd.consultar(querys, all=True)
 
     def lista_menu_locales(self):
-        querys = "SELECT ID_LOCAL, NOMBRE_LOCAL	FROM locales;"
+        querys = "SELECT id_local, nombre_local	FROM locales;"
         return self.bd.consultar(querys, all=True)
 
     def registrar_trabajador(self, rut, id_local, sueldo, dia_pago):
@@ -166,11 +176,15 @@ class Querys():
         '''.format(rut, id_local, sueldo, dia_pago)
         return self.bd.insertar(querys)
 
-    def registrar_locales(self, nombre, telefono, direccion):
+    def registrar_locales(self, objeto):
+        objeto = her.recuperacion_sentencia(objeto)
+        local = RegistrarLocales()
+        local.__dict__ = objeto.__dict__
+
         querys = '''
-        INSERT INTO locales(NOMBRE_LOCAL, TELEFONO_LOCAL, DIRECCION)
-        VALUES("{}","{}","{}")
-        '''.format(nombre, telefono, direccion)
+        INSERT INTO locales(nombre_local, telefono_local, direccion)
+        VALUES({}, {}, {})
+        '''.format(local.nombre_local, local.telefono_local, local.direccion)
         return self.bd.insertar(querys)
 
     def lista_menu_trabajadores(self):
@@ -204,13 +218,14 @@ class Querys():
         datos.update({"datos": lista_notas})
         return datos
 
-    def registrar_grupos(self, objeto):
-        obj = RegistroGrupos()
-        obj.__dict__ = her.recuperacion_sentencia(objeto).__dict__
+    def registrar_departamento(self, objeto):
+        objeto = her.recuperacion_sentencia(objeto)
+        obj = RegistrarDepartamento()
+        obj.__dict__ = objeto.__dict__
         querys = """
-        INSERT INTO GRUPOS (NOMBRE_GRUPO, DESCR) 
-        VALUES ({}, {});
-        """.format(obj.nombre_grupo, obj.desc)
+        INSERT INTO departamentos (nombre_grupo, descripcion, id_local) 
+        VALUES ({}, {}, {});
+        """.format(obj.nombre_departamento, obj.descripcion, obj.id_local)
         return self.bd.insertar(querys)
 
     def asignar_grupo(self, rut_Trabajador, id_grupo):
