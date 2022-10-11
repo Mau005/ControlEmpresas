@@ -16,6 +16,8 @@ class VEmpresas(MDScreenAbstrac):
     def accion_boton(self, arg):
         if arg.icon == "exit-run":
             self.siguiente()
+        if arg.icon == "delete":
+            self.formatear()
         if arg.icon == "pencil":
             longitud = 1
             noti = Notificacion("Error", "")
@@ -38,37 +40,36 @@ class VEmpresas(MDScreenAbstrac):
             if not ("@" in self.ids.correo_empresa.text):
                 noti.text += "El Correo de la empresa debe tener almenos un @\n"
                 estado = False
-            if estado:
-                verificando_rut = her.verificar_rut(self.ids.rut_empresa.text)
+            if not estado:
+                noti.open()
+                return None
+            verificando_rut = her.verificar_rut(self.ids.rut_empresa.text)
 
-                if verificando_rut[0]:
-                    objeto = RegistroEmpresas(
-                        rut_empresa=verificando_rut[1],
-                        nombre_empresa=self.ids.nombre_empresa.text,
-                        giro_empresa=self.ids.giro_empresa.text,
-                        direccion_empresa=self.ids.direccion_empresa.text,
-                        telefono=self.ids.telefono_empresa.text,
-                        celular_empresa=self.ids.celular_empresa.text,
-                        correo_empresa=self.ids.correo_empresa.text,
-                        correo_respaldo=self.ids.correo_respaldo_empresa.text,
-                    )
-                    self.network.enviar(objeto.preparar())
-                    info = self.network.recibir()
-                    if info.get("estado"):
-                        Logger.info("Se ha creado el dato empresa")
-                        noti.title = "Exito"
-                        noti.text = info.get("condicion")
-                        self.formatear()
-                        self.siguiente()
-                    else:
+            if verificando_rut[0]:
+                objeto = RegistroEmpresas(
+                    rut_empresa=verificando_rut[1],
+                    nombre_empresa=self.ids.nombre_empresa.text,
+                    giro_empresa=self.ids.giro_empresa.text,
+                    direccion_empresa=self.ids.direccion_empresa.text,
+                    telefono_empresa=self.ids.telefono_empresa.text,
+                    celular_empresa=self.ids.celular_empresa.text,
+                    correo_empresa=self.ids.correo_empresa.text,
+                    correo_respaldo=self.ids.correo_respaldo_empresa.text,
+                )
+                self.network.enviar(objeto.preparar())
+                info = self.network.recibir()
+                if info.get("estado"):
+                    Logger.info("Se ha creado el dato empresa")
+                    noti.title = "Exito"
+                    noti = Notificacion("Exito", info.get("condicion"))
+                    noti.open()
+                    self.formatear()
+                    self.siguiente()
+                    return None
 
-                        Logger.warning("No se ha podido registrar la empresa")
-                        noti.text = info.get("condicion")
-            noti.open()
-
-        if arg.icon == "delete":
-            self.formatear()
-
+                noti = Notificacion("Error", info.get("condicion"))
+                noti.open()
+                return None
     def formatear(self):
         self.ids.rut_empresa.text = ""
         self.ids.nombre_empresa.text = ""
