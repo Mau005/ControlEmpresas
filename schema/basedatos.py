@@ -31,10 +31,10 @@ class BaseDatos:
         try:
             self.cursor.execute(querys)
             self.conec.commit()
-            return {"estado": True, "condicion": PROTOCOLOAFIRMATIVO["INSERTAR"]}
+            return {"estado": True, "ultimo_id": self.cursor.lastrowid}
         except mysql.connector.errors.IntegrityError as error:
             print(error)
-            return {"estado": False, "condicion": PROTOCOLOERROR["INSERTAR"]}
+            return {"estado": False, "condicion": "INSERCION"}
         finally:
             self.__cerrar()
 
