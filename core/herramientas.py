@@ -4,6 +4,7 @@ import json
 import os
 import hashlib
 import random
+import uuid
 
 class Herramientas:
 
@@ -14,6 +15,10 @@ class Herramientas:
             print("[OK] ", mensaje)
             return archivo.read()
         return None
+
+    @staticmethod
+    def generar_numero_unico():
+        return uuid.uuid4()
 
     @staticmethod
     def numero_aleatorio():
@@ -110,7 +115,6 @@ class Herramientas:
             return False, f"No se puede comprobar el rut correctamente"
         
         formato_nuevo = f"{rut[0][:2]}.{rut[0][2:5]}.{rut[0][5:8]}" #es procesar el rut devido a la cantida dde informacion
-        print(f"{formato_nuevo}-{rut[1]}")
         return True, f"{formato_nuevo}-{rut[1]}"
     
 if __name__ == "__main__":
