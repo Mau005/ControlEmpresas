@@ -1,7 +1,10 @@
 {
     "Grupos":{
-        "1": {
+        "0": {
             "Grupos": "Cliente"
+        },
+        "1": {
+            "Grupos": "Pionetas"
         },
         "2":{
             "Nombre": "Choferes"
