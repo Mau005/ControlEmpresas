@@ -27,7 +27,7 @@ class VListasEmpresas(MDScreenAbstrac):
 
     def activar(self):
         self.limpiar_objetos()
-        data = {"estado": "listaEmpresas"}
+        data = {"estado": "lista_empresas"}
         self.network.enviar(data)
         info = self.network.recibir()
 
