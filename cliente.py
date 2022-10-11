@@ -1,7 +1,7 @@
 from kivy.core.window import Window
 
 from ventanas.VListaNotasEmpresas import VListaNotasEmpresas
-from ventanas.vgrupos import VGrupos
+from ventanas.vdepartamentos import VDepartamentos
 from ventanas.vlocales import VLocales
 
 Window.size = (400, 625)
@@ -55,8 +55,8 @@ class ControlEmpresas(MDApp):
         self.vlocales = VLocales(self.network, self.manejador, "locales", siguiente="casa")
         self.vlistanotasempresas = VListaNotasEmpresas(self.network, self.manejador, "lista_menu_empresas",
                                                        siguiente="casa")
-        self.vgrupos = VGrupos(self.network, self.manejador, "grupos",
-                               siguiente="casa")
+        self.vgrupos = VDepartamentos(self.network, self.manejador, "departamentos",
+                                      siguiente="casa")
         self.manejador.add_widget(self.login)
         self.manejador.add_widget(self.casa)
         self.manejador.add_widget(self.vservicios)
