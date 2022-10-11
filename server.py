@@ -7,6 +7,16 @@ from network.control_network import Control_Network
 import threading, time
 from servicios_correos.servicio_correos import Servicio_Correos
 
+MOTD= """
+ ____  __.                __                .__                          
+|    |/ _|____    _______/  |______    ____ |  |__ _____    ____ _____   
+|      < \__  \  /  ___/\   __\__  \ _/ ___\|  |  \ \__  \  /    \ \__  \  
+|    |  \ / __ \_\___ \  |  |  / __ \ \  \___|   Y  \/ __ \|   |  \/ __ \_
+|____|__ (____  /____  > |__| (____  /\___  >___|  (____  /___|  (____  /
+        \/    \/     \/            \/     \/     \/     \/     \/     \/ 
+Creado por Mau
+https://github.com/Mau005
+"""
 
 class Server:
     # Kastachaña: ordenar separar en idioma aymara
@@ -25,6 +35,7 @@ class Server:
         self.tiempo_inicial = time.time()
 
     def __iniciar_variables(self):
+        print(MOTD)
         self.info = her.cargar_json("data/ConfiguracionServidor.json")
         print("[OK] Se Cargan Variables")
         self.grupos = her.cargar_json("data/Grupos.json")["Grupos"]
@@ -66,5 +77,29 @@ class Server:
 
 
 if __name__ == "__main__":
-    servidor = Server()
-    servidor.iniciar()
+    iniciando = False
+    if iniciando:
+        print(MOTD)
+        while True:
+            info = her.cargar_json("data/ConfiguracionServidor.json")
+            bd = BaseDatos(info.get("Mysql"))
+            querys = Querys(bd)
+            print("Sistema de registro del administrador... ")
+
+            import getpass
+            try:
+                print("Indicame la contraseña para el administrador: ")
+                contra = getpass.getpass()
+                print("Indicame nuevamente la contraseña: ")
+                contra2 = getpass.getpass()
+                if len(contra) >= 3 and contra == contra2:
+                    querys.registrar_cuenta("admin", contra)
+                    break
+            except Exception as err:
+                print('ERROR:', err)
+
+
+    else:
+        servidor = Server()
+        servidor.iniciar()
+
