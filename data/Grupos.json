@@ -21,6 +21,7 @@
             "Crearusuarios": true,
             "CrearServicios": true,
             "CrearProductos": true,
+            "CrearPersona": true,
             "RecibirTodaNotificacion": true,
             "EliminarEmpresas": true,
             "EliminarUsuarios": true,

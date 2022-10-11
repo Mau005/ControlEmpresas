@@ -60,8 +60,7 @@ class VEmpresas(MDScreenAbstrac):
                 info = self.network.recibir()
                 if info.get("estado"):
                     Logger.info("Se ha creado el dato empresa")
-                    noti.title = "Exito"
-                    noti = Notificacion("Exito", info.get("condicion"))
+                    noti = Notificacion("Exito", f"Se ha generado con exito la Empresa {objeto.nombre_empresa}")
                     noti.open()
                     self.formatear()
                     self.siguiente()
@@ -70,6 +69,7 @@ class VEmpresas(MDScreenAbstrac):
                 noti = Notificacion("Error", info.get("condicion"))
                 noti.open()
                 return None
+
     def formatear(self):
         self.ids.rut_empresa.text = ""
         self.ids.nombre_empresa.text = ""

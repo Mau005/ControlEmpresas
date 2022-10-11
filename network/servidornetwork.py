@@ -151,16 +151,13 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "menu_productos":
                 self.enviar(self.querys.lista_menu_productos())
 
-
-
-
             if datos.get("estado") == "registro_servicio":
                 self.registro_servicios(datos.get("contenido"))
 
             if datos.get("estado") == "registro_notas_empresas":
                 self.registro_notas_empresas(datos.get("contenido"))
 
-            if datos.get("estado") == "registropersona":
+            if datos.get("estado") == "registrar_persona":
                 self.registrar_persona(datos.get("contenido"))
 
             if datos.get("estado") == "listadoservicios":
@@ -176,15 +173,11 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "menu_personas":
                 self.enviar(self.querys.lista_menu_personas())
 
-
-
             if datos.get("estado") == "registrartrabajador":
                 self.registrar_trabajador(datos.get("contenido"))
 
             if datos.get("estado") == "menu_trabajadores":
                 self.enviar(self.querys.lista_menu_trabajadores())
-
-
 
             if datos.get("estado") == "menu_empresas":
                 self.enviar(self.querys.lista_menu_empresas())
@@ -194,8 +187,6 @@ class ServidorNetwork(Thread):
 
             if datos.get("estado") == "listado_notas_empresa_especifica":
                 self.enviar(self.querys.listado_notas_empresa_especifica(datos.get("contenido")))
-
-
 
             if datos.get("estado") == "cierre_abrupto":
                 print(f"Se Desconecta usuario: {self.cuenta.nombre_cuenta}")
@@ -231,7 +222,7 @@ class ServidorNetwork(Thread):
         return self.enviar({"estado": False, "condicion": "privilegios"})
 
     def inciar_recuperacion(self, contenido):
-        info = self.querys.existe_usuario(contenido)
+        info = self.querys.existe_cuenta(contenido)
         if info.get("estado"):
             self.recuperacion_cuenta.iniciar(info.get("datos")[0])
 
@@ -270,14 +261,11 @@ class ServidorNetwork(Thread):
         return self.enviar({"estado": False, "condicion": "privilegios"})
 
     def registrar_persona(self, datos):
-        datos_procesados = self.querys.registrar_personas(datos.rut_persona, datos.nombres, datos.apellidos,
-                                                          datos.telefono,
-                                                          datos.celular, datos.correo.lower(), datos.rut_empresa)
-
-        if datos_procesados.get("estado"):
-            self.base_correo.Correo_Bienvenida(datos.nombres, datos.correo.lower(), "12345")
-
-        return self.enviar(datos_procesados)
+        if self.consultar_privilegios("CrearPersona"):
+            return self.enviar(self.querys.registrar_personas(datos))
+            # if info.get("estado"): se suspende el envio de correos electornicos
+            #    self.base_correo.Correo_Bienvenida(datos.nombres, datos.correo, "12345")
+        return self.enviar({"estado": False, "condicion": "PRIVILEGIOS"})
 
     def registro_servicios(self, datos):
         if self.consultar_privilegios("CrearServicios"):

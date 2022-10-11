@@ -2,7 +2,7 @@ from entidades.registropersonas import RegistroPersonas
 from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion, MenuEntidades
 from kivy.properties import ObjectProperty
 from core.herramientas import Herramientas as her
-from core.constantes import BUTTONCREATE
+from core.constantes import BUTTONCREATE, PROTOCOLOERROR
 
 
 class VPersonas(MDScreenAbstrac):
@@ -68,7 +68,7 @@ class VPersonas(MDScreenAbstrac):
                     self.formatear()
                     self.siguiente()
                 else:
-                    noti.text = "No se ha podido registrar este usuario, el rut ya existe o el correo ya se encuentra registrado"
+                    noti.text = PROTOCOLOERROR[info.get("condicion")]
             noti.open()
 
     def actualizar(self, dt):
