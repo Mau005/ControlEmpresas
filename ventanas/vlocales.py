@@ -1,7 +1,7 @@
 from entidades.registrarlocales import RegistrarLocales
 from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion
 from kivy.properties import ObjectProperty
-from core.constantes import BUTTONCREATE
+from core.constantes import BUTTONCREATE, PROTOCOLOERROR
 
 
 class VLocales(MDScreenAbstrac):
@@ -33,19 +33,18 @@ class VLocales(MDScreenAbstrac):
             )
             self.network.enviar(objeto.preparar())
             info = self.network.recibir()
-            noti = Notificacion("Error", "")
+
             print(f"Datos procesados es: {info}")
             if info.get("estado"):
-                noti.title = "Correcto"
-                noti.text = "Se ha registrado correctamente"
-            else:
-                if info.get("condicion") == "privilegios":
-                    noti.text = "Problemas de Privilegios"
-                elif info.get("condicion") == "NETWORK":
-                    noti.text = "Se ha desconectado del servidor"
-                else:
-                    noti.text = f"Error desconocido {info.get('condicion')}"
+                noti = Notificacion("Correcto", "Se ha registrado correctamente")
+                noti.open()
+                self.formatear()
+                self.siguiente()
+                return None
+
+            noti = Notificacion("Error", PROTOCOLOERROR[info.get("condicion")])
             noti.open()
+            return None
 
     def activar(self):
         super().activar()
