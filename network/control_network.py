@@ -6,44 +6,44 @@ class Control_Network():
         self.pendientes_recuperacion = []
         self.control_recuperacion = {}
 
-    def agregar_control_recuperacion(self, correo, valor):
-        if self.control_recuperacion.get(correo) is None:
-            self.control_recuperacion.update({correo: valor})
+    def agregar_control_recuperacion(self, nombre_cuenta, valor):
+        if self.control_recuperacion.get(nombre_cuenta) is None:
+            self.control_recuperacion.update({nombre_cuenta: valor})
             return True
         return False
 
-    def buscar_control_recuperacion(self, correo):
+    def buscar_control_recuperacion(self, nombre_cuenta):
 
-        if correo in self.control_recuperacion.keys():
+        if nombre_cuenta in self.control_recuperacion.keys():
             return True
         return False
 
-    def comprobar_control_recuperacion(self, correo, valor):
+    def comprobar_control_recuperacion(self, nombre_cuenta, valor):
 
-        if self.control_recuperacion[correo] == valor:
-            self.pendientes_recuperacion.append(correo)
+        if self.control_recuperacion[nombre_cuenta] == valor:
+            self.pendientes_recuperacion.append(nombre_cuenta)
             return True
         return False
 
-    def comprobar_control_hilos(self, correo):
+    def comprobar_control_hilos(self, nombre_cuenta):
         """
         Methodo especifico para encontrar si el hilo se encuentra activo
-        :str correo: correo str
+        :str nombre_cuenta: nombre_cuenta str
         :return: bool si existe el hilo
         """
-        if correo in self.hilos_cliente.keys():
+        if nombre_cuenta in self.hilos_cliente.keys():
             return True
         return False
-    def perdida_tiempo_recuperacion(self, correo):
-        self.control_recuperacion.pop(correo)
+    def perdida_tiempo_recuperacion(self, nombre_cuenta):
+        self.control_recuperacion.pop(nombre_cuenta)
 
     def agregar_pendiente_hilos(self, key):
         if not key in self.pendientes_desconexion:
             self.pendientes_desconexion.append(key)
 
     def agregar_hilo(self, hilo):
-        if self.hilos_cliente.get(hilo.usuario.correo) is None:
-            self.hilos_cliente.update({hilo.usuario.correo: hilo})
+        if self.hilos_cliente.get(hilo.cuenta.nombre_cuenta) is None:
+            self.hilos_cliente.update({hilo.cuenta.nombre_cuenta: hilo})
             return True
         return False
 
