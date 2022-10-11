@@ -1,7 +1,7 @@
 
 
 class RegistrarLocales:
-#ID_LOCAL, NOMBRE_LOCAL, TELEFONO_LOCAL, DIRECCION
+#id_local	nombre_local	direccion	telefono_local
 
     def __init__(self, **kargs):
         self.id_local = kargs.get("id_local")
@@ -15,7 +15,7 @@ class RegistrarLocales:
         Nombre: {}
         Telefono: {}
         Direccion: {}
-        """.format(self.id_local, self.nombre_local,self.telefono_local,self.direccion)
+        """.format(self.id_local, self.nombre_local, self.telefono_local, self.direccion)
 
     def preparar(self):
-        return {"estado":"registrarlocal", "contenido":self}
+        return {"estado":"registrar_local", "contenido":self}
