@@ -84,19 +84,41 @@ if __name__ == "__main__":
             info = her.cargar_json("data/ConfiguracionServidor.json")
             bd = BaseDatos(info.get("Mysql"))
             querys = Querys(bd)
-            print("Sistema de registro del administrador... ")
-
             import getpass
             try:
-                print("Indicame la contraseña para el administrador: ")
+                print("[PREPARANDO] Indicame la contraseña para el usuario admin: ")
                 contra = getpass.getpass()
-                print("Indicame nuevamente la contraseña: ")
+                print("[PREPARANDO] Indicame nuevamente la contraseña: ")
                 contra2 = getpass.getpass()
                 if len(contra) >= 3 and contra == contra2:
-                    querys.registrar_cuenta("admin", contra)
-                    break
+                    querys.registrar_cuenta("admin", contra, acceso = 5)
+                    print("[OK] Usuario admin registrado con exito")
             except Exception as err:
                 print('ERROR:', err)
+
+            from entidades.registroempresas import RegistroEmpresas
+            print("[PREPARANDO] Registrando tablas minimas para funcionar")
+            base_string = "Persona Natural"
+            base_empresa = RegistroEmpresas(rut_empresa="11.111.111-1",
+                                            nombre_empresa=base_string,
+                                            giro_empresa=base_string,
+                                            direccion_empresa=base_string,
+                                            telefono_empresa="",
+                                            correo_empresa=base_string,
+                                            correo_respaldo="",
+                                            celular_empresa="")
+            querys.registrar_empresas(base_empresa)
+            querys.registrar_estados("OPERATIVO")
+            querys.registrar_estados("DETENIDO")
+            querys.registrar_estados("SINIESTRADO")
+            querys.registrar_estados("TRANSLADO")
+            querys.registrar_estado_gastos("ARRIENDO")
+            querys.registrar_estado_gastos("HOGAREÑO")
+            querys.registrar_estado_gastos("INMUEBLES")
+            querys.registrar_estado_gastos("OTROS")
+            print("[OK] Se han registrado todos los atributos necesarios")
+            break
+
 
 
     else:

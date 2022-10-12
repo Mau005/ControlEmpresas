@@ -28,11 +28,12 @@ class Querys():
         querys = f'SELECT rut_persona from personas WHERE rut_persona = "{rut}";'
         return self.bd.consultar(querys)
 
-    def registrar_cuenta(self, nombre_cuenta, contraseña):
+    def registrar_cuenta(self, nombre_cuenta, contraseña, acceso = 0):
         """
         Methodo utilizado para registrar una cuenta
         """
-        querys = f'INSERT INTO cuentas(nombre_cuenta, contraseña) VALUES("{nombre_cuenta}", SHA("{contraseña}"));'
+        querys = f'INSERT INTO cuentas(nombre_cuenta, contraseña, acceso) ' \
+                 f'VALUES("{nombre_cuenta}", SHA("{contraseña}"),{acceso});'
         return self.bd.insertar(querys)
 
     def consultar_cuenta(self, usuario, contraseña):
@@ -67,7 +68,6 @@ class Querys():
         empresa = RegistroEmpresas()
         empresa.__dict__ = objeto.__dict__
 
-        print(empresa)
         querys = '''
         INSERT INTO EMPRESAS(rut_empresa, nombre_empresa, giro_empresa, direccion_empresa, correo_empresa, 
         correo_respaldo, telefono_empresa, celular_empresa)
@@ -85,12 +85,23 @@ class Querys():
         querys = f"INSERT INTO empresas_personas(rut_empresa, rut_persona) VALUES({rut_empresa}, {rut_persona});"
         return self.bd.insertar(querys)
 
+    def registrar_departamento(self, objeto):
+        """
+        Methodo Utilizado para registrar departamentos
+        """
+        objeto = her.recuperacion_sentencia(objeto)
+        obj = RegistrarDepartamento()
+        obj.__dict__ = objeto.__dict__
+        querys = """
+        INSERT INTO departamentos (nombre_grupo, descripcion, id_local) 
+        VALUES ({}, {}, {});
+        """.format(obj.nombre_departamento, obj.descripcion, obj.id_local)
+        return self.bd.insertar(querys)
     def registrar_personas(self, objeto):
         """
         Methodo utilizado para que gestione la creacion de usuarios nuevos
         comprobare si el correo existe, si no existe lo creara con default de password
         """
-
         personas = RegistroPersonas()
         personas.__dict__ = objeto.__dict__
 
@@ -122,6 +133,48 @@ class Querys():
             self.registrar_personas_empresas(personas.rut_empresa, personas.rut_persona)
             return {"estado": True}
         return {"estado": False, "condicion": "REGISTRARCUENTA"}
+
+    def registrar_estados(self, nombre):
+        """
+        Methodo Utilizado para ingresar los estados
+        """
+        querys = f'INSERT INTO estados(nombre_estado) VALUES("{nombre}")'
+        self.bd.insertar(querys)
+
+    def registrar_estado_gastos(self, nombre):
+        """
+        Methodo utilizado para ingresar los estados de los gastos
+        """
+        querys = f'INSERT INTO estado_gastos(nombre) VALUES("{nombre}")'
+        self.bd.insertar(querys)
+
+    def lista_menu_empresas(self):
+        """
+        Methodo utilizado para gestionar menus de empresas
+        """
+        querys = "SELECT rut_empresa, nombre_empresa FROM empresas;"
+        return self.bd.consultar(querys, all=True)
+
+    def lista_menu_estados(self):
+        """
+        Methodo que gestiona estados de el programa
+        """
+        querys = f'SELECT id_estado, nombre_estado FROM estados;'
+        return self.bd.consultar(querys, all=True)
+
+    def lista_menu_personas(self):
+        """
+        Methodo utilizado para gstionar lista de personas
+        """
+        querys = "SELECT rut_persona, CONCAT(nombres, ' ', apellidos) as Nombres FROM personas;"
+        return self.bd.consultar(querys, all=True)
+
+    def lista_menu_locales(self):
+        """
+        Methodo Utilizado para gestionar menus de locales
+        """
+        querys = "SELECT id_local, nombre_local	FROM locales;"
+        return self.bd.consultar(querys, all=True)
 
     def actualizar_grupo_usuario(self, correo, grupo):
         querys = f'UPDATE USUARIOS SET GRUPOS = {grupo} WHERE CORREO = "{correo}";'
@@ -168,9 +221,7 @@ class Querys():
         querys = f'SELECT ID_PRODUCTO, NOMBRE_PRODUCTO, CANTIDAD FROM productos;'
         return self.bd.consultar(querys, all=True)
 
-    def lista_menu_estados(self):
-        querys = f'SELECT ID_ESTADO, NOMBRE FROM ESTADOS;'
-        return self.bd.consultar(querys, all=True)
+
 
     def registrar_servicio_diario(self, objeto):
         obj = RegistroServiciosDiarios()
@@ -195,13 +246,9 @@ class Querys():
         querys = f'select CORREO  from usuarios where CORREO = "{correo}";'
         return self.bd.consultar(querys)
 
-    def lista_menu_personas(self):
-        querys = "SELECT RUT, CONCAT(NOMBRES, ' ', APELLIDOS) as Nombres FROM personas;"
-        return self.bd.consultar(querys, all=True)
 
-    def lista_menu_locales(self):
-        querys = "SELECT id_local, nombre_local	FROM locales;"
-        return self.bd.consultar(querys, all=True)
+
+
 
     def registrar_trabajador(self, rut, id_local, sueldo, dia_pago):
         querys = '''
@@ -233,9 +280,7 @@ class Querys():
         querys = "SELECT ID_PRODUCTO, NOMBRE_PRODUCTO FROM productos;"
         return self.bd.consultar(querys, all=True)
 
-    def lista_menu_empresas(self):
-        querys = "SELECT RUT_EMPRESA, NOMBRE_EMPRESA FROM empresas;"
-        return self.bd.consultar(querys, all=True)
+
 
     def listado_notas_empresa_especifica(self, contenido):
         querys = """
@@ -252,15 +297,7 @@ class Querys():
         datos.update({"datos": lista_notas})
         return datos
 
-    def registrar_departamento(self, objeto):
-        objeto = her.recuperacion_sentencia(objeto)
-        obj = RegistrarDepartamento()
-        obj.__dict__ = objeto.__dict__
-        querys = """
-        INSERT INTO departamentos (nombre_grupo, descripcion, id_local) 
-        VALUES ({}, {}, {});
-        """.format(obj.nombre_departamento, obj.descripcion, obj.id_local)
-        return self.bd.insertar(querys)
+
 
     def asignar_grupo(self, rut_Trabajador, id_grupo):
         querys = """
