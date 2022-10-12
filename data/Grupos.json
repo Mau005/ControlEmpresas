@@ -1,10 +1,10 @@
 {
     "Grupos":{
         "0": {
-            "Grupos": "Cliente"
+            "Nombre": "Cliente"
         },
         "1": {
-            "Grupos": "Pionetas"
+            "Nombre": "Pionetas"
         },
         "2":{
             "Nombre": "Choferes"
@@ -21,6 +21,8 @@
             "Crearusuarios": true,
             "CrearServicios": true,
             "CrearProductos": true,
+            "CrearNotaEmpresa": true,
+            "CrearNotaPersona": true,
             "CrearPersona": true,
             "RecibirTodaNotificacion": true,
             "EliminarEmpresas": true,
@@ -30,10 +32,7 @@
             "VerProductos": true,
             "VerEmpresas": true,
             "RegistrarTrabajadores": true,
-            "RegistrarLocales": true,
-            "CrearNotaEmpresa": true,
-            "CrearNotaPersona": true
-            
+            "RegistrarLocales": true
         }
     }
 }
