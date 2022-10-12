@@ -10,7 +10,8 @@ PROTOCOLOERROR = {"USUARIOACTIVO": "Usuario ya se encuentra activo en el sistema
                   "CONTRASEÑAS": "Usuario o Contraseñas incorrectas.",
                   "INSERCION": "Datos no se han podido guardar por un fallo en el contenido.",
                   "REGISTRARCUENTA":"Hubo un problema al poder registrar la cuenta de este usuario",
-                  "RUT_EXISTE":"Este usuario ya se encuentra registrado"}
+                  "RUT_EXISTE":"Este usuario ya se encuentra registrado",
+                  "SINSELECCION":"No Se ha ingresado una seleccion correspondiente"}
 
 ERRORPRIVILEGIOS = "No tienes los privilegios para ejercer esta accion"
 TIEMPOACTUALIZAR = 1  # segundos

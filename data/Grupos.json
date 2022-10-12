@@ -31,7 +31,8 @@
             "VerEmpresas": true,
             "RegistrarTrabajadores": true,
             "RegistrarLocales": true,
-            "CrearNotaEmpresa": true
+            "CrearNotaEmpresa": true,
+            "CrearNotaPersona": true
             
         }
     }

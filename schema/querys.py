@@ -1,5 +1,5 @@
 from entidades.registrarlocales import RegistrarLocales
-from entidades.registro_notas_empresas import Registro_Notas_Empresas
+from entidades.registronotas import RegistroNotas
 from entidades.registroempresas import RegistroEmpresas
 from entidades.registrardepartamento import RegistrarDepartamento
 from entidades.registropersonas import RegistroPersonas
@@ -141,6 +141,41 @@ class Querys():
         querys = f'INSERT INTO estados(nombre_estado) VALUES("{nombre}")'
         self.bd.insertar(querys)
 
+    def registrar_notas(self, objeto, cuenta, objetivo = "empresas"):
+        """
+        Methodo utilizado para gestionar notas de empresas y personas
+        """
+        nota = RegistroNotas()
+        nota.__dict__ = her.recuperacion_sentencia(objeto).__dict__
+        querys = '''
+        INSERT INTO notas(nota, id_cuenta)
+        VALUES({}, {});
+        '''.format(nota.nota, cuenta.id_cuenta)
+        nota_resgistrada = self.bd.insertar(querys)
+        if not nota_resgistrada.get("estado"):
+            return {"estado":False, "condicion": "INSERCION"}
+
+        if objetivo == "empresas":
+            querys = '''
+                INSERT INTO empresas_notas(id_nota, rut_empresa)
+                VALUES({},{});'''.format(nota_resgistrada.get("ultimo_id"), nota.rut_asociado)
+            empresa_notas = self.bd.insertar(querys)
+            if empresa_notas.get("estado"):
+                return empresa_notas
+            return {"estado":False, "condicion": "INSERCION"}
+        elif objetivo == "personas":
+            querys = '''
+                INSERT INTO personas_notas(id_nota, rut_persona)
+                VALUES({},{});
+                '''.format(nota_resgistrada.get("ultimo_id"), nota.rut_asociado)
+            persona_notas = self.bd.insertar(querys)
+
+            if persona_notas.get("estado"):
+                return persona_notas
+            return {"estado":False, "condicion": "INSERCION"}
+
+        return {"estado":False, "condicion":"SINSELECCION"}
+
     def registrar_estado_gastos(self, nombre):
         """
         Methodo utilizado para ingresar los estados de los gastos
@@ -184,10 +219,6 @@ class Querys():
         querys = f'SELECT * FROM ESTADOS;'
         return self.bd.consultar(querys, all=True)
 
-    def registrar_baneo(self, correo, ip, descr=""):
-        querys = f'INSERT INTO HISTORIAL_BANEOS(CORREO,IP,DESCR) VALUES("{correo}", "{ip}", "{descr}")'
-        return self.bd.insertar(querys)
-
     def registrar_servicios(self, datos):
         objeto = RegistroServicios()
         objeto.__dict__ = her.recuperacion_sentencia(datos).__dict__
@@ -202,12 +233,7 @@ class Querys():
 
         return self.bd.insertar(querys)
 
-    def registrar_notas_empresas(self, nota, rut_empresa, correo):
-        querys = '''
-        INSERT INTO registro_notas_empresas(NOTA, RUT_EMPRESA, CORREO)
-        VALUES("{}", "{}", "{}")
-        '''.format(nota, rut_empresa, correo)
-        return self.bd.insertar(querys)
+
 
     def solicitar_listado_servicios(self):
         querys = f'SELECT ID_SERVICIO, NOMBRE_SERVICIO FROM SERVICIOS;'
@@ -291,9 +317,9 @@ class Querys():
         datos = self.bd.consultar(querys, all=True)
         lista_notas = []
         for nota in datos.get("datos"):
-            lista_notas.append(Registro_Notas_Empresas(id_registro=nota[0], notas=nota[1],
-                                                       rut_empresa=nota[2], correo=nota[3],
-                                                       fecha_creacion=nota[4]))
+            lista_notas.append(RegistroNotas(id_registro=nota[0], notas=nota[1],
+                                             rut_empresa=nota[2], correo=nota[3],
+                                             fecha_creacion=nota[4]))
         datos.update({"datos": lista_notas})
         return datos
 

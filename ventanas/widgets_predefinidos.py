@@ -12,7 +12,7 @@ from kivymd.uix.list import TwoLineListItem, ThreeLineListItem, MDList
 from kivymd.uix.textfield import MDTextField
 
 from entidades.menuitems import MenuGlobal
-from entidades.registro_notas_empresas import Registro_Notas_Empresas
+from entidades.registronotas import RegistroNotas
 
 
 class MenuEntidades:
@@ -223,7 +223,7 @@ class ItemNotaEmpresa(ItemCard):
     def __init__(self, network, objeto, **kargs):
         super().__init__(**kargs)
 
-        maqueta = Registro_Notas_Empresas()
+        maqueta = RegistroNotas()
         maqueta.__dict__ = objeto.__dict__
         self.network = network
 

@@ -1,7 +1,7 @@
 from threading import Thread
 from core.constantes import TAMANIO_PAQUETE, TIMEPOESPERAUSUARIO
 from core.herramientas import Herramientas as her
-from entidades.registro_notas_empresas import Registro_Notas_Empresas
+from entidades.registronotas import RegistroNotas
 from entidades.registrocuentas import RegistroCuentas
 from entidades.registrotrabajador import RegistroTrabajador
 from network.recuperacion_cuenta import RecuperacionCuenta
@@ -151,11 +151,15 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "menu_productos":
                 self.enviar(self.querys.lista_menu_productos())
 
-            if datos.get("estado") == "registro_servicio":
-                self.registro_servicios(datos.get("contenido"))
 
             if datos.get("estado") == "registro_notas_empresas":
                 self.registro_notas_empresas(datos.get("contenido"))
+
+            if datos.get("estado") == "registro_servicio":
+                self.registro_servicios(datos.get("contenido"))
+
+            if datos.get("estado") == "registro_notas_personas":
+                self.registro_notas_personas(datos.get("contenido"))
 
             if datos.get("estado") == "registrar_persona":
                 self.registrar_persona(datos.get("contenido"))
@@ -252,13 +256,13 @@ class ServidorNetwork(Thread):
 
     def registro_notas_empresas(self, contenido):
         if self.consultar_privilegios("CrearNotaEmpresa"):
-            notas = Registro_Notas_Empresas()
-            notas.__dict__ = contenido.__dict__
-            datos = self.querys.registrar_notas_empresas(notas.notas, notas.rut_empresa,
-                                                         self.cuenta.correo,
-                                                         )
-            return self.enviar(datos)
+            return self.enviar(self.querys.registrar_notas(contenido, self.cuenta, objetivo="empresas"))
         return self.enviar({"estado": False, "condicion": "privilegios"})
+
+    def registro_notas_personas(self, contenido):
+        if self.consultar_privilegios("CrearNotaPersona"):
+            return self.enviar(self.querys.registrar_notas(contenido, self.cuenta, objetivo="personas"))
+        return self.enviar({"estado": False, "condicion": "PRIVILEGIOS"})
 
     def registrar_persona(self, datos):
         if self.consultar_privilegios("CrearPersona"):

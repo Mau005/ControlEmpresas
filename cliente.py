@@ -3,6 +3,7 @@ from kivy.core.window import Window
 from ventanas.VListaNotasEmpresas import VListaNotasEmpresas
 from ventanas.vdepartamentos import VDepartamentos
 from ventanas.vlocales import VLocales
+from ventanas.vnotaspersonas import VNotasPersonas
 
 Window.size = (400, 625)
 from kivymd.app import MDApp
@@ -57,6 +58,8 @@ class ControlEmpresas(MDApp):
                                                        siguiente="casa")
         self.vgrupos = VDepartamentos(self.network, self.manejador, "departamentos",
                                       siguiente="casa")
+        self.vnotaspersonas = VNotasPersonas(self.network, self.manejador, "notaspersonas", siguiente="casa")
+
         self.manejador.add_widget(self.login)
         self.manejador.add_widget(self.casa)
         self.manejador.add_widget(self.vservicios)
@@ -73,6 +76,7 @@ class ControlEmpresas(MDApp):
         self.manejador.add_widget(self.vlocales)
         self.manejador.add_widget(self.vlistanotasempresas)
         self.manejador.add_widget(self.vgrupos)
+        self.manejador.add_widget(self.vnotaspersonas)
         self.login.activar()
 
     def actualizar(self, dt):

@@ -1,0 +1,34 @@
+
+
+<VNotasPersonas>:
+    botones:botones
+    MDCardPre:
+        orientation: 'vertical'
+        elevation: 15
+        pos_hint: {"center_x": .5, "center_y": .5}
+        size_hint: .9,.9
+        padding: dp(45)
+
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            MDList:
+                spacing: dp(15)
+                MDRaisedButton:
+                    text: "Rut Persona:"
+                    id: boton_persona
+
+                MDTextField:
+                    id: nota_persona
+                    size_hint_y : None
+                    hint_text: "Nota"
+                    height: dp(300)
+                    multiline: True
+
+            
+    
+    MDFloatingActionButtonSpeedDial:
+        callback: root.accion_boton
+        id: botones
+        size_hint_y: .1
+        root_button_anim: True
