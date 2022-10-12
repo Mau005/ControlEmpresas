@@ -1,5 +1,6 @@
 from abc import abstractmethod
 
+from kivy.metrics import dp
 from kivy.uix.scrollview import ScrollView
 from kivymd.uix.bottomsheet import MDListBottomSheet
 from kivymd.uix.card import MDCard
@@ -210,12 +211,11 @@ class ItemCard(MDCardPre):
         self.elevation = 15
         self.orientation = 'vertical'
         self.size_hint_y = None
-        self.height = 640
-        self.padding = "20dp"
-        self.scroll = ScrollView(do_scroll_x=False, do_scroll_y=True)
+        self.height = dp(400)
+        self.padding = dp(20)
+        self.adaptative_size = True
         self.contenedor = MDList(size_hint_y=None, size = self.size )
-        self.scroll.add_widget(self.contenedor)
-        self.add_widget(self.scroll)
+        self.add_widget(self.contenedor)
 
 
 
@@ -227,14 +227,16 @@ class ItemNotaEmpresa(ItemCard):
         maqueta.__dict__ = objeto.__dict__
         self.network = network
 
+        self.scroll = ScrollView(do_scroll_x=False, do_scroll_y=True, size_hint_y= None, height=dp(100))
         self.id_registro = MDTextField(hint_text="ID Registro", text=str(maqueta.id_registro), disabled=True, mode= "fill")
-        self.nota = MDTextField(hint_text="Nota....", text=maqueta.notas, multiline=True)
-        self.rut_empresa = MDTextField(hint_text="Rut Empresa:", text=maqueta.rut_empresa, disabled=True)
-        self.correo = MDTextField(hint_text="Correo", text=maqueta.correo, disabled=True)
-        self.fecha_creacion = MDTextField(hint_text="Fecha Creacion", text=str(maqueta.fecha_creacion), disabled=True)
+        self.nota = MDTextField(hint_text="Nota", text=maqueta.nota, multiline=True, disabled=True)
+        self.rut_empresa = MDTextField(hint_text="Rut Empresa:", text=maqueta.rut_asociado, disabled=True)
+        self.correo = MDTextField(hint_text="Usuario", text=maqueta.id_cuenta, disabled=True)
+        self.fecha_creacion = MDTextField(hint_text="Fecha Creación", text=str(maqueta.fecha_creacion), disabled=True)
 
         self.contenedor.add_widget(self.id_registro)
-        self.contenedor.add_widget(self.nota)
+        self.scroll.add_widget(self.nota)
+        self.contenedor.add_widget(self.scroll)
         self.contenedor.add_widget(self.rut_empresa)
         self.contenedor.add_widget(self.correo)
         self.contenedor.add_widget(self.fecha_creacion)

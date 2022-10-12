@@ -310,16 +310,21 @@ class Querys():
 
     def listado_notas_empresa_especifica(self, contenido):
         querys = """
-        SELECT * FROM registro_notas_empresas
-        WHERE RUT_EMPRESA = '{}'
-        GROUP BY FECHA_CREACION DESC;
+            SELECT n.id_nota, en.rut_empresa, n.nota, n.fecha_creacion, cu.nombre_cuenta
+            FROM notas n
+            INNER JOIN empresas_notas en
+                ON en.id_nota = n.id_nota
+            INNER JOIN cuentas cu
+                ON cu.id_cuenta = n.id_cuenta
+            WHERE en.rut_empresa = "{}"
+            GROUP BY n.fecha_creacion DESC;
         """.format(contenido)
         datos = self.bd.consultar(querys, all=True)
         lista_notas = []
         for nota in datos.get("datos"):
-            lista_notas.append(RegistroNotas(id_registro=nota[0], notas=nota[1],
-                                             rut_empresa=nota[2], correo=nota[3],
-                                             fecha_creacion=nota[4]))
+            lista_notas.append(RegistroNotas(id_registro=nota[0], rut_asociado=nota[1],
+                                             nota=nota[2], fecha_creacion=nota[3],
+                                             id_cuenta=nota[4]))
         datos.update({"datos": lista_notas})
         return datos
 
