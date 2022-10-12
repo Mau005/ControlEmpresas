@@ -8,10 +8,10 @@ PROTOCOLOERROR = {"USUARIOACTIVO": "Usuario ya se encuentra activo en el sistema
                   "NETWORK": "Sin conexión con el Servidor",
                   "PRIVILEGIOS": "Esta cuenta no tiene los privilegios necesarios para realizar esta accion",
                   "CONTRASEÑAS": "Usuario o Contraseñas incorrectas.",
-                  "INSERCION": "Datos no se han podido guardar por un fallo en el contenido."}
-PROTOCOLOAFIRMATIVO = {
-    "INSERTAR": "Información almacenada con exito"
-}
+                  "INSERCION": "Datos no se han podido guardar por un fallo en el contenido.",
+                  "REGISTRARCUENTA":"Hubo un problema al poder registrar la cuenta de este usuario",
+                  "RUT_EXISTE":"Este usuario ya se encuentra registrado"}
+
 ERRORPRIVILEGIOS = "No tienes los privilegios para ejercer esta accion"
 TIEMPOACTUALIZAR = 1  # segundos
 REVISARCORREOS = 2

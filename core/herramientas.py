@@ -56,7 +56,7 @@ class Herramientas:
             archivo.close()
 
     @staticmethod
-    def generar_nombres(datos1, datos2):
+    def generar_nombres(datos1, datos2, contador = 0):
         """
         Methodo usado para generar nombres
         de usuarios segun sus nombres y apellidos
@@ -72,6 +72,8 @@ class Herramientas:
         else:
             datos2 = datos2
 
+        if contador >= 1:
+            return (datos1 + (datos2+"0"+str(contador))).lower()
         return (datos1 + datos2).lower()
 
 

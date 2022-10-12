@@ -1,6 +1,5 @@
 import mysql.connector
 import sys
-from core.constantes import PROTOCOLOERROR, PROTOCOLOAFIRMATIVO
 
 
 class BaseDatos:

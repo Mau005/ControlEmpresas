@@ -15,17 +15,113 @@ class Querys():
         self.bd = bd
 
     def existe_cuenta(self, nombre_cuenta):
+        """
+        Methodo utilizado para gestionar si existe una cuenta
+        """
         querys = f'SELECT nombre_cuenta FROM cuentas WHERE nombre_cuenta = "{nombre_cuenta}";'
         return self.bd.consultar(querys)
 
+    def existe_persona(self, rut):
+        """
+        Methodo utilizado para gestionar si existe una persona
+        """
+        querys = f'SELECT rut_persona from personas WHERE rut_persona = "{rut}";'
+        return self.bd.consultar(querys)
+
     def registrar_cuenta(self, nombre_cuenta, contraseña):
+        """
+        Methodo utilizado para registrar una cuenta
+        """
         querys = f'INSERT INTO cuentas(nombre_cuenta, contraseña) VALUES("{nombre_cuenta}", SHA("{contraseña}"));'
         return self.bd.insertar(querys)
 
     def consultar_cuenta(self, usuario, contraseña):
+        """
+        Methodo Utilizado para poder gestionar si el usuario ha escrito bien sus contraseñas
+        y pueda iniciar seccion
+        """
         querys = f'SELECT * FROM cuentas WHERE nombre_cuenta = "{usuario}" AND contraseña = "{contraseña}";'
         datos = self.bd.consultar(querys)
         return datos
+
+    def registrar_productos(self, objeto):
+        """
+        Methodo utilizado para gestionar registros de productos
+        objeto es de tipo RegistroProductos()
+        """
+        objeto = her.recuperacion_sentencia(objeto)
+        productos = RegistroProductos()
+        productos.__dict__ = objeto.__dict__
+        querys = '''
+        INSERT INTO productos(nombre_producto, descripcion, cantidad, id_local)
+        VALUES({}, {}, {}, {});
+        '''.format(productos.nombre_producto, productos.descripcion, productos.cantidad, productos.id_local)
+        return self.bd.insertar(querys)
+
+    def registrar_empresas(self, objeto):
+        """
+        Methodo utilizado para gestionar registros de empresas
+        objeto es tipo RegistroEmpresas()
+        """
+        objeto = her.recuperacion_sentencia(objeto)
+        empresa = RegistroEmpresas()
+        empresa.__dict__ = objeto.__dict__
+
+        print(empresa)
+        querys = '''
+        INSERT INTO EMPRESAS(rut_empresa, nombre_empresa, giro_empresa, direccion_empresa, correo_empresa, 
+        correo_respaldo, telefono_empresa, celular_empresa)
+        VALUES({}, {}, {}, {}, {}, {}, {}, {});
+        '''.format(empresa.rut_empresa, empresa.nombre_empresa, empresa.giro_empresa, empresa.direccion_empresa,
+                   empresa.correo_empresa,
+                   empresa.correo_respaldo, empresa.telefono_empresa, empresa.celular_empresa)
+        return self.bd.insertar(querys)
+
+    def registrar_personas_empresas(self, rut_empresa, rut_persona):
+        """
+        Methodo utilizado para gestionar empresas de usuarios
+        este existe dado que un usuario puede participar en mas de una empresa
+        """
+        querys = f"INSERT INTO empresas_personas(rut_empresa, rut_persona) VALUES({rut_empresa}, {rut_persona});"
+        return self.bd.insertar(querys)
+
+    def registrar_personas(self, objeto):
+        """
+        Methodo utilizado para que gestione la creacion de usuarios nuevos
+        comprobare si el correo existe, si no existe lo creara con default de password
+        """
+
+        personas = RegistroPersonas()
+        personas.__dict__ = objeto.__dict__
+
+        rut_existe = self.existe_persona(personas.rut_persona)
+
+        if rut_existe.get("estado"):
+            return {"estado": False, "condicion": "RUT_EXISTE"}
+
+        apellido_antiguo = personas.apellidos
+        contador = 0
+        while True:
+            nombre_cuenta = her.generar_nombres(personas.nombres, personas.apellidos, contador=contador)
+            info = self.existe_cuenta(nombre_cuenta)
+            if info.get("datos") is None:
+                personas.apellidos = apellido_antiguo
+                break
+            contador += 1
+
+        cuenta = self.registrar_cuenta(nombre_cuenta, "12345")
+
+        if cuenta.get("estado"):
+            personas = her.recuperacion_sentencia(personas)
+            querys = '''
+            INSERT INTO personas(rut_persona, nombres, apellidos, telefono, celular, correo, id_cuenta)
+            VALUES({}, {}, {}, {}, {}, {}, {}); 
+            '''.format(personas.rut_persona, personas.nombres, personas.apellidos, personas.telefono, personas.celular,
+                       personas.correo, cuenta["ultimo_id"])
+            self.bd.insertar(querys)
+            self.registrar_personas_empresas(personas.rut_empresa, personas.rut_persona)
+            return {"estado": True}
+        return {"estado": False, "condicion": "REGISTRARCUENTA"}
 
     def actualizar_grupo_usuario(self, correo, grupo):
         querys = f'UPDATE USUARIOS SET GRUPOS = {grupo} WHERE CORREO = "{correo}";'
@@ -36,17 +132,6 @@ class Querys():
         return self.bd.consultar(querys, all=True)
 
     def registrar_baneo(self, correo, ip, descr=""):
-        """Methodo de prueba dado que no se puede banear a un usuario por intento
-        methodo deprecated
-
-        Args:
-            correo (str): correo
-            ip (str): ip del cliente ingresado
-            descr (str, optional): _description_. Defaults to "".
-
-        Returns:
-            _type_: _description_
-        """
         querys = f'INSERT INTO HISTORIAL_BANEOS(CORREO,IP,DESCR) VALUES("{correo}", "{ip}", "{descr}")'
         return self.bd.insertar(querys)
 
@@ -64,57 +149,6 @@ class Querys():
 
         return self.bd.insertar(querys)
 
-    def registrar_empresas(self, objeto):
-        objeto = her.recuperacion_sentencia(objeto)
-        empresa = RegistroEmpresas()
-        empresa.__dict__ = objeto.__dict__
-
-        print(empresa)
-        querys = '''
-        INSERT INTO EMPRESAS(rut_empresa, nombre_empresa, giro_empresa, direccion_empresa, correo_empresa, 
-        correo_respaldo, telefono_empresa, celular_empresa)
-        VALUES({}, {}, {}, {}, {}, {}, {}, {});
-        '''.format(empresa.rut_empresa, empresa.nombre_empresa, empresa.giro_empresa, empresa.direccion_empresa,
-                   empresa.correo_empresa,
-                   empresa.correo_respaldo, empresa.telefono_empresa, empresa.celular_empresa)
-        return self.bd.insertar(querys)
-
-    def registrar_personas(self, objeto):
-        """
-        Methodo utilizado para que gestione la creacion de usuarios nuevos
-        comprobare si el correo existe, si no existe lo creara con default de password
-        """
-        apellido_old = objeto.apellidos
-        contador = 0
-        while True:
-            nombre_cuenta = her.generar_nombres(objeto.nombres, objeto.apellidos)
-            info = self.existe_cuenta(nombre_cuenta)
-            if info.get("datos") is None:
-                break
-            contador += 1
-            objeto.apellidos = apellido_old + " 0" + str(contador)
-
-        cuenta = self.registrar_cuenta(nombre_cuenta, "12345")
-
-        objeto = her.recuperacion_sentencia(objeto)
-        personas = RegistroPersonas()
-        personas.__dict__ = objeto.__dict__
-
-        print(f"Objeto: {objeto}")
-        if cuenta.get("estado"):
-            querys = '''
-            INSERT INTO personas(rut_persona, nombres, apellidos, telefono, celular, correo, id_cuenta)
-            VALUES({}, {}, {}, {}, {}, {}, {}); 
-            '''.format(personas.rut_persona, personas.nombres, personas.apellidos, personas.telefono, personas.celular,
-                       personas.correo, cuenta["ultimo_id"])
-            self.bd.insertar(querys)
-            self.registrar_personas_empresas(personas.rut_empresa, personas.rut_persona)
-            return {"estado":True}
-        return {"estado": False, "condicion": "INSERCION"}
-
-    def registrar_personas_empresas(self, rut_empresa, rut_persona):
-        querys = f"INSERT INTO empresas_personas(rut_empresa, rut_persona) VALUES({rut_empresa}, {rut_persona});"
-        return self.bd.insertar(querys)
     def registrar_notas_empresas(self, nota, rut_empresa, correo):
         querys = '''
         INSERT INTO registro_notas_empresas(NOTA, RUT_EMPRESA, CORREO)
@@ -125,18 +159,6 @@ class Querys():
     def solicitar_listado_servicios(self):
         querys = f'SELECT ID_SERVICIO, NOMBRE_SERVICIO FROM SERVICIOS;'
         return self.bd.consultar(querys, all=True)
-
-    def registrar_productos(self, objeto):
-        objeto = her.recuperacion_sentencia(objeto)
-        productos = RegistroProductos()
-        productos.__dict__ = objeto.__dict__
-
-        print(f"Productos: {productos}")
-        querys = '''
-        INSERT INTO productos(nombre_producto, descripcion, cantidad, id_local)
-        VALUES({}, {}, {}, {});
-        '''.format(productos.nombre_producto, productos.descripcion, productos.cantidad, productos.id_local)
-        return self.bd.insertar(querys)
 
     def nueva_contraseña(self, correo, contraseña_nueva):
         querys = f'UPDATE USUARIOS SET CONTRASEÑA = "{contraseña_nueva}" WHERE CORREO = "{correo}";'
