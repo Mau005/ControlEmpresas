@@ -7,6 +7,7 @@ from entidades.registroproductos import RegistroProductos
 from entidades.registroservicio import RegistroServicios
 from entidades.registroserviciosdiarios import RegistroServiciosDiarios
 from core.herramientas import Herramientas as her
+from entidades.registrotrabajador import RegistroTrabajador
 
 
 class Querys():
@@ -93,7 +94,7 @@ class Querys():
         obj = RegistrarDepartamento()
         obj.__dict__ = objeto.__dict__
         querys = """
-        INSERT INTO departamentos (nombre_grupo, descripcion, id_local) 
+        INSERT INTO departamentos (nombre_departamento, descripcion, id_local) 
         VALUES ({}, {}, {});
         """.format(obj.nombre_departamento, obj.descripcion, obj.id_local)
         return self.bd.insertar(querys)
@@ -211,6 +212,18 @@ class Querys():
         querys = "SELECT id_local, nombre_local	FROM locales;"
         return self.bd.consultar(querys, all=True)
 
+    def lista_menu_departamentos(self):
+        """
+        Methodo utulizar para gestionar departamentos
+        """
+        querys = """
+        select l.id_local, concat(dp.nombre_departamento, ' Local: ', l.nombre_local)
+        from locales l
+        inner join departamentos dp
+        on l.id_local = dp.id_local
+        """
+        return self.bd.consultar(querys, all=True)
+
     def actualizar_grupo_usuario(self, correo, grupo):
         querys = f'UPDATE USUARIOS SET GRUPOS = {grupo} WHERE CORREO = "{correo}";'
         return self.bd.insertar(querys)
@@ -276,11 +289,14 @@ class Querys():
 
 
 
-    def registrar_trabajador(self, rut, id_local, sueldo, dia_pago):
+    def registrar_trabajador(self, contenido):
+        trabajador = RegistroTrabajador()
+        trabajador.__dict__ = her.recuperacion_sentencia(contenido).__dict__
         querys = '''
-        INSERT INTO trabajadores(RUT, ID_LOCAL, SUELDO, DIA_PAGO)
-        VALUES("{}", {}, {}, {});
-        '''.format(rut, id_local, sueldo, dia_pago)
+        INSERT INTO trabajadores(rut_persona, id_departamento, sueldo, dia_pago)
+        VALUES({}, {}, {}, {});
+        '''.format(trabajador.rut_persona, trabajador.id_departamento,
+                   trabajador.sueldo, trabajador.dia_pago)
         return self.bd.insertar(querys)
 
     def registrar_locales(self, objeto):

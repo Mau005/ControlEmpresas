@@ -13,51 +13,67 @@ class VTrabajadores(MDScreenAbstrac):
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
         self.data = BUTTONCREATE
-        self.fecha_inicio = None
-        self.fecha_termino = None
         self.botones_trabajadores.data = self.data
 
-        self.colecciones_personas = MenuEntidades(self.network, "Rut:", "Rut:", self.ids.botton_rut_accion)
-        self.colecciones_locales = MenuEntidades(self.network, "Local:", "Local:", self.ids.botton_id_local,
-                                                 filtro="int")
+        self.colecciones_personas = MenuEntidades(self.network, "Rut Trabajador:", "Rut Trabajador:", self.ids.botton_rut_accion)
+        self.colecciones_departamentos = MenuEntidades(self.network, "Departamento:", "Departamento:", self.ids.botton_id_departamento,
+                                                       filtro="int")
 
     def accion_boton(self, arg):
-        print(arg.icon)
+        self.botones_trabajadores.close_stack()
         if arg.icon == "delete":
             self.formatear()
         if arg.icon == "exit-run":
             self.siguiente()
         if arg.icon == "pencil":
 
+            if self.ids.botton_rut_accion.text == "Rut Trabajador:":
+                noti = Notificacion("Error", "Debe seleccionar a una persona")
+                noti.open()
+                return
+            if self.ids.botton_id_departamento.text == "Departamento:":
+                noti = Notificacion("Error", "Debe seleccionar un departamento")
+                noti.open()
+                return
+            if self.ids.dia_pago.text == "":
+                noti = Notificacion("Error", "Debe asignar un dia de pago entre 1 y 30")
+                noti.open()
+                return
+
+            if self.ids.sueldo_trabajador.text == "":
+                noti = Notificacion("Error", "Debe asignar un sueldo al trabajador")
+                noti.open()
+                return
+
             objeto = RegistroTrabajador(
-                rut=self.colecciones_personas.dato_guardar,
-                id_local=self.colecciones_locales.dato_guardar,
+                rut_persona=self.colecciones_personas.dato_guardar,
+                id_departamento=self.colecciones_departamentos.dato_guardar,
                 sueldo=int(self.ids.sueldo_trabajador.text),
                 dia_pago=int(self.ids.dia_pago.text)
             )
             self.network.enviar(objeto.preparar())
             info = self.network.recibir()
-            noti = Notificacion("Error", "Usuario ya se encuentra registrado en Trabajadores")
+
             if info.get("estado"):
-                noti.title = "Correcto"
-                noti.text = f"Se ha generado correctamente el trabajdor"
+                noti = Notificacion("Exito", "Se ha registrado el trabajdor con exito")
+                noti.open()
+                self.formatear()
+                return
 
-            elif info.get("condicion") == "privilegios":
-                noti.tex = "Lo lamento no tienes los privilegios suficientes para crear un trabajador"
-
-            self.formatear()
+            noti = Notificacion("Error", info.get("condicion"))
             noti.open()
-        self.botones_trabajadores.close_stack()
+            return
+
     def formatear(self):
-        self.ids.botton_rut_accion.text = "Rut: "
-        self.ids.botton_id_local.text = "Local: "
+        self.ids.botton_rut_accion.text = "Rut Trabajador:"
+        self.ids.botton_id_departamento.text = "Departamento:"
         self.ids.sueldo_trabajador.text = ""
         self.ids.dia_pago.text = ""
         self.activar()
 
     def activar(self):
         self.colecciones_personas.generar_consulta("menu_personas")
-        self.colecciones_locales.generar_consulta("menu_locales")
+        self.colecciones_departamentos.generar_consulta("menu_departamentos")
         super().activar()
 
     def actualizar(self, *dt):

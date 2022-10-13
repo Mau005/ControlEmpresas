@@ -151,6 +151,9 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "menu_productos":
                 self.enviar(self.querys.lista_menu_productos())
 
+            if datos.get("estado") == "menu_departamentos":
+                self.enviar(self.querys.lista_menu_departamentos())
+
 
             if datos.get("estado") == "registro_notas_empresas":
                 self.registro_notas_empresas(datos.get("contenido"))
@@ -177,7 +180,7 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "menu_personas":
                 self.enviar(self.querys.lista_menu_personas())
 
-            if datos.get("estado") == "registrartrabajador":
+            if datos.get("estado") == "registrar_trabajador":
                 self.registrar_trabajador(datos.get("contenido"))
 
             if datos.get("estado") == "menu_trabajadores":
@@ -208,11 +211,8 @@ class ServidorNetwork(Thread):
         return self.enviar({"estado": False, "condicion": "REGISTRO"})
 
     def registrar_trabajador(self, contenido):
-        objeto = RegistroTrabajador()
-        objeto.__dict__ = contenido.__dict__
-        if self.grupos.get(str(self.cuenta.grupos)).get("RegistrarTrabajadores"):
-            info = self.querys.registrar_trabajador(objeto.rut, objeto.id_local, objeto.sueldo, objeto.dia_pago)
-            return self.enviar(info)
+        if self.consultar_privilegios("RegistrarTrabajadores"):
+            return self.enviar(self.querys.registrar_trabajador(contenido))
         return self.enviar({"estado": False, "condicion": "privilegios"})
 
     def listado_empresas(self):
