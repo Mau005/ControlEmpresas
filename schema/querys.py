@@ -1,3 +1,4 @@
+from entidades.registrargastos import RegistrarGastos
 from entidades.registrarlocales import RegistrarLocales
 from entidades.registronotas import RegistroNotas
 from entidades.registroempresas import RegistroEmpresas
@@ -29,7 +30,7 @@ class Querys():
         querys = f'SELECT rut_persona from personas WHERE rut_persona = "{rut}";'
         return self.bd.consultar(querys)
 
-    def registrar_cuenta(self, nombre_cuenta, contraseña, acceso = 0):
+    def registrar_cuenta(self, nombre_cuenta, contraseña, acceso=0):
         """
         Methodo utilizado para registrar una cuenta
         """
@@ -98,6 +99,7 @@ class Querys():
         VALUES ({}, {}, {});
         """.format(obj.nombre_departamento, obj.descripcion, obj.id_local)
         return self.bd.insertar(querys)
+
     def registrar_personas(self, objeto):
         """
         Methodo utilizado para que gestione la creacion de usuarios nuevos
@@ -142,7 +144,7 @@ class Querys():
         querys = f'INSERT INTO estados(nombre_estado) VALUES("{nombre}")'
         self.bd.insertar(querys)
 
-    def registrar_notas(self, objeto, cuenta, objetivo = "empresas"):
+    def registrar_notas(self, objeto, cuenta, objetivo="empresas"):
         """
         Methodo utilizado para gestionar notas de empresas y personas
         """
@@ -154,7 +156,7 @@ class Querys():
         '''.format(nota.nota, cuenta.id_cuenta)
         nota_resgistrada = self.bd.insertar(querys)
         if not nota_resgistrada.get("estado"):
-            return {"estado":False, "condicion": "INSERCION"}
+            return {"estado": False, "condicion": "INSERCION"}
 
         if objetivo == "empresas":
             querys = '''
@@ -163,7 +165,7 @@ class Querys():
             empresa_notas = self.bd.insertar(querys)
             if empresa_notas.get("estado"):
                 return empresa_notas
-            return {"estado":False, "condicion": "INSERCION"}
+            return {"estado": False, "condicion": "INSERCION"}
         elif objetivo == "personas":
             querys = '''
                 INSERT INTO personas_notas(id_nota, rut_persona)
@@ -173,9 +175,9 @@ class Querys():
 
             if persona_notas.get("estado"):
                 return persona_notas
-            return {"estado":False, "condicion": "INSERCION"}
+            return {"estado": False, "condicion": "INSERCION"}
 
-        return {"estado":False, "condicion":"SINSELECCION"}
+        return {"estado": False, "condicion": "SINSELECCION"}
 
     def registrar_estado_gastos(self, nombre):
         """
@@ -183,6 +185,17 @@ class Querys():
         """
         querys = f'INSERT INTO estado_gastos(nombre) VALUES("{nombre}")'
         self.bd.insertar(querys)
+
+    def registrar_gasto(self, contenido):
+        gastos = RegistrarGastos()
+        gastos.__dict__ = her.recuperacion_sentencia(contenido).__dict__
+
+        querys = """
+        INSERT INTO gastos(descripcion, saldo, fecha_creacion, id_departamento, id_estado_gastos)
+        VALUES({}, {}, {}, {}, {});
+        """.format(gastos.descripcion, gastos.saldo, gastos.fecha_creacion,
+                   gastos.id_departamento, gastos.id_estado_gastos)
+        return self.bd.insertar(querys)
 
     def lista_menu_empresas(self):
         """
@@ -224,6 +237,14 @@ class Querys():
         """
         return self.bd.consultar(querys, all=True)
 
+    def lista_menu_estado_gastos(self):
+        """
+        Methodo utlizado para los menus de estado de los gastos
+        predefinidos por el sistema
+        """
+        querys = "SELECT * FROM estado_gastos;"
+        return self.bd.consultar(querys, all=True)
+
     def actualizar_grupo_usuario(self, correo, grupo):
         querys = f'UPDATE USUARIOS SET GRUPOS = {grupo} WHERE CORREO = "{correo}";'
         return self.bd.insertar(querys)
@@ -246,8 +267,6 @@ class Querys():
 
         return self.bd.insertar(querys)
 
-
-
     def solicitar_listado_servicios(self):
         querys = f'SELECT ID_SERVICIO, NOMBRE_SERVICIO FROM SERVICIOS;'
         return self.bd.consultar(querys, all=True)
@@ -259,8 +278,6 @@ class Querys():
     def solicitar_lista_productos(self):
         querys = f'SELECT ID_PRODUCTO, NOMBRE_PRODUCTO, CANTIDAD FROM productos;'
         return self.bd.consultar(querys, all=True)
-
-
 
     def registrar_servicio_diario(self, objeto):
         obj = RegistroServiciosDiarios()
@@ -284,10 +301,6 @@ class Querys():
     def consultar_correo_existente(self, correo):
         querys = f'select CORREO  from usuarios where CORREO = "{correo}";'
         return self.bd.consultar(querys)
-
-
-
-
 
     def registrar_trabajador(self, contenido):
         trabajador = RegistroTrabajador()
@@ -322,8 +335,6 @@ class Querys():
         querys = "SELECT ID_PRODUCTO, NOMBRE_PRODUCTO FROM productos;"
         return self.bd.consultar(querys, all=True)
 
-
-
     def listado_notas_empresa_especifica(self, contenido):
         querys = """
             SELECT n.id_nota, en.rut_empresa, n.nota, n.fecha_creacion, cu.nombre_cuenta
@@ -343,8 +354,6 @@ class Querys():
                                              id_cuenta=nota[4]))
         datos.update({"datos": lista_notas})
         return datos
-
-
 
     def asignar_grupo(self, rut_Trabajador, id_grupo):
         querys = """

@@ -25,6 +25,7 @@ from ventanas.vlistaproductos import VListaProductos
 from ventanas.vserviciosdiarios import VServiciosDiarios
 from ventanas.vtrabajadores import VTrabajadores
 from kivy.clock import Clock
+from ventanas.vgastos import VGastos
 
 Builder.load_file("kvlengs/root.kv")
 
@@ -59,6 +60,7 @@ class ControlEmpresas(MDApp):
         self.vgrupos = VDepartamentos(self.network, self.manejador, "departamentos",
                                       siguiente="casa")
         self.vnotaspersonas = VNotasPersonas(self.network, self.manejador, "notaspersonas", siguiente="casa")
+        self.vgastos = VGastos(self.network, self.manejador, "gastos", siguiente="casa")
 
         self.manejador.add_widget(self.login)
         self.manejador.add_widget(self.casa)
@@ -77,6 +79,7 @@ class ControlEmpresas(MDApp):
         self.manejador.add_widget(self.vlistanotasempresas)
         self.manejador.add_widget(self.vgrupos)
         self.manejador.add_widget(self.vnotaspersonas)
+        self.manejador.add_widget(self.vgastos)
         self.login.activar()
 
     def actualizar(self, dt):

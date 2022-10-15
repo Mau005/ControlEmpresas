@@ -24,6 +24,7 @@
             "CrearNotaEmpresa": true,
             "CrearNotaPersona": true,
             "CrearPersona": true,
+            "CrearGastos": true,
             "RecibirTodaNotificacion": true,
             "EliminarEmpresas": true,
             "EliminarUsuarios": true,
@@ -33,6 +34,7 @@
             "VerEmpresas": true,
             "RegistrarTrabajadores": true,
             "RegistrarLocales": true
+
         }
     }
 }

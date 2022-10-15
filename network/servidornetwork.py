@@ -154,9 +154,17 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "menu_departamentos":
                 self.enviar(self.querys.lista_menu_departamentos())
 
+            if datos.get("estado") == "menu_estado_gastos":
+                self.enviar(self.querys.lista_menu_estado_gastos())
 
             if datos.get("estado") == "registro_notas_empresas":
                 self.registro_notas_empresas(datos.get("contenido"))
+
+            if datos.get("estado") == "registrar_gasto":
+                if self.consultar_privilegios("CrearGastos"):
+                    self.enviar(self.querys.registrar_gasto(datos.get("contenido")))
+                else:
+                    self.enviar({"estado":False, "condicion":"PRIVILEGIOS"})
 
             if datos.get("estado") == "registro_servicio":
                 self.registro_servicios(datos.get("contenido"))
