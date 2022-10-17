@@ -1,18 +1,14 @@
-
 <VPersonas>:
-    botones:botones
-    MDCardPre:
-        orientation: 'vertical'
-        elevation: 10
-        spacing: "20dp"
+    MDCard:
+        elevation: 5
         pos_hint: {"center_x": .5, "center_y": .5}
-        size_hint: .95,.95
-        padding: dp(35)
+        size_hint: .9,.9
         ScrollView:
             do_scroll_x: False
             do_scroll_y: True
             MDList:
-                spacing: dp(10)
+                spacing: dp(25)
+                padding: dp(35)
                 MDTextField:
                     id: rut
                     max_text_length: 8
@@ -61,8 +57,8 @@
                     id: boton_rut_empresas
 
     MDFloatingActionButtonSpeedDial:
-        callback: root.accion_boton
-        id: botones
+        on_release_stack_button: root.accion_boton(*args)
+        id: botones_personas
         root_button_anim: True
 
             

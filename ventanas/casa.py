@@ -1,6 +1,6 @@
 from ventanas.widgets_predefinidos import MDScreenAbstrac
 from kivy.properties import ObjectProperty
-import sys
+
 
 class Casa(MDScreenAbstrac):
     lista_productos = ObjectProperty()

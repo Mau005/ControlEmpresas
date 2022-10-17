@@ -2,11 +2,9 @@
 
 
 <VGastos>:
-    botones:botones
-    MDCardPre:
-        size_hint: .95, .95
-        adaptive_size: True
-        elevation: 40
+    MDCard:
+        size_hint: .9, .9
+        elevation: 5
         pos_hint: {"center_x": .5, "center_y": .5}
         ScrollView:
             do_scroll_x: False
@@ -42,10 +40,11 @@
                     hint_text: "Descripción"
                     multiline: True
 
-
-
     MDFloatingActionButtonSpeedDial:
-        size_hint_y: .1
-        id: botones
-        callback: root.accion_boton
-        root_button_anim: True
+        id: botones_gastos
+        on_release_stack_button: root.accion_boton(*args)
+        hint_animation:True
+        root_button_anim:True
+
+
+

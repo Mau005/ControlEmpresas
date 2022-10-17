@@ -1,5 +1,4 @@
 <VListadoServicios>:
-    botones:botones
     contenedor:contenedor
 
     ScrollView:
@@ -13,7 +12,7 @@
                 orientation: 'horizontal'
                 size_hint_y: None
                 height: dp(55)
-                PreLabel:
+                MDLabel:
                     text: "Buscar ID: "
                 
                 MDTextField:
@@ -22,9 +21,7 @@
                 MDFlatButton:
                     text: "Buscar"
 
-            
-
     MDFloatingActionButtonSpeedDial:
-        callback: root.accion_boton
-        id: botones
+        on_release_stack_button: root.accion_boton(*args)
+        id: botones_lista_servicios
         root_button_anim: True

@@ -1,20 +1,15 @@
 
 
 <VEmpresas>:
-    padding: dp(45)
-
-    MDCardPre:
-        orientation: 'vertical'
-        elevation: 10
-        spacing: "20dp"
+    MDCard:
+        elevation: 5
         pos_hint: {"center_x": .5, "center_y": .5}
-        size_hint: .95,.95
-        padding: dp(38)
+        size_hint: .9,.9
         ScrollView:
             do_scroll_x: False
             do_scroll_y: True
             MDList:
-                
+                padding: dp(30)
                 MDTextField:
                     id: rut_empresa
                     hint_text: "Rut Empresa*"
@@ -72,12 +67,10 @@
                     helper_text_mode: "on_focus"
                     helper_text: "ejemplo@tudominio.cl"
 
-            
-    
-        MDFloatingActionButtonSpeedDial:
-            size_hint_y: .1
-            callback: root.accion_boton
-            id: botones
-            root_button_anim: True
+    MDFloatingActionButtonSpeedDial:
+        size_hint_y: .1
+        on_release_stack_button: root.accion_boton(*args)
+        id: botones_empresas
+        root_button_anim: True
 
             

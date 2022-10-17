@@ -2,7 +2,6 @@ from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion, MenuEnt
 from kivymd.uix.pickers import MDDatePicker
 from kivy.properties import ObjectProperty
 from entidades.registroservicio import RegistroServicios
-from core.constantes import BUTTONCREATE
 
 
 class MenuItemEstado:
@@ -16,60 +15,58 @@ class VServicios(MDScreenAbstrac):
     descr = ObjectProperty()
     id_estado = ObjectProperty()
     precio = ObjectProperty()
-    botones_servicios = ObjectProperty()
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.data = BUTTONCREATE
+        self.ids.botones_servicios.data = {'Crear': ["pencil", "on_release", self.crear],
+                                           'Formatear': ["delete", "on_release", self.formatear],
+                                           'Salir': ["exit-run", "on_release", self.siguiente]}
         self.fecha_inicio = None
         self.fecha_termino = None
-        self.botones_servicios.data = self.data
         self.colecciones_estado = MenuEntidades(self.network, "Estados:", "Id:", self.ids.id_estado, filtro="int")
-        self.colecciones_rut_cliente = MenuEntidades(self.network, "Rut Cliente:", "Rut Cliente:", self.ids.boton_rut_cliente)
-        self.colecciones_rut_trabajador = MenuEntidades(self.network, "Rut Trabajador:", "Rut Trabajador:", self.ids.boton_rut_trabajador)
+        self.colecciones_rut_cliente = MenuEntidades(self.network, "Rut Cliente:", "Rut Cliente:",
+                                                     self.ids.boton_rut_cliente)
+        self.colecciones_rut_trabajador = MenuEntidades(self.network, "Rut Trabajador:", "Rut Trabajador:",
+                                                        self.ids.boton_rut_trabajador)
+
+    def crear(self, *args):
+        if self.fecha_inicio is None:
+            noti = Notificacion("ERROR", "Alemenos debe indicar la fecha de inicio.")
+            noti.open()
+            return
+        if not len(self.precio.text) >= 1:
+            noti = Notificacion("Error", "Debe asignar algun precio")
+            noti.open()
+            return
+
+        if self.fecha_termino is None:
+            self.fecha_termino = ""
+
+        obj = RegistroServicios(nombre=self.nombre.text,
+                                descr=self.descr.text,
+                                fecha_inicio=str(self.fecha_inicio),
+                                fecha_termino=str(self.fecha_termino),
+                                id_estado=self.colecciones_estado.dato_guardar,
+                                precio=int(self.precio.text),
+                                rut_persona=self.colecciones_rut_cliente.dato_guardar,
+                                rut_trabajador=self.colecciones_rut_trabajador.dato_guardar,
+                                )
+        self.network.enviar(obj.preparar())
+        datos = self.network.recibir()
+        if datos.get("estado"):
+            test = Notificacion("Exito", datos.get("condicion"))
+            test.open()
+            self.formatear()
+            return
+        if datos.get("condicion") == "privilegios":
+            test = Notificacion("Error",
+                                datos.get("No tienes los privilegios suficientes para crear servicios!"))
+            test.open()
 
     def accion_boton(self, arg):
-        self.botones_servicios.close_stack()
-        if arg.icon == "delete":
-            self.formatear()
+        self.ids.botones_servicios.close_stack()
 
-        if arg.icon == "exit-run":
-            self.siguiente()
-        if arg.icon == "pencil":
-            if self.fecha_inicio is None:
-                noti = Notificacion("ERROR", "Alemenos debe indicar la fecha de inicio.")
-                noti.open()
-                return
-            if not len(self.precio.text) >= 1:
-                noti = Notificacion("Error", "Debe asignar algun precio")
-                noti.open()
-                return
-
-            if self.fecha_termino is None:
-                self.fecha_termino = ""
-
-            obj = RegistroServicios(nombre=self.nombre.text,
-                                    descr=self.descr.text,
-                                    fecha_inicio=str(self.fecha_inicio),
-                                    fecha_termino=str(self.fecha_termino),
-                                    id_estado=self.colecciones_estado.dato_guardar,
-                                    precio=int(self.precio.text),
-                                    rut_persona=self.colecciones_rut_cliente.dato_guardar,
-                                    rut_trabajador=self.colecciones_rut_trabajador.dato_guardar,
-                                    )
-            self.network.enviar(obj.preparar())
-            datos = self.network.recibir()
-            if datos.get("estado"):
-                test = Notificacion("Exito", datos.get("condicion"))
-                test.open()
-                self.formatear()
-                return
-            if datos.get("condicion") == "privilegios":
-                test = Notificacion("Error",
-                                    datos.get("No tienes los privilegios suficientes para crear servicios!"))
-                test.open()
-
-    def formatear(self):
+    def formatear(self, *args):
         self.fecha_termino = None
         self.fecha_termino = None
         self.nombre.text = ""
@@ -113,6 +110,7 @@ class VServicios(MDScreenAbstrac):
         return super().actualizar(*dt)
 
     def siguiente(self, *dt):
+        self.formatear()
         return super().siguiente(*dt)
 
     def volver(self, *dt):

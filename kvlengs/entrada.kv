@@ -1,19 +1,16 @@
 <Entrada>:
     entrada_usuario:entrada_usuario
     pass_usuario:pass_usuario
-    MDCardPre:
+    MDCard:
         orientation: 'vertical'
         size_hint: .9,.9
-        elevation: 10
-        adaptive_size: True
-        spacing: "20dp"
+        elevation: 5
         pos_hint: {"center_x": .5, "center_y": .5}
 
         MDBoxLayout:
             size_hint_y: None
-            height: "200dp"
+            height: dp(200)
             orientation: 'vertical'
-
             FitImage:
                 source: "icon.png"
                 size_hint_y: .8
@@ -35,7 +32,7 @@
 
         MDGridLayout:
             cols: 2
-            padding: "30dp"
+            padding: dp(30)
             MDLabel:
                 text: "Guardar Usuario"
             MDCheckbox:
@@ -44,7 +41,7 @@
         MDBoxLayout:
             size_hint_y: .1
             adaptive_size: True
-            spacing: "12dp"
+            spacing: dp(12)
             pos_hint: {"center_x": .5, "center_y": .5}
 
             MDRectangleFlatButton:

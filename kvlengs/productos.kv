@@ -1,17 +1,13 @@
 <VProductos>:
-    botones:botones
-    MDCardPre:
-        orientation: 'vertical'
-        elevation: 10
-        spacing: "20dp"
+    MDCard:
+        elevation: 5
         pos_hint: {"center_x": .5, "center_y": .5}
-        size_hint: .95,.95
-        padding: dp(38)
+        size_hint: .9,.9
         ScrollView:
             do_scroll_x: False
             do_scroll_y: True
             MDList:
-                
+                padding: dp(30)
                 MDTextField:
                     id: nombre_producto
                     hint_text: "Nombre Producto*"
@@ -40,7 +36,6 @@
                     id: menu_local
 
     MDFloatingActionButtonSpeedDial:
-        size_hint_y: .1
-        callback: root.accion_boton
-        id: botones
+        on_release_stack_button: root.accion_boton(*args)
+        id: botones_productos
         root_button_anim: True

@@ -5,15 +5,10 @@
     descr:descr
     id_estado:id_estado
     precio:precio
-    botones_servicios:botones_servicios
-        
-    MDCardPre:
-        orientation: 'vertical'
-        elevation: 10
-        spacing: "20dp"
+    MDCard:
+        elevation: 5
         pos_hint: {"center_x": .5, "center_y": .5}
-        size_hint: .95,.95
-        padding: dp(38)
+        size_hint: .9,.9
         MDLabel:
             halign: "center"
             font_size : dp(30)
@@ -24,6 +19,7 @@
             do_scroll_y: True
             
             MDList:
+                padding: dp(38)
                 spacing: dp(10)
                 MDTextField:
                     hint_text: "Nombre:"
@@ -106,10 +102,9 @@
                     hint_text: "Descripcion:"
                     multiline: True
 
-        MDFloatingActionButtonSpeedDial:
-            size_hint_y: .2
-            id: botones_servicios
-            callback: root.accion_boton
-            root_button_anim: True
+    MDFloatingActionButtonSpeedDial:
+        id: botones_servicios_diarios
+        on_release_stack_button: root.accion_boton(*args)
+        root_button_anim: True
 
                 

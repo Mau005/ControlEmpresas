@@ -4,7 +4,6 @@ from kivy.metrics import dp
 from kivy.uix.scrollview import ScrollView
 from kivymd.uix.bottomsheet import MDListBottomSheet
 from kivymd.uix.card import MDCard
-from kivymd.uix.behaviors import RectangularElevationBehavior
 
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.dialog import MDDialog
@@ -112,10 +111,6 @@ class MDTwoLine(TwoLineListItem):
         self.network = network
 
 
-class MDCardPre(MDCard, RectangularElevationBehavior):
-    pass
-
-
 class NotificacionText(MDDialog):
 
     def __init__(self, title, ayuda, aceptar=None, **kargs):
@@ -205,7 +200,7 @@ class MDScreenAbstrac(MDScreen):
             self.manager.current = self.nombre_volver
 
 
-class ItemCard(MDCardPre):
+class ItemCard(MDCard):
     def __init__(self, **kargs):
         super().__init__(**kargs)
         self.elevation = 15

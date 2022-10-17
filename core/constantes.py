@@ -2,7 +2,6 @@ TAMANIO_PAQUETE = 1024
 IP = "localhost"
 PORT = 7171
 
-BUTTONCREATE = {'Crear': 'pencil', 'Formatear': 'delete', 'Salir': 'exit-run'}
 PROTOCOLOERROR = {"USUARIOACTIVO": "Usuario ya se encuentra activo en el sistema",
                   "RECUPERACION": "Usuario se encuentra en un proceso de recuperacion de cuenta",
                   "NETWORK": "Sin conexión con el Servidor",

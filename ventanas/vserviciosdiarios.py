@@ -3,20 +3,18 @@ from kivymd.uix.bottomsheet import MDListBottomSheet
 from entidades.registroserviciosdiarios import RegistroServiciosDiarios
 from ventanas.widgets_predefinidos import MDScreenAbstrac, MenuEntidades, Notificacion
 from kivy.properties import ObjectProperty
-from core.constantes import BUTTONCREATE
-
 
 class VServiciosDiarios(MDScreenAbstrac):
     nombre = ObjectProperty()
     descr = ObjectProperty()
     id_estado = ObjectProperty()
     precio = ObjectProperty()
-    botones_servicios = ObjectProperty()
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.data = BUTTONCREATE
-        self.botones_servicios.data = self.data
+        self.ids.botones_servicios_diarios.data = {'Crear': ["pencil", "on_release", self.crear],
+                                         'Formatear': ["delete", "on_release", self.formatear],
+                                         'Salir': ["exit-run", "on_release", self.siguiente]}
         self.toda_la_semana = False
         self.coleccion_menu_estados = MenuEntidades(self.network, "Estado:", "Estado:", self.ids.id_estado, filtro="int")
         self.coleccion_menu_personas = MenuEntidades(self.network, "Rut Cliente:", "Rut:", self.ids.botton_rut_accion)
@@ -25,44 +23,39 @@ class VServiciosDiarios(MDScreenAbstrac):
         self.coleccion_menu_productos = MenuEntidades(self.network, "ID Producto:", "ID:", self.ids.menu_producto,
                                                       filtro="int")
 
-    def accion_boton(self, arg):
-        if arg.icon == "delete":
-            self.formatear()
-        if arg.icon == "exit-run":
-            self.botones_servicios.on_close()
-            self.siguiente()
-        if arg.icon == "pencil":
-            objeto = RegistroServiciosDiarios(
-                nombre_servicio=self.ids.nombre.text,
-                id_estado=self.coleccion_menu_estados.dato_guardar,
-                precio=int(self.ids.precio.text),
-                fecha_semana=self.__dias_diarios(),
-                url_posicion=self.ids.url_posicion.text,
-                ubicacion=self.ids.ubicacion.text,
-                rut_usuario=self.coleccion_menu_personas.dato_guardar,
-                rut_trabajador=self.coleccion_menu_trabajadores.dato_guardar,
-                descr=self.ids.descr.text,
-                toda_semana=self.toda_la_semana,
-                id_producto=self.coleccion_menu_productos.dato_guardar,
-                cantidad=int(self.ids.cantidad_productos.text)
-            )
-            if not self.__prueba_check(objeto):
-                return
+    def crear(self, *args):
+        objeto = RegistroServiciosDiarios(
+            nombre_servicio=self.ids.nombre.text,
+            id_estado=self.coleccion_menu_estados.dato_guardar,
+            precio=int(self.ids.precio.text),
+            fecha_semana=self.__dias_diarios(),
+            url_posicion=self.ids.url_posicion.text,
+            ubicacion=self.ids.ubicacion.text,
+            rut_usuario=self.coleccion_menu_personas.dato_guardar,
+            rut_trabajador=self.coleccion_menu_trabajadores.dato_guardar,
+            descr=self.ids.descr.text,
+            toda_semana=self.toda_la_semana,
+            id_producto=self.coleccion_menu_productos.dato_guardar,
+            cantidad=int(self.ids.cantidad_productos.text)
+        )
+        if not self.__prueba_check(objeto):
+            return
 
-            self.network.enviar(objeto.preparar())
-            info = self.network.recibir()
-            noti = Notificacion("Error", "")
-            if info.get("estado"):
-                noti.title = "Exito"
-                noti.text = "Se ha generado el servicio con Exito"
-                noti.open()
-                return
-            if info.get("condicion") == "REGISTRO":
-                noti.text += "Ha ocurrido un problema al gestionar este servicio\n"
-            if info.get("condicion") == "NETWORK":
-                noti.text += "Seha desconectado del servidor.\n"
+        self.network.enviar(objeto.preparar())
+        info = self.network.recibir()
+        noti = Notificacion("Error", "")
+        if info.get("estado"):
+            noti.title = "Exito"
+            noti.text = "Se ha generado el servicio con Exito"
             noti.open()
-
+            return
+        if info.get("condicion") == "REGISTRO":
+            noti.text += "Ha ocurrido un problema al gestionar este servicio\n"
+        if info.get("condicion") == "NETWORK":
+            noti.text += "Seha desconectado del servidor.\n"
+        noti.open()
+    def accion_boton(self, arg):
+        self.ids.botones_servicios_diarios.close_stack()
     def __prueba_check(self, objeto):
         noti = Notificacion("Error", "")
         if not len(objeto.nombre_servicio) >= 5 and not len(objeto.nombre_servicio) <= 100:
@@ -126,6 +119,7 @@ class VServiciosDiarios(MDScreenAbstrac):
         return super().actualizar(*dt)
 
     def siguiente(self, *dt):
+        self.formatear()
         return super().siguiente(*dt)
 
     def volver(self, *dt):

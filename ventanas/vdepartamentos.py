@@ -1,17 +1,44 @@
 from entidades.registrardepartamento import RegistrarDepartamento
 from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion, MenuEntidades
 from kivy.properties import ObjectProperty
-from core.constantes import BUTTONCREATE, PROTOCOLOERROR
+from core.constantes import PROTOCOLOERROR
 from kivy.logger import Logger
 
 
 class VDepartamentos(MDScreenAbstrac):
-    botones = ObjectProperty()
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.botones.data = BUTTONCREATE
-        self.coleccion_locales = MenuEntidades(self.network, "Local:", "Local:",self.ids.menu_local, filtro="int")
+        self.ids.botones_departamento.data = {'Crear': ["pencil", "on_release", self.crear],
+                                              'Formatear': ["delete", "on_release", self.formatear],
+                                              'Salir': ["exit-run", "on_release", self.siguiente]}
+        self.coleccion_locales = MenuEntidades(self.network, "Local:", "Local:", self.ids.menu_local, filtro="int")
+
+    def crear(self, *args):
+        if len(self.ids.nombre_grupo.text) <= 5:
+            noti = Notificacion("Error", "Nombre de grupo almenos debe tener 5 caracteres\n")
+            noti.open()
+            return
+        if self.ids.menu_local.text == "Local:":
+            noti = Notificacion("Error", "Tiene que seleccionar algun local\n")
+            noti.open()
+            return
+
+        objeto = RegistrarDepartamento(
+            nombre_departamento=self.ids.nombre_grupo.text,
+            descripcion=self.ids.desc_grupo.text,
+            id_local=self.coleccion_locales.dato_guardar
+        )
+        self.network.enviar(objeto.preparar())
+        info = self.network.recibir()
+        if info.get("estado"):
+            self.formatear()
+            noti = Notificacion("Exito", f"Se ha registrado el grupo: {objeto.nombre_departamento}")
+            noti.open()
+            return None
+        noti = Notificacion("Error", PROTOCOLOERROR[info.get("condicion")])
+        noti.open()
+        Logger.critical(f"Error no contralado en VGrupos datos: {info}")
 
     def formatear(self):
         self.ids.nombre_grupo.text = ""
@@ -20,38 +47,8 @@ class VDepartamentos(MDScreenAbstrac):
         self.coleccion_locales.dato_guardar = None
 
     def accion_boton(self, arg):
-        self.botones.close_stack()
-        if arg.icon == "exit-run":
-            self.siguiente()
+        self.ids.botones_departamento.close_stack()
 
-        if arg.icon == "delete":
-            self.formatear()
-
-        if arg.icon == "pencil":
-            if len(self.ids.nombre_grupo.text) <= 5:
-                noti = Notificacion("Error", "Nombre de grupo almenos debe tener 5 caracteres\n")
-                noti.open()
-                return
-            if self.ids.menu_local.text == "Local:":
-                noti = Notificacion("Error", "Tiene que seleccionar algun local\n")
-                noti.open()
-                return
-
-            objeto = RegistrarDepartamento(
-                nombre_departamento=self.ids.nombre_grupo.text,
-                descripcion=self.ids.desc_grupo.text,
-                id_local=self.coleccion_locales.dato_guardar
-            )
-            self.network.enviar(objeto.preparar())
-            info = self.network.recibir()
-            if info.get("estado"):
-                self.formatear()
-                noti = Notificacion("Exito", f"Se ha registrado el grupo: {objeto.nombre_departamento}")
-                noti.open()
-                return None
-            noti = Notificacion("Error", PROTOCOLOERROR[info.get("condicion")])
-            noti.open()
-            Logger.critical(f"Error no contralado en VGrupos datos: {info}")
 
     def activar(self):
         self.coleccion_locales.generar_consulta("menu_locales")

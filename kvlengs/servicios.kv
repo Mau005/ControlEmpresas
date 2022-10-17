@@ -1,26 +1,13 @@
-
-
-<PreButton@Button>:
-    size_hint: None, None
-    size: "125dp", "45dp"
-
-<PreLabel@MDLabel>:
-    size_hint_x: .2
-
 <VServicios>:
     nombre:nombre
     descr:descr
     id_estado:id_estado
     precio:precio
-    botones_servicios:botones_servicios
         
-    MDCardPre:
-        orientation: 'vertical'
-        elevation: 30
-        spacing: dp(20)
+    MDCard:
+        elevation: 5
         pos_hint: {"center_x": .5, "center_y": .5}
         size_hint: .9,.9
-        padding: dp(38)
         MDLabel:
             halign: "center"
             font_size : dp(30)
@@ -30,6 +17,7 @@
             do_scroll_x: False
             do_scroll_y: True
             MDList:
+                padding: dp(30)
                 spacing: dp(15)
                 MDTextField:
                     hint_text: "Nombre:"
@@ -65,13 +53,9 @@
                     text: "Rut Trabajador:"
                     id: boton_rut_trabajador
 
-                
-            
-            
-        MDFloatingActionButtonSpeedDial:
-            size_hint_y: .2
-            id: botones_servicios
-            callback: root.accion_boton
-            root_button_anim: True
+    MDFloatingActionButtonSpeedDial:
+        id: botones_servicios
+        on_release_stack_button: root.accion_boton(*args)
+        root_button_anim: True
 
                 

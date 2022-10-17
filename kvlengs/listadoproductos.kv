@@ -1,5 +1,4 @@
 <VListaProductos>:
-    botones:botones
     contenedor:contenedor
     ScrollView:
         do_scroll_y: True
@@ -7,12 +6,13 @@
     
         MDList:
             id: contenedor
-            padding: dp(30)
+
             MDBoxLayout:
+                padding: dp(30)
                 orientation: 'horizontal'
                 size_hint_y: None
                 height: dp(55)
-                PreLabel:
+                MDLabel:
                     text: "Buscar ID: "
                 
                 MDTextField:
@@ -20,10 +20,7 @@
 
                 MDFlatButton:
                     text: "Buscar"
-
-            
-
     MDFloatingActionButtonSpeedDial:
-        callback: root.accion_boton
-        id: botones
+        on_release_stack_button: root.accion_boton(*args)
+        id: botones_lista_productos
         root_button_anim: True

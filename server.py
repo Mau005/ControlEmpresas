@@ -1,4 +1,6 @@
 import socket
+import sys
+
 from network.servidornetwork import ServidorNetwork
 from schema.basedatos import BaseDatos
 from core.herramientas import Herramientas as her
@@ -51,9 +53,15 @@ class Server:
         self.control_network = Control_Network()
 
     def __configurar_servidor(self):
-        self.socket = socket.socket()
-        self.socket.bind((self.info["Servidor"]["ip"], self.info["Servidor"]["port"]))
-        self.socket.listen(0)
+        try:
+            self.socket = socket.socket()
+            self.socket.bind((self.info["Servidor"]["ip"], self.info["Servidor"]["port"]))
+            self.socket.listen(0)
+        except OSError as error:
+            print(error)
+            input("Precione para continuar")
+            sys.exit()
+
 
     def actualizar(self):
         while self.enfuncionamiento:

@@ -6,23 +6,22 @@ class VListaNotasEmpresas(MDScreenAbstrac):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
         self.coleccion_empresas = MenuEntidades(self.network, "Rut Empresa:", "Rut Empresa:", self.ids.rut_empresa)
         self.objetos_widgets = []
-        self.ids.botones.data = {'Buscar': 'book-search', 'Formatear': 'delete', 'Salir': 'exit-run'}
+        self.ids.botones_notas_empresas.data = {'Buscar': ['book-search', "on_release", self.crear],
+                                                'Formatear': ["delete", "on_release", self.limpiar_items],
+                                                'Salir': ["exit-run", "on_release", self.siguiente]}
 
-    def activar(self):
-        super().activar()
+    def crear(self, *args):
+        self.coleccion_empresas.desplegar_menu()
+    def activar(self, *args):
         self.coleccion_empresas.generar_consulta("menu_empresas")
+        super().activar()
+
 
     def accion_boton(self, arg):
-        self.ids.botones.close_stack()
-        if arg.icon == "delete":
-            self.limpiar_widget()
+        self.ids.botones_notas_empresas.close_stack()
 
-        if arg.icon == "exit-run":
-            self.siguiente()
-        if arg.icon == "book-search":
-            self.coleccion_empresas.desplegar_menu()
 
-    def limpiar_items(self):
+    def limpiar_items(self, *args):
         for widget in self.objetos_widgets:
             self.ids.contenedor_registros.remove_widget(widget)
         self.objetos_widgets.clear()
@@ -45,6 +44,7 @@ class VListaNotasEmpresas(MDScreenAbstrac):
 
 
     def siguiente(self, *dt):
+        self.limpiar_items()
         super().siguiente()
 
     def volver(self):

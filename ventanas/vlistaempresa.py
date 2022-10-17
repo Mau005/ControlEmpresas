@@ -1,32 +1,27 @@
 from ventanas.widgets_predefinidos import MDScreenAbstrac, MDTwoLine
 from kivy.properties import ObjectProperty
-from core.constantes import BUTTONCREATE
 
 
 class VListasEmpresas(MDScreenAbstrac):
     contenedor = ObjectProperty()
-    botones = ObjectProperty()
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.botones.data = BUTTONCREATE
+        self.ids.botones_lista_empresas.data = {'Actualizar': ["pencil", "on_release", self.activar],
+                                                'Formatear': ["delete", "on_release", self.formatear],
+                                                'Salir': ["exit-run", "on_release", self.siguiente]}
         self.contenido_empresas = []
 
     def accion_boton(self, arg):
-        if arg.icon == "pencil":
-            self.activar()
-        if arg.icon == "exit-run":
-            self.siguiente()
-        if arg.icon == "delete":
-            self.limpiar_objetos()
+        self.ids.botones_lista_empresas.close_stack()
 
-    def limpiar_objetos(self):
+    def formatear(self, *args):
         for obj in self.contenido_empresas:
             self.contenedor.remove_widget(obj)
         self.contenido_empresas.clear()
 
     def activar(self):
-        self.limpiar_objetos()
+        self.formatear()
         data = {"estado": "lista_empresas"}
         self.network.enviar(data)
         info = self.network.recibir()
@@ -39,6 +34,7 @@ class VListasEmpresas(MDScreenAbstrac):
         super().activar()
 
     def siguiente(self, *dt):
+        self.formatear()
         return super().siguiente(*dt)
 
     def volver(self, *dt):

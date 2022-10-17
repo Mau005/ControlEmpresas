@@ -1,22 +1,62 @@
 from entidades.registrargastos import RegistrarGastos
 from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion
-from kivy.properties import ObjectProperty
-from core.constantes import BUTTONCREATE, PROTOCOLOERROR
+from core.constantes import PROTOCOLOERROR
 from ventanas.widgets_predefinidos import MenuEntidades
 from kivymd.uix.pickers import MDDatePicker
 
 
 class VGastos(MDScreenAbstrac):
-    botones = ObjectProperty()
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
         self.fecha_asignada = None
-        self.botones.data = BUTTONCREATE
+        self.ids.botones_gastos.data = {'Crear': ["pencil", "on_release", self.crear],
+                                    'Formatear': ["delete", "on_release", self.formatear],
+                                    'Salir': ["exit-run", "on_release", self.salir]}
         self.coleccion_departamento = MenuEntidades(self.network, "Departamento:",
                                                     "Departamento:", self.ids.departamento, filtro="int")
         self.coleccion_estado_gasto = MenuEntidades(self.network, "Estado Gasto:",
                                                     "Estado Gasto:", self.ids.estado_gasto, filtro="int")
+
+    def crear(self, *args):
+        noti = Notificacion("Error", "")
+
+        if self.ids.saldo.text == "":
+            noti.text += "Se necesita Ingresar un saldo\n"
+        if self.ids.departamento.text == "Departamento:":
+            noti.text += "Se necesita seleccionar un departamento\n"
+        if self.ids.estado_gasto.text == "Estado Gasto:":
+            noti.text += "Se necesita ingresar un estado de gastos\n"
+        if self.fecha_asignada is None:
+            noti.text += "Debe indicar una fecha de cuando se realizo el gasto\n"
+
+        if len(noti.text) >= 1:
+            noti.open()
+            return None
+
+        objeto = RegistrarGastos(
+            descripcion=self.ids.descripcion.text,
+            saldo=int(self.ids.saldo.text),
+            fecha_creacion=self.fecha_asignada,
+            id_departamento=self.coleccion_departamento.dato_guardar,
+            id_estado_gastos=self.coleccion_estado_gasto.dato_guardar
+        )
+        self.network.enviar(objeto.preparar())
+        info = self.network.recibir()
+
+        if info.get("estado"):
+            noti.title = "Correcto"
+            noti.text = "Se ha registrado correctamente"
+            noti.open()
+            self.formatear()
+            return None
+
+        noti.text = PROTOCOLOERROR[info.get("condicion")]
+        noti.open()
+        return None
+
+    def salir(self, *args):
+        self.siguiente()
 
     def abrir_fecha(self):
         capturar_fecha = MDDatePicker()
@@ -28,7 +68,7 @@ class VGastos(MDScreenAbstrac):
         self.ids.fecha_creacion.text = f"Fecha Creación: {self.fecha_asignada}"
         print(self.fecha_asignada)
 
-    def formatear(self):
+    def formatear(self, *args):
         self.ids.departamento.text = "Departamento:"
         self.ids.estado_gasto.text = "Estado Gasto:"
         self.ids.saldo.text = ""
@@ -36,50 +76,8 @@ class VGastos(MDScreenAbstrac):
         self.ids.fecha_creacion.text = "Fecha Creación: 00/00/00"
         self.fecha_asignada = None
 
-    def accion_boton(self, arg):
-        self.botones.close_stack()
-        if arg.icon == "exit-run":
-            self.siguiente()
-
-        if arg.icon == "delete":
-            self.formatear()
-
-        if arg.icon == "pencil":
-            noti = Notificacion("Error", "")
-
-            if self.ids.saldo.text == "":
-                noti.text += "Se necesita Ingresar un saldo\n"
-            if self.ids.departamento.text == "Departamento:":
-                noti.text += "Se necesita seleccionar un departamento\n"
-            if self.ids.estado_gasto.text == "Estado Gasto:":
-                noti.text += "Se necesita ingresar un estado de gastos\n"
-            if self.fecha_asignada is None:
-                noti.text += "Debe indicar una fecha de cuando se realizo el gasto\n"
-
-            if len(noti.text) >= 1:
-                noti.open()
-                return None
-
-            objeto = RegistrarGastos(
-                descripcion=self.ids.descripcion.text,
-                saldo=int(self.ids.saldo.text),
-                fecha_creacion=self.fecha_asignada,
-                id_departamento=self.coleccion_departamento.dato_guardar,
-                id_estado_gastos=self.coleccion_estado_gasto.dato_guardar
-            )
-            self.network.enviar(objeto.preparar())
-            info = self.network.recibir()
-
-            if info.get("estado"):
-                noti.title = "Correcto"
-                noti.text = "Se ha registrado correctamente"
-                noti.open()
-                self.formatear()
-                return None
-
-            noti.text = PROTOCOLOERROR[info.get("condicion")]
-            noti.open()
-            return None
+    def accion_boton(self, *arg):
+        self.ids.botones_gastos.close_stack()
 
     def activar(self):
         super().activar()

@@ -1,12 +1,7 @@
-
-
-
 <VDepartamentos>:
-    botones:botones
-    MDCardPre:
-        size_hint: .95, .95
-        adaptive_size: True
-        elevation: 10
+    MDCard:
+        size_hint: .9, .9
+        elevation: 5
         pos_hint: {"center_x": .5, "center_y": .5}
 
         ScrollView:
@@ -33,7 +28,6 @@
                     id: menu_local
 
     MDFloatingActionButtonSpeedDial:
-        size_hint_y: .1
-        id: botones
-        callback: root.accion_boton
+        id: botones_departamento
+        on_release_stack_button: root.accion_boton(*args)
         root_button_anim: True
