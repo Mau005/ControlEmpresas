@@ -5,7 +5,6 @@ from entidades.registroempresas import RegistroEmpresas
 from entidades.registrardepartamento import RegistrarDepartamento
 from entidades.registropersonas import RegistroPersonas
 from entidades.registroproductos import RegistroProductos
-from entidades.abstracservicio import RegistroServicios
 from entidades.registroserviciosdiarios import RegistroServiciosDiarios
 from core.herramientas import Herramientas as her
 from entidades.registrotrabajador import RegistroTrabajador
@@ -254,6 +253,7 @@ class Querys():
         return self.bd.consultar(querys, all=True)
 
     def registrar_servicios(self, datos):
+        return
         objeto = RegistroServicios()
         objeto.__dict__ = her.recuperacion_sentencia(datos).__dict__
         print(objeto)

@@ -121,9 +121,13 @@ if __name__ == "__main__":
             querys.registrar_estados("SINIESTRADO")
             querys.registrar_estados("TRANSLADO")
             querys.registrar_estado_gastos("COMUNES")
+            querys.registrar_estado_gastos("REMUNERACIONES")
+            querys.registrar_estado_gastos("TRANSPORTES")
+            querys.registrar_estado_gastos("INSUMOS")
             querys.registrar_estado_gastos("ARRIENDO")
             querys.registrar_estado_gastos("COMBUSTIBLES")
             querys.registrar_estado_gastos("INMUEBLES")
+            querys.registrar_estado_gastos("SIN BOLETAS/SIN DOCUMENTOS")
             querys.registrar_estado_gastos("OTROS")
             print("[OK] Se han registrado todos los atributos necesarios")
             break
