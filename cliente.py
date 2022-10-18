@@ -3,6 +3,8 @@ from kivymd.uix.screenmanager import MDScreenManager
 from kivy.clock import Clock
 from kivy.lang import Builder
 
+from ventanas.vserviciosmensuales import VServiciosMensuales
+
 Builder.load_file("kvlengs/root.kv")
 
 from ventanas.vlistanotasempresas import VListaNotasEmpresas
@@ -38,7 +40,7 @@ class ControlEmpresas(MDApp):
     def __cargar_ventanas(self):
         self.login = Entrada(self.network, self.manejador, "entrada", siguiente="casa")
         self.casa = Casa(self.network, self.manejador, "casa", volver="entrada")
-        # self.vservicios = VServicios(self.network, self.manejador, "servicios", siguiente="casa")
+        self.vservicios = VServiciosMensuales(self.network, self.manejador, "serviciosmensuales", siguiente="casa")
         self.vpersonas = VPersonas(self.network, self.manejador, "personas", siguiente="casa")
         self.vempresas = VEmpresas(self.network, self.manejador, "empresas", siguiente="casa")
         self.vnotasempresas = VNotasEmpresas(self.network, self.manejador, "notasempresas", siguiente="casa")
@@ -59,7 +61,7 @@ class ControlEmpresas(MDApp):
 
         self.manejador.add_widget(self.login)
         self.manejador.add_widget(self.casa)
-        # self.manejador.add_widget(self.vservicios)
+        self.manejador.add_widget(self.vservicios)
         self.manejador.add_widget(self.vpersonas)
         self.manejador.add_widget(self.vempresas)
         self.manejador.add_widget(self.vnotasempresas)

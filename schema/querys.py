@@ -5,7 +5,7 @@ from entidades.registroempresas import RegistroEmpresas
 from entidades.registrardepartamento import RegistrarDepartamento
 from entidades.registropersonas import RegistroPersonas
 from entidades.registroproductos import RegistroProductos
-from entidades.registroservicio import RegistroServicios
+from entidades.abstracservicio import RegistroServicios
 from entidades.registroserviciosdiarios import RegistroServiciosDiarios
 from core.herramientas import Herramientas as her
 from entidades.registrotrabajador import RegistroTrabajador

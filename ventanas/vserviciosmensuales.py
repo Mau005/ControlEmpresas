@@ -1,56 +1,67 @@
+from entidades.serviciomensual import ServicioMensual
 from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion, MenuEntidades
 from kivymd.uix.pickers import MDDatePicker
-from kivy.properties import ObjectProperty
-from entidades.registroservicio import RegistroServicios
 
 
-class MenuItemEstado:
-    def __init__(self, id_estado, nombre):
-        self.id_estado = id_estado
-        self.nombre = nombre
-
-
-class VServicios(MDScreenAbstrac):
-    nombre = ObjectProperty()
-    descr = ObjectProperty()
-    id_estado = ObjectProperty()
-    precio = ObjectProperty()
+class VServiciosMensuales(MDScreenAbstrac):
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.ids.botones_servicios.data = {'Crear': ["pencil", "on_release", self.crear],
-                                           'Formatear': ["delete", "on_release", self.formatear],
-                                           'Salir': ["exit-run", "on_release", self.siguiente]}
         self.fecha_inicio = None
         self.fecha_termino = None
-        self.colecciones_estado = MenuEntidades(self.network, "Estados:", "Id:", self.ids.id_estado, filtro="int")
+        self.lista_productos = {}
+        self.colecciones_estado = MenuEntidades(self.network, "Estados:", "Estados:", self.ids.id_estado, filtro="int")
         self.colecciones_rut_cliente = MenuEntidades(self.network, "Rut Cliente:", "Rut Cliente:",
                                                      self.ids.boton_rut_cliente)
-        self.colecciones_rut_trabajador = MenuEntidades(self.network, "Rut Trabajador:", "Rut Trabajador:",
-                                                        self.ids.boton_rut_trabajador)
+        self.colecciones_departamentos = MenuEntidades(self.network, "Departamento:", "Departamento:",
+                                                       self.ids.boton_departamentos)
+
+        self.colecciones_procutos = MenuEntidades(self.network, "Agregar Producto:", "Agregar Producto:",
+                                                       self.ids.boton_departamentos)
 
     def crear(self, *args):
+        noti = Notificacion("Error", "")
         if self.fecha_inicio is None:
-            noti = Notificacion("ERROR", "Alemenos debe indicar la fecha de inicio.")
-            noti.open()
-            return
-        if not len(self.precio.text) >= 1:
-            noti = Notificacion("Error", "Debe asignar algun precio")
+            noti.text += "Alemenos debe indicar la fecha de inicio.\n"
+        if len(self.ids.nombre.text) <= 3:
+            noti.text += "Tiene que indicar un nombre del servicio.\n"
+
+        if self.ids.id_estado.text == "Estados:":
+            noti.text += "Tiene que indicar un estado del servicio.\n"
+
+        if self.ids.boton_rut_cliente.text == "Rut Cliente:":
+            noti.text += "Tiene que indicar un cliente.\n"
+
+        if self.ids.boton_departamentos.text == "Departamento:":
+            noti.text += "Tiene que indicar un departamento.\n"
+
+        if len(self.ids.ubicacion.text) <= 3:
+            noti.text += "Tiene que indicar una ubicacion.\n"
+
+        if self.ids.btn_fecha.text == "00/00/00 al 00/00/00":
+            noti.text += "Alemenos debe indicar la fecha de inicio.\n"
+
+        if len(self.lista_productos) == 0:
+            noti.text += "Tiene que indicar un producto para los servicios.\n"
+
+        if not noti.text == "":
             noti.open()
             return
 
-        if self.fecha_termino is None:
-            self.fecha_termino = ""
 
-        obj = RegistroServicios(nombre=self.nombre.text,
-                                descr=self.descr.text,
-                                fecha_inicio=str(self.fecha_inicio),
-                                fecha_termino=str(self.fecha_termino),
-                                id_estado=self.colecciones_estado.dato_guardar,
-                                precio=int(self.precio.text),
-                                rut_persona=self.colecciones_rut_cliente.dato_guardar,
-                                rut_trabajador=self.colecciones_rut_trabajador.dato_guardar,
-                                )
+
+        obj = ServicioMensual(
+            nombre_servicio=self.ids.nombre.text,
+            url_posicion=self.ids.url_posicion.text,
+            ubicacion=self.ids.ubicacion.text,
+            rut_usuario=self.colecciones_rut_cliente.dato_guardar,
+            descripcion=self.ids.descr.text,
+            id_departamento=self.colecciones_departamentos.dato_guardar,
+            fecha_inicio=self.fecha_inicio,
+            fecha_termino=self.fecha_termino
+        )
+        print(obj)
+        return
         self.network.enviar(obj.preparar())
         datos = self.network.recibir()
         if datos.get("estado"):
@@ -63,28 +74,23 @@ class VServicios(MDScreenAbstrac):
                                 datos.get("No tienes los privilegios suficientes para crear servicios!"))
             test.open()
 
-    def accion_boton(self, arg):
-        self.ids.botones_servicios.close_stack()
-
     def formatear(self, *args):
         self.fecha_termino = None
         self.fecha_termino = None
-        self.nombre.text = ""
-        self.id_estado.text = "Estado:"
-        self.colecciones_estado.dato_guardar = None
-        self.descr.text = ""
-        self.precio.text = ""
+        self.ids.nombre.text = ""
+        self.ids.id_estado.text = "Estados:"
+        self.ids.descr.text = ""
         self.ids.btn_fecha.text = "00/00/00 al 00/00/00"
         self.ids.boton_rut_cliente.text = "Rut Cliente:"
-        self.ids.boton_rut_trabajador.text = "Rut Trabajador:"
-        self.colecciones_rut_trabajador.dato_guardar = None
+        self.ids.boton_departamentos.text = "Departamento:"
+        self.colecciones_departamentos.dato_guardar = None
         self.colecciones_rut_cliente.dato_guardar = None
         self.colecciones_estado.dato_guardar = None
 
     def activar(self):
         self.colecciones_estado.generar_consulta("menu_estado")
         self.colecciones_rut_cliente.generar_consulta("menu_personas")
-        self.colecciones_rut_trabajador.generar_consulta("menu_trabajadores")
+        self.colecciones_departamentos.generar_consulta("menu_departamentos")
         super().activar()
 
     def abrir_fecha(self):

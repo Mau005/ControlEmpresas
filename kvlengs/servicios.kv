@@ -1,61 +1,88 @@
-<VServicios>:
-    nombre:nombre
-    descr:descr
-    id_estado:id_estado
-    precio:precio
-        
-    MDCard:
-        elevation: 5
-        pos_hint: {"center_x": .5, "center_y": .5}
-        size_hint: .9,.9
-        MDLabel:
-            halign: "center"
-            font_size : dp(30)
-            size_hint_y: .1
-            text: "Registrar Servicios"
-        ScrollView:
-            do_scroll_x: False
-            do_scroll_y: True
-            MDList:
-                padding: dp(30)
-                spacing: dp(15)
-                MDTextField:
-                    hint_text: "Nombre:"
-                    id: nombre
-                MDRaisedButton:
-                    id: id_estado
-                    text: "Estados:"
-                    pos_hint: {"center_x": .5, "center_y": .5}
-                MDTextField:
-                    hint_text: "Precio:"
-                    id:precio
-                    input_filter: 'int'
-                MDTextField:
-                    id:descr
-                    hint_text: "Descripcion:"
-                    multiline: True
+<VServiciosMensuales>:
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: dp(20)
+        padding: dp(10)
+        MDCard:
+            orientation: "vertical"
+            elevation: 5
+            pos_hint: {"center_x": .5, "center_y": .5}
+            size_hint: .9,.9
+            spacing: dp(20)
+            MDLabel:
+                halign: "center"
+                font_size : dp(30)
+                size_hint_y: .1
+                text: "Registrar Servicios Mensuales"
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                MDList:
+                    padding: dp(30)
+                    spacing: dp(15)
+                    MDTextField:
+                        hint_text: "Nombre Servicio:"
+                        id: nombre
+                    MDRaisedButton:
+                        id: id_estado
+                        text: "Estados:"
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                    MDRaisedButton:
+                        text: "Rut Cliente:"
+                        id: boton_rut_cliente
+                    MDRaisedButton:
+                        text: "Departamento:"
+                        id: boton_departamentos
+                    MDTextField:
+                        hint_text: "URL Posicion:"
+                        id: url_posicion
+                    MDTextField:
+                        hint_text: "Ubicacion:"
+                        id: ubicacion
+                    MDTextField:
+                        id:descr
+                        hint_text: "Descripcion:"
+                        multiline: True
+                    MDRaisedButton:
+                        text: "00/00/00 al 00/00/00"
+                        id: btn_fecha
+                        pos_hint: {"center_x": .5, "center_y": .5}
+                        halign: "center"
+                        on_release: root.abrir_fecha()
 
-                MDLabel:
-                    text: 
-            
+                    MDBoxLayout:
+                        size_hint_y: None
+                        height: dp(200)
+                        MDCard:
+                            style: "outlined"
+                            outlined: dp(5)
+                            orientation: "vertical"
+                            ScrollView:
+                                do_scroll_x: False
+                                do_scroll_y: True
+                                MDList:
+                                    id:contenedor_objetos
+                    MDRaisedButton:
+                        text: "Agregar Producto"
+                        on_release: root.agregar_producto()
+
+        MDCard:
+            orientation: "vertical"
+            size_hint: .9, .1
+            elevation: 5
+            pos_hint: {"center_x": .5, "center_y": .5}
+            padding: dp(5)
+            MDBoxLayout:
+                adaptive_size: True
+                spacing: dp(12)
+                pos_hint: {"center_x": .5, "center_y": .5}
                 MDRoundFlatButton:
-                    text: "00/00/00 - 00/00/00"
-                    id: btn_fecha
-                    pos_hint: {"center_x": .5, "center_y": .5}
-                    halign: "center"
-                    on_release: root.abrir_fecha()
-
+                    text: "Crear"
+                    on_release: root.crear()
                 MDRoundFlatButton:
-                    text: "Rut Cliente:"
-                    id: boton_rut_cliente
-
+                    text: "Formatear"
+                    on_release: root.formatear()
                 MDRoundFlatButton:
-                    text: "Rut Trabajador:"
-                    id: boton_rut_trabajador
-
-    MDFloatingActionButtonSpeedDial:
-        id: botones_servicios
-        on_release_stack_button: root.accion_boton(*args)
-        root_button_anim: True
-
+                    text: "Volver"
+                    on_release: root.siguiente()
                 

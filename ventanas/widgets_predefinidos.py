@@ -4,7 +4,9 @@ from kivy.metrics import dp
 from kivy.uix.screenmanager import FadeTransition, CardTransition, SwapTransition
 from kivy.uix.scrollview import ScrollView
 from kivymd.uix.bottomsheet import MDListBottomSheet
+from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.card import MDCard
+from kivymd.uix.label import MDLabel
 
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.dialog import MDDialog
@@ -14,6 +16,38 @@ from kivymd.uix.textfield import MDTextField
 
 from entidades.menuitems import MenuGlobal
 from entidades.registronotas import RegistroNotas
+from entidades.serviciosproductos import ServiciosProductos
+
+
+class ItemProductos(MDBoxLayout):
+    indice = 0
+
+    def __init__(self, id_producto, cantidad, precio, **kargs):
+        self.contador()
+        self.id_interno = self.indice
+        self.estado = True
+        self.producto = ServiciosProductos(
+            id_producto=id_producto,
+            cantidad=cantidad,
+            precio=precio
+        )
+        super().__init__(kargs)
+        self.nombre = MDLabel(text=f"ID: {self.producto.id_producto}  Precio: {self.producto.precio}")
+        self.boton_eliminar = MDRoundFlatButton(text="Eliminar", on_release=self.eliminar)
+        self.orientation = "horizontal"
+        self.size_hint_y = None
+        self.height = dp(75)
+        self.padding = dp(10)
+        self.spacing = dp(10)
+        self.add_widget(self.nombre)
+        self.add_widget(self.boton_eliminar)
+
+    def eliminar(self, *args):
+        self.estado = False
+
+    @classmethod
+    def contador(cls):
+        cls.indice += 1
 
 
 class MenuEntidades:
@@ -79,6 +113,11 @@ class MenuEntidades:
                 self.listados.update({objeto.identificador: objeto})
             return {"estado": True}
         return {"estado": False, "condicion": "CONSULTA"}
+
+
+class MenuEntidadesMultiples(MenuEntidades):
+    def __init__(self, network, nombre_boton, nombre_busqueda, boton_modificar, filtro="str"):
+        super().__init_(self, network, nombre_boton, nombre_busqueda, boton_modificar, filtro)
 
 
 class MDTreeLine(ThreeLineListItem):
@@ -195,11 +234,9 @@ class MDScreenAbstrac(MDScreen):
             self.manager.get_screen(self.nombre_siguiente).activar()
             self.manager.current = self.nombre_siguiente
 
-
     @abstractmethod
     def volver(self):
         if self.nombre_volver:
-
             self.manejador.get_screen(self.nombre_volver).activar()
             self.manager.current = self.nombre_volver
 
@@ -213,9 +250,8 @@ class ItemCard(MDCard):
         self.height = dp(400)
         self.padding = dp(20)
         self.adaptative_size = True
-        self.contenedor = MDList(size_hint_y=None, size = self.size )
+        self.contenedor = MDList(size_hint_y=None, size=self.size)
         self.add_widget(self.contenedor)
-
 
 
 class ItemNotaEmpresa(ItemCard):
@@ -226,8 +262,9 @@ class ItemNotaEmpresa(ItemCard):
         maqueta.__dict__ = objeto.__dict__
         self.network = network
 
-        self.scroll = ScrollView(do_scroll_x=False, do_scroll_y=True, size_hint_y= None, height=dp(100))
-        self.id_registro = MDTextField(hint_text="ID Registro", text=str(maqueta.id_registro), disabled=True, mode= "fill")
+        self.scroll = ScrollView(do_scroll_x=False, do_scroll_y=True, size_hint_y=None, height=dp(100))
+        self.id_registro = MDTextField(hint_text="ID Registro", text=str(maqueta.id_registro), disabled=True,
+                                       mode="fill")
         self.nota = MDTextField(hint_text="Nota", text=maqueta.nota, multiline=True, disabled=True)
         self.rut_empresa = MDTextField(hint_text="Rut Empresa:", text=maqueta.rut_asociado, disabled=True)
         self.correo = MDTextField(hint_text="Usuario", text=maqueta.id_cuenta, disabled=True)
