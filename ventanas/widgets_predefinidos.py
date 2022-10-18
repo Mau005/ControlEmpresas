@@ -207,7 +207,7 @@ class MDScreenAbstrac(MDScreen):
 class ItemCard(MDCard):
     def __init__(self, **kargs):
         super().__init__(**kargs)
-        self.elevation = 15
+        self.elevation = 3
         self.orientation = 'vertical'
         self.size_hint_y = None
         self.height = dp(400)
