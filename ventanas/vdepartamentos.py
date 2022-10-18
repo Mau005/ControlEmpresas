@@ -9,9 +9,6 @@ class VDepartamentos(MDScreenAbstrac):
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.ids.botones_departamento.data = {'Crear': ["pencil", "on_release", self.crear],
-                                              'Formatear': ["delete", "on_release", self.formatear],
-                                              'Salir': ["exit-run", "on_release", self.siguiente]}
         self.coleccion_locales = MenuEntidades(self.network, "Local:", "Local:", self.ids.menu_local, filtro="int")
 
     def crear(self, *args):
@@ -45,10 +42,6 @@ class VDepartamentos(MDScreenAbstrac):
         self.ids.desc_grupo.text = ""
         self.ids.menu_local.text = "Local:"
         self.coleccion_locales.dato_guardar = None
-
-    def accion_boton(self, arg):
-        self.ids.botones_departamento.close_stack()
-
 
     def activar(self):
         self.coleccion_locales.generar_consulta("menu_locales")

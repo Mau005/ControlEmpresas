@@ -2,49 +2,65 @@
 
 
 <VGastos>:
-    MDCard:
-        size_hint: .9, .9
-        elevation: 5
-        pos_hint: {"center_x": .5, "center_y": .5}
-        ScrollView:
-            do_scroll_x: False
-            do_scroll_y: True
-            MDList:
-                padding: dp(30)
-                spacing: dp(25)
-                MDLabel:
-                    text: "Crear Gastos"
-                    font_size: dp(25)
-                    haling: "center"
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: dp(20)
+        padding: dp(10)
+        MDCard:
+            size_hint_x: .9
+            elevation: 5
+            pos_hint: {"center_x": .5, "center_y": .5}
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                MDList:
+                    padding: dp(30)
+                    spacing: dp(25)
+                    MDLabel:
+                        text: "Crear Gastos"
+                        font_size: dp(25)
+                        haling: "center"
 
-                MDRaisedButton:
-                    text: "Departamento:"
-                    id:departamento
+                    MDRaisedButton:
+                        text: "Departamento:"
+                        id:departamento
 
-                MDRaisedButton:
-                    text: "Estado Gasto:"
-                    id:estado_gasto
+                    MDRaisedButton:
+                        text: "Estado Gasto:"
+                        id:estado_gasto
 
-                MDTextField:
-                    id: saldo
-                    hint_text: "Saldo"
-                    input_filter: 'int'
+                    MDTextField:
+                        id: saldo
+                        hint_text: "Saldo"
+                        input_filter: 'int'
 
-                MDRaisedButton:
-                    text: "Fecha Creación: 00/00/00"
-                    id: fecha_creacion
-                    on_release: root.abrir_fecha()
+                    MDRaisedButton:
+                        text: "Fecha Creación: 00/00/00"
+                        id: fecha_creacion
+                        on_release: root.abrir_fecha()
 
-                MDTextField:
-                    id: descripcion
-                    hint_text: "Descripción"
-                    multiline: True
+                    MDTextField:
+                        id: descripcion
+                        hint_text: "Descripción"
+                        multiline: True
 
-    MDFloatingActionButtonSpeedDial:
-        id: botones_gastos
-        on_release_stack_button: root.accion_boton(*args)
-        hint_animation:True
-        root_button_anim:True
-
-
+        MDCard:
+            orientation: "vertical"
+            size_hint: .9, .1
+            elevation: 5
+            pos_hint: {"center_x": .5, "center_y": .5}
+            padding: dp(5)
+            MDBoxLayout:
+                adaptive_size: True
+                spacing: dp(12)
+                pos_hint: {"center_x": .5, "center_y": .5}
+                MDRoundFlatButton:
+                    text: "Crear"
+                    on_release: root.crear()
+                MDRoundFlatButton:
+                    text: "Formatear"
+                    on_release: root.formatear()
+                MDRoundFlatButton:
+                    text: "Volver"
+                    on_release: root.siguiente()
 

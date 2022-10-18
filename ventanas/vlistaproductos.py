@@ -9,19 +9,12 @@ class VListaProductos(MDScreenAbstrac):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
 
         self.listas_widget = []
-        self.ids.botones_lista_productos.data = {'Crear': ["pencil", "on_release", self.activar],
-                                         'Formatear': ["delete", "on_release", self.formatear],
-                                         'Salir': ["exit-run", "on_release", self.siguiente]}
 
     def formatear(self, *args):
         for elementos in self.listas_widget:
             self.contenedor.remove_widget(elementos)
 
         self.listas_widget.clear()
-
-    def accion_boton(self, arg):
-        self.ids.botones.close_stack()
-
     def activar(self):
         self.formatear()
         data = {"estado": "listadoproductos"}

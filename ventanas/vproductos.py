@@ -6,10 +6,6 @@ class VProductos(MDScreenAbstrac):
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-
-        self.ids.botones_productos.data = {'Crear': ["pencil", "on_release", self.crear],
-                                         'Formatear': ["delete", "on_release", self.formatear],
-                                         'Salir': ["exit-run", "on_release", self.siguiente]}
         self.colecciones_menu_local = MenuEntidades(self.network, "Local:", "Local:", self.ids.menu_local, filtro="int")
 
     def crear(self, *args):

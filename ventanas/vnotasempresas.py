@@ -7,9 +7,6 @@ class VNotasEmpresas(MDScreenAbstrac):
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.ids.botones_notas_empresas.data = {'Crear': ["pencil", "on_release", self.crear],
-                                                'Formatear': ["delete", "on_release", self.formatear],
-                                                'Salir': ["exit-run", "on_release", self.siguiente]}
         self.coleccion_empresas = MenuEntidades(self.network, "Rut Empresa:", "Rut:", self.ids.boton_empresas)
 
     def crear(self, *args):
@@ -38,9 +35,6 @@ class VNotasEmpresas(MDScreenAbstrac):
         noti = Notificacion("Error", PROTOCOLOERROR(info.get("condicion")))
         noti.open()
         return
-
-    def accion_boton(self, *arg):
-        self.ids.botones_notas_empresas.close_stack()
 
     def activar(self):
         self.coleccion_empresas.generar_consulta("menu_empresas")

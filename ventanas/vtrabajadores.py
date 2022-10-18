@@ -7,10 +7,6 @@ class VTrabajadores(MDScreenAbstrac):
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.ids.botones_trabajadores.data = {'Crear': ["pencil", "on_release", self.crear],
-                                              'Formatear': ["delete", "on_release", self.formatear],
-                                              'Salir': ["exit-run", "on_release", self.siguiente]}
-
         self.colecciones_personas = MenuEntidades(self.network, "Rut Trabajador:", "Rut Trabajador:",
                                                   self.ids.botton_rut_accion)
         self.colecciones_departamentos = MenuEntidades(self.network, "Departamento:", "Departamento:",
@@ -54,9 +50,6 @@ class VTrabajadores(MDScreenAbstrac):
         noti = Notificacion("Error", info.get("condicion"))
         noti.open()
         return
-
-    def accion_boton(self, *arg):
-        self.ids.botones_trabajadores.close_stack()
 
     def formatear(self, *args):
         self.ids.botton_rut_accion.text = "Rut Trabajador:"

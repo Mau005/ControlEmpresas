@@ -9,7 +9,7 @@
     "Servidor":{
         "MOTD": "Bienvenido a Kastachana",
         "Version": 0.1,
-        "ip": "localhost",
+        "ip": "192.168.100.105",
         "port": 7171
     },
     "Correo": {

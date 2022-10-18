@@ -9,9 +9,6 @@ class VListadoServicios(MDScreenAbstrac):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
 
         self.listas_widget = []
-        self.ids.botones_lista_servicios.data = {'Crear': ["pencil", "on_release", self.crear],
-                                                 'Formatear': ["delete", "on_release", self.formatear],
-                                                 'Salir': ["exit-run", "on_release", self.siguiente]}
 
     def crear(self, *args):
         data = {"estado": "listadoservicios"}

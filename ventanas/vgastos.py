@@ -10,9 +10,6 @@ class VGastos(MDScreenAbstrac):
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
         self.fecha_asignada = None
-        self.ids.botones_gastos.data = {'Crear': ["pencil", "on_release", self.crear],
-                                    'Formatear': ["delete", "on_release", self.formatear],
-                                    'Salir': ["exit-run", "on_release", self.salir]}
         self.coleccion_departamento = MenuEntidades(self.network, "Departamento:",
                                                     "Departamento:", self.ids.departamento, filtro="int")
         self.coleccion_estado_gasto = MenuEntidades(self.network, "Estado Gasto:",

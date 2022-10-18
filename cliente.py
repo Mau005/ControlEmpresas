@@ -5,7 +5,7 @@ from kivy.lang import Builder
 
 Builder.load_file("kvlengs/root.kv")
 
-from ventanas.VListaNotasEmpresas import VListaNotasEmpresas
+from ventanas.vlistanotasempresas import VListaNotasEmpresas
 from ventanas.vdepartamentos import VDepartamentos
 from ventanas.vlocales import VLocales
 from ventanas.vnotaspersonas import VNotasPersonas
@@ -29,7 +29,7 @@ class ControlEmpresas(MDApp):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.theme_cls.theme_style = "Dark"
-        self.theme_cls.primary_palette = "Orange"
+        self.theme_cls.primary_palette = "BlueGray"
         self.network = ClienteNetwork()
         self.manejador = MDScreenManager()
         self.__cargar_ventanas()

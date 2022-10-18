@@ -1,26 +1,46 @@
 <VListasEmpresas>:
     contenedor:contenedor
-    ScrollView:
-        do_scroll_y: True
-        do_scroll_x: False
-    
-        MDList:
-            id: contenedor
-            padding: dp(30)
+
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: dp(20)
+        padding: dp(10)
+        MDCard:
+            size_hint_x: .9
+            elevation: 5
+            pos_hint: {"center_x": .5, "center_y": .5}
+            ScrollView:
+                do_scroll_y: True
+                do_scroll_x: False
+
+                MDList:
+                    id: contenedor
+                    padding: dp(30)
+                    MDBoxLayout:
+                        orientation: 'horizontal'
+                        size_hint_y: None
+                        height: dp(55)
+                        MDLabel:
+                            text: "Buscar Rut: "
+
+                        MDTextField:
+                            hint_text: "Ejemplo: 11.111.111-2"
+
+                        MDFlatButton:
+                            text: "Buscar"
+        MDCard:
+            orientation: "vertical"
+            size_hint: .9, .1
+            elevation: 5
+            pos_hint: {"center_x": .5, "center_y": .5}
+            padding: dp(5)
             MDBoxLayout:
-                orientation: 'horizontal'
-                size_hint_y: None
-                height: dp(55)
-                MDLabel:
-                    text: "Buscar Rut: "
-                
-                MDTextField:
-                    hint_text: "Ejemplo: 11.111.111-2"
-
-                MDFlatButton:
-                    text: "Buscar"
-
-    MDFloatingActionButtonSpeedDial:
-        on_release_stack_button: root.accion_boton(*args)
-        id: botones_lista_empresas
-        root_button_anim: True
+                adaptive_size: True
+                spacing: dp(12)
+                pos_hint: {"center_x": .5, "center_y": .5}
+                MDRoundFlatButton:
+                    text: "Formatear"
+                    on_release: root.formatear()
+                MDRoundFlatButton:
+                    text: "Volver"
+                    on_release: root.siguiente()

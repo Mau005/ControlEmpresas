@@ -8,9 +8,6 @@ class VEmpresas(MDScreenAbstrac):
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.ids.botones_empresas.data = {'Crear': ["pencil", "on_release", self.crear],
-                                          'Formatear': ["delete", "on_release", self.formatear],
-                                          'Salir': ["exit-run", "on_release", self.siguiente]}
         self.correo = "prueba"
 
     def crear(self, *args):
@@ -65,10 +62,7 @@ class VEmpresas(MDScreenAbstrac):
             noti.open()
             return None
 
-    def accion_boton(self, arg):
-        self.ids.botones_empresas.close_stack()
-
-    def formatear(self):
+    def formatear(self, *args):
         self.ids.rut_empresa.text = ""
         self.ids.nombre_empresa.text = ""
         self.ids.giro_empresa.text = ""

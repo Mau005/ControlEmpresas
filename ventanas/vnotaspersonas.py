@@ -7,9 +7,6 @@ class VNotasPersonas(MDScreenAbstrac):
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.ids.botones_notas_personas.data = {'Crear': ["pencil", "on_release", self.crear],
-                                                'Formatear': ["delete", "on_release", self.formatear],
-                                                'Salir': ["exit-run", "on_release", self.siguiente]}
         self.coleccion_personas = MenuEntidades(self.network, "Rut Persona:", "Rut Persona:", self.ids.boton_persona)
 
     def crear(self, *args):
@@ -38,9 +35,6 @@ class VNotasPersonas(MDScreenAbstrac):
         noti = Notificacion("Error", PROTOCOLOERROR(info.get("condicion")))
         noti.open()
         return
-
-    def accion_boton(self, *arg):
-        self.ids.botones_notas_personas.close_stack()
 
     def activar(self):
         self.coleccion_personas.generar_consulta("menu_personas")

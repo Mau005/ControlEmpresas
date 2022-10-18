@@ -8,9 +8,6 @@ class VPersonas(MDScreenAbstrac):
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.ids.botones_personas.data = {'Crear': ["pencil", "on_release", self.crear],
-                                          'Formatear': ["delete", "on_release", self.formatear],
-                                          'Salir': ["exit-run", "on_release", self.siguiente]}
         self.colecciones_empresas = MenuEntidades(self.network, "Empresa:", "Empresa:", self.ids.boton_rut_empresas)
 
     def crear(self, *args):
@@ -20,7 +17,7 @@ class VPersonas(MDScreenAbstrac):
             noti.text += "El rut debe tener 10 caracteres ejemplo: 11222333-4\n"
             estado = False
         if not "@" in self.ids.correo_sistema.text:
-            noti.text += "El Correo debe ser correcto ejemplo: tuempresa@tudominio.cl"
+            noti.text += "El Correo debe ser correcto ejemplo: tuempresa@tudominio.cl\n"
             estado = False
 
         rut_verificado = her.verificar_rut(self.ids.rut.text)
@@ -65,9 +62,6 @@ class VPersonas(MDScreenAbstrac):
         self.ids.correo_sistema.text = ""
         self.ids.boton_rut_empresas.text = "Empresa:"
         self.colecciones_empresas.dato_guardar = None
-
-    def accion_boton(self, args):
-        self.ids.botones_personas.close_stack()
 
     def actualizar(self, dt):
         super().actualizar(dt)

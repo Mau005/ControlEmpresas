@@ -1,6 +1,7 @@
 from abc import abstractmethod
 
 from kivy.metrics import dp
+from kivy.uix.screenmanager import FadeTransition, CardTransition, SwapTransition
 from kivy.uix.scrollview import ScrollView
 from kivymd.uix.bottomsheet import MDListBottomSheet
 from kivymd.uix.card import MDCard
@@ -190,12 +191,15 @@ class MDScreenAbstrac(MDScreen):
     @abstractmethod
     def siguiente(self, *dt):
         if self.nombre_siguiente:
+            self.manager.transition = SwapTransition()
             self.manager.get_screen(self.nombre_siguiente).activar()
             self.manager.current = self.nombre_siguiente
+
 
     @abstractmethod
     def volver(self):
         if self.nombre_volver:
+
             self.manejador.get_screen(self.nombre_volver).activar()
             self.manager.current = self.nombre_volver
 

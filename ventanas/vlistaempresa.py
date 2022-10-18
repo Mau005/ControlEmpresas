@@ -7,13 +7,7 @@ class VListasEmpresas(MDScreenAbstrac):
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.ids.botones_lista_empresas.data = {'Actualizar': ["pencil", "on_release", self.activar],
-                                                'Formatear': ["delete", "on_release", self.formatear],
-                                                'Salir': ["exit-run", "on_release", self.siguiente]}
         self.contenido_empresas = []
-
-    def accion_boton(self, arg):
-        self.ids.botones_lista_empresas.close_stack()
 
     def formatear(self, *args):
         for obj in self.contenido_empresas:
