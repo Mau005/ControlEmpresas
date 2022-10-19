@@ -1,7 +1,6 @@
 from core.constantes import TAMANIO_PAQUETE
 from core.herramientas import Herramientas as her
 from kivy.logger import Logger
-from ventanas.widgets_predefinidos import Notificacion
 import socket
 
 
@@ -26,7 +25,7 @@ class ClienteNetwork:
     def iniciar(self, *args):
         try:
             self.socket = socket.socket()
-            self.socket.settimeout(10)
+            self.socket.settimeout(2)
             self.socket.connect((self.ip, self.port))
             self.socket.settimeout(None)
             self.configuracion = self.cargar_json(actualizar=True)

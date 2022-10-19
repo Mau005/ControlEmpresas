@@ -1,7 +1,7 @@
 from abc import abstractmethod
 
 from kivy.metrics import dp
-from kivy.uix.screenmanager import FadeTransition, CardTransition, SwapTransition
+from kivy.uix.screenmanager import WipeTransition
 from kivy.uix.scrollview import ScrollView
 from kivymd.uix.bottomsheet import MDListBottomSheet
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -230,7 +230,7 @@ class MDScreenAbstrac(MDScreen):
     @abstractmethod
     def siguiente(self, *dt):
         if self.nombre_siguiente:
-            self.manager.transition = SwapTransition()
+            self.manager.transition = WipeTransition()
             self.manager.get_screen(self.nombre_siguiente).activar()
             self.manager.current = self.nombre_siguiente
 

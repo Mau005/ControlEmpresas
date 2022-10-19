@@ -229,7 +229,7 @@ class Querys():
         Methodo utulizar para gestionar departamentos
         """
         querys = """
-        select l.id_local, concat(dp.nombre_departamento, ' Local: ', l.nombre_local)
+        select dp.id_departamento, concat(dp.nombre_departamento, ' Local: ', l.nombre_local)
         from locales l
         inner join departamentos dp
         on l.id_local = dp.id_local
