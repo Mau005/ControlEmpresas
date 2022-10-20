@@ -1,10 +1,8 @@
-from abc import abstractmethod, ABC
+from abc import abstractmethod
 
-
-class AbstracServicio(ABC):
+class AbstracServicio:
     #	id_servicios	nombre_servicio	id_estado	url_posicion
     #	ubicacion	rut_usuario	descripcion	id_departamento	fecha_creacion
-    @abstractmethod
     def __init__(self, **kargs):
         self.id_servicio = kargs.get("id_servicio")
         self.nombre_servicio = kargs.get("nombre_servicio")

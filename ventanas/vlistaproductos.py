@@ -15,6 +15,7 @@ class VListaProductos(MDScreenAbstrac):
             self.contenedor.remove_widget(elementos)
 
         self.listas_widget.clear()
+
     def activar(self):
         self.formatear()
         data = {"estado": "listadoproductos"}

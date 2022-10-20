@@ -103,6 +103,11 @@ class ServidorNetwork(Thread):
         else:
             self.enviar({"estado": False, "condicion": "PRIVILEGIOS"})
 
+    def registrar_servicio_mensual(self, contenido):
+        if self.consultar_privilegios("CrearServicioMensual"):
+            return self.enviar(self.querys.registrar_servicio_mensual(contenido))
+        return self.enviar({"estado": False, "condicion": "PRIVILEGIOS"})
+
     def run(self):
         while self.enfuncionamiento:
             datos = self.recibir()
@@ -120,6 +125,9 @@ class ServidorNetwork(Thread):
 
             if datos.get("estado") == "registrar_local":
                 self.registrar_local(datos.get("contenido"))
+
+            if datos.get("estado") == "servicio_mensual":
+                self.registrar_servicio_mensual(datos)
 
             if datos.get("estado") == "desconectar":
                 self.desconectar()
@@ -164,7 +172,7 @@ class ServidorNetwork(Thread):
                 if self.consultar_privilegios("CrearGastos"):
                     self.enviar(self.querys.registrar_gasto(datos.get("contenido")))
                 else:
-                    self.enviar({"estado":False, "condicion":"PRIVILEGIOS"})
+                    self.enviar({"estado": False, "condicion": "PRIVILEGIOS"})
 
             if datos.get("estado") == "registro_servicio":
                 self.registro_servicios(datos.get("contenido"))

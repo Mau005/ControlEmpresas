@@ -3,7 +3,7 @@ from entidades.abstracservicio import AbstracServicio
 
 class ServicioMensual(AbstracServicio):
     def __init__(self, **kargs):
-        AbstracServicio.__init__(self, kargs)
+        super().__init__(**kargs)
         self.fecha_inicio = kargs.get("fecha_inicio")
         self.fecha_termino = kargs.get("fecha_termino")
 

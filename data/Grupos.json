@@ -25,6 +25,7 @@
             "CrearNotaPersona": true,
             "CrearPersona": true,
             "CrearGastos": true,
+            "CrearServicioMensual": true,
             "RecibirTodaNotificacion": true,
             "EliminarEmpresas": true,
             "EliminarUsuarios": true,

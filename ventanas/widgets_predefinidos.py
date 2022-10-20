@@ -1,7 +1,6 @@
 from abc import abstractmethod
 
 from kivy.metrics import dp
-from kivy.uix.screenmanager import WipeTransition
 from kivy.uix.scrollview import ScrollView
 from kivymd.uix.bottomsheet import MDListBottomSheet
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -22,28 +21,41 @@ from entidades.serviciosproductos import ServiciosProductos
 class ItemProductos(MDBoxLayout):
     indice = 0
 
-    def __init__(self, id_producto, cantidad, precio, **kargs):
+    def __init__(self, id_producto, nombre, contenedor=None, precio="0", cantidad="1", **kargs):
         self.contador()
         self.id_interno = self.indice
-        self.estado = True
-        self.producto = ServiciosProductos(
-            id_producto=id_producto,
-            cantidad=cantidad,
-            precio=precio
-        )
+        self.contenedor = contenedor
+        self.id_producto = id_producto
+        self.nombre = nombre
         super().__init__(kargs)
-        self.nombre = MDLabel(text=f"ID: {self.producto.id_producto}  Precio: {self.producto.precio}")
-        self.boton_eliminar = MDRoundFlatButton(text="Eliminar", on_release=self.eliminar)
+        self.nombre = MDLabel(text=f"{self.id_interno} {self.nombre}")
+        self.precio = MDTextField(hint_text="Precio", text=precio, input_filter="int")
+        self.cantidad = MDTextField(hint_text="Cantidad", text=cantidad, input_filter="int", size_hint_x=None, width=dp(25))
+        self.boton_eliminar = MDRoundFlatButton(text="Eliminar", on_release=self.eliminar, size_hint_x=None, width=dp(15))
         self.orientation = "horizontal"
         self.size_hint_y = None
         self.height = dp(75)
         self.padding = dp(10)
         self.spacing = dp(10)
         self.add_widget(self.nombre)
+        self.add_widget(self.precio)
+        self.add_widget(self.cantidad)
         self.add_widget(self.boton_eliminar)
 
+    def generar(self):
+        if self.cantidad.text == "" or self.precio.text == "":
+            return
+
+        producto = ServiciosProductos(
+            id_producto=self.id_producto,
+            cantidad=int(self.cantidad.text),
+            precio=int(self.precio.text)
+        )
+        return producto
+
     def eliminar(self, *args):
-        self.estado = False
+        if self.contenedor is not None:
+            self.contenedor.remove_widget(self)
 
     @classmethod
     def contador(cls):
@@ -115,9 +127,33 @@ class MenuEntidades:
         return {"estado": False, "condicion": "CONSULTA"}
 
 
-class MenuEntidadesMultiples(MenuEntidades):
-    def __init__(self, network, nombre_boton, nombre_busqueda, boton_modificar, filtro="str"):
-        super().__init_(self, network, nombre_boton, nombre_busqueda, boton_modificar, filtro)
+class MenuEntidadesMultiples:
+    def __init__(self, network, contenedor, btn):
+        self.network = network
+        self.contenedor = contenedor
+        self.lista_objetos = []
+        self.btn = btn
+        self.btn.bind(on_release=self.desplegar_menu)
+
+    def callback(self, arg):
+        procesar = arg.text.split(":")
+        identificador = procesar[1].split("\n")
+        self.contenedor.add_widget(ItemProductos(identificador[0], identificador[1], contenedor=self.contenedor))
+
+    def desplegar_menu(self, *args):
+        bottom_sheet_menu = MDListBottomSheet()
+        for objetos in self.lista_objetos:
+            bottom_sheet_menu.add_item(f"ID:{objetos.identificador}\n{objetos.nombre}",
+                                       self.callback)
+        bottom_sheet_menu.open()
+
+    def generar_consulta(self, consulta):
+        self.network.enviar({"estado": consulta})
+        info = self.network.recibir()
+        if info.get("estado"):
+            for elementos in info.get("datos"):
+                objeto = MenuGlobal(str(elementos[0]), elementos[1])
+                self.lista_objetos.append(objeto)
 
 
 class MDTreeLine(ThreeLineListItem):
@@ -230,7 +266,6 @@ class MDScreenAbstrac(MDScreen):
     @abstractmethod
     def siguiente(self, *dt):
         if self.nombre_siguiente:
-            self.manager.transition = WipeTransition()
             self.manager.get_screen(self.nombre_siguiente).activar()
             self.manager.current = self.nombre_siguiente
 

@@ -34,6 +34,9 @@ class BaseDatos:
         except mysql.connector.errors.IntegrityError as error:
             print(error)
             return {"estado": False, "condicion": "INSERCION"}
+        except mysql.connector.ProgrammingError as error:
+            print(error)
+            return {"estado": False, "condicion": "INSERCION"}
         finally:
             self.__cerrar()
 
