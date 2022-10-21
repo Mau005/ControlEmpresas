@@ -5,7 +5,7 @@ from entidades.registroempresas import RegistroEmpresas
 from entidades.registrardepartamento import RegistrarDepartamento
 from entidades.registropersonas import RegistroPersonas
 from entidades.registroproductos import RegistroProductos
-from entidades.registroserviciosdiarios import RegistroServiciosDiarios
+from entidades.serviciodiarios import ServicioDiarios
 from core.herramientas import Herramientas as her
 from entidades.registrotrabajador import RegistroTrabajador
 from entidades.serviciomensual import ServicioMensual
@@ -319,18 +319,42 @@ class Querys():
 
         return {"estado": True}
 
-    def registrar_servicio_diario(self, objeto):
-        obj = RegistroServiciosDiarios()
-        obj.__dict__ = objeto.__dict__
-        obj = her.recuperacion_sentencia(obj)
-        querys = '''
-        INSERT INTO serviciosdiarios(NOMBRE_SERVICIO, ID_ESTADO, PRECIO, FECHA_SEMANA, URL_POSICION, UBICACION,
-        RUT_USUARIO, RUT_TRABAJADOR, DESCR, TODA_SEMANA, ID_PRODUCTO, CANTIDAD)
-        VALUES({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {});
-        '''.format(obj.nombre_servicio, obj.id_estado, obj.precio, obj.fecha_semana, obj.url_posicion, obj.ubicacion,
-                   obj.rut_usuario, obj.rut_trabajador, obj.descr, obj.toda_semana, obj.id_producto, obj.cantidad)
-        print(querys)
-        return self.bd.insertar(querys)
+    def registrar_servicio_diario(self, datos):
+        servicio = ServicioDiarios()
+        servicio.__dict__ = her.recuperacion_sentencia(datos.get("contenido")).__dict__
+
+        # id_servicios	nombre_servicio	id_estado	url_posicion
+        # ubicacion	rut_usuario	descripcion	id_departamento	fecha_creacion
+        querys_servicio = f'INSERT INTO servicios(nombre_servicio, id_estado, url_posicion,' \
+                          f'ubicacion, rut_usuario, descripcion, id_departamento)' \
+                          f'VALUES({servicio.nombre_servicio}, {servicio.id_estado}, {servicio.url_posicion},' \
+                          f'{servicio.ubicacion}, {servicio.rut_usuario}, {servicio.descripcion}, ' \
+                          f'{servicio.id_departamento});'
+        qr_servicio = self.bd.insertar(querys_servicio)
+
+        if not qr_servicio.get("estado"):
+            return {"estado": False, "condicion": "INSERCION"}
+
+        querys_servicio_diarios = f'INSERT INTO servicios_diarios(id_servicios, dias_diarios)' \
+                                  f'VALUES({qr_servicio.get("ultimo_id")}, {servicio.dias_diarios});'
+
+        qr_servicio_diarios = self.bd.insertar(querys_servicio_diarios)
+        if not qr_servicio_diarios.get("estado"):
+            return {"estado": False, "condicion": "INSERCION"}
+
+        productos = datos.get("productos")
+
+        base_producto = ServiciosProductos()
+        for prod in productos:
+            base_producto.__dict__ = her.recuperacion_sentencia(prod).__dict__
+            querys_productos = f'INSERT INTO servicios_productos(id_producto, cantidad, precio, id_servicio)' \
+                               f'VALUES({base_producto.id_producto}, {base_producto.cantidad},' \
+                               f'{base_producto.precio}, {qr_servicio.get("ultimo_id")});'
+            qr_productos = self.bd.insertar(querys_productos)
+            if not qr_productos.get("estado"):
+                return {"estado": False, "condicion": "INSERCION"}
+
+        return {"estado": True}
 
     def lista_empresas(self):
         querys = '''

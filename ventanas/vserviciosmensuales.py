@@ -95,8 +95,6 @@ class VServiciosMensuales(MDScreenAbstrac):
         paquete = obj.preparar()
         paquete.update({"productos":productos})
 
-        print(paquete)
-
         self.network.enviar(paquete)
         datos = self.network.recibir()
 

@@ -23,6 +23,7 @@ from ventanas.vrecuperacion import VRecuperacion
 from ventanas.vlistaproductos import VListaProductos
 from ventanas.vtrabajadores import VTrabajadores
 from ventanas.vgastos import VGastos
+from ventanas.vserviciosdiarios import VServiciosDiarios
 
 
 class ControlEmpresas(MDApp):
@@ -58,6 +59,7 @@ class ControlEmpresas(MDApp):
                                       siguiente="casa")
         self.vnotaspersonas = VNotasPersonas(self.network, self.manejador, "notaspersonas", siguiente="casa")
         self.vgastos = VGastos(self.network, self.manejador, "gastos", siguiente="casa")
+        self.vserviciosdiarios = VServiciosDiarios(self.network, self.manejador, "serviciosdiarios", siguiente="casa")
 
         self.manejador.add_widget(self.login)
         self.manejador.add_widget(self.casa)
@@ -70,13 +72,13 @@ class ControlEmpresas(MDApp):
         self.manejador.add_widget(self.vproductos)
         self.manejador.add_widget(self.vrecuperacion)
         self.manejador.add_widget(self.vlistaproductos)
-        # self.manejador.add_widget(self.vserviciosdiarios)
         self.manejador.add_widget(self.vtrabajadores)
         self.manejador.add_widget(self.vlocales)
         self.manejador.add_widget(self.vlistanotasempresas)
         self.manejador.add_widget(self.vgrupos)
         self.manejador.add_widget(self.vnotaspersonas)
         self.manejador.add_widget(self.vgastos)
+        self.manejador.add_widget(self.vserviciosdiarios)
         self.login.activar()
 
     def actualizar(self, dt):

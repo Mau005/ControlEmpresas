@@ -1,85 +1,108 @@
 from kivymd.uix.bottomsheet import MDListBottomSheet
 
-from entidades.registroserviciosdiarios import RegistroServiciosDiarios
-from ventanas.widgets_predefinidos import MDScreenAbstrac, MenuEntidades, Notificacion
+from core.constantes import PROTOCOLOERROR
+from entidades.serviciodiarios import ServicioDiarios
+from ventanas.widgets_predefinidos import MDScreenAbstrac, MenuEntidades, Notificacion, MenuEntidadesMultiples
 from kivy.properties import ObjectProperty
 
+
 class VServiciosDiarios(MDScreenAbstrac):
-    nombre = ObjectProperty()
-    descr = ObjectProperty()
-    id_estado = ObjectProperty()
-    precio = ObjectProperty()
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.ids.botones_servicios_diarios.data = {'Crear': ["pencil", "on_release", self.crear],
-                                         'Formatear': ["delete", "on_release", self.formatear],
-                                         'Salir': ["exit-run", "on_release", self.siguiente]}
         self.toda_la_semana = False
-        self.coleccion_menu_estados = MenuEntidades(self.network, "Estado:", "Estado:", self.ids.id_estado, filtro="int")
-        self.coleccion_menu_personas = MenuEntidades(self.network, "Rut Cliente:", "Rut:", self.ids.botton_rut_accion)
-        self.coleccion_menu_trabajadores = MenuEntidades(self.network, "Rut Trabajador:", "Rut:",
-                                                         self.ids.botton_rut_trabajador)
-        self.coleccion_menu_productos = MenuEntidades(self.network, "ID Producto:", "ID:", self.ids.menu_producto,
-                                                      filtro="int")
+        self.total = 0
+        self.coleccion_menu_estados = MenuEntidades(self.network, "Estado:", "Estado:", self.ids.id_estado,
+                                                    filtro="int")
+        self.coleccion_menu_cliente = MenuEntidades(self.network, "Rut Cliente:", "Rut Cliente:",
+                                                    self.ids.boton_rut_cliente)
+        self.coleccion_menu_departamentos = MenuEntidades(self.network, "Departamento:", "Departamento:",
+                                                          self.ids.boton_departamentos, filtro="int")
+        self.menu_productos = MenuEntidadesMultiples(self.network, self.ids.contenedor_objetos,
+                                                     self.ids.btn_agregar_productos)
 
+    def actualizar_total(self):
+        if len(self.ids.contenedor_objetos.children) == 0:
+            self.total = 0
+            self.ids.neto.text = f"NETO: {self.total}"
+            self.ids.iva.text = f"IVA: {self.total * 0.19}"
+            self.ids.total_servicio_mensual.text = f"Total: {self.total * 1.19}"
+
+        self.total = 0
+        for objetos in self.ids.contenedor_objetos.children:
+            elemento = objetos.generar()
+            if elemento is not None:
+                resultado = elemento.precio * elemento.cantidad
+                self.total += resultado
+                self.ids.neto.text = f"NETO: {self.total}"
+                self.ids.iva.text = f"IVA: {self.total * 0.19}"
+                self.ids.total_servicio_mensual.text = f"Total: {self.total * 1.19}"
+    def chequear_objetos(self, contenedor):
+        for elementos in contenedor.children:
+            objeto = elementos.generar()
+            if objeto is None:
+                return True
+        return False
     def crear(self, *args):
-        objeto = RegistroServiciosDiarios(
+        noti = Notificacion("Error", "")
+        dias = self.__dias_diarios()
+
+        if len(self.ids.nombre.text) <= 3:
+            noti.text += "Tiene que indicar un nombre del servicio.\n"
+
+        if self.ids.id_estado.text == "Estados:":
+            noti.text += "Tiene que indicar un estado del servicio.\n"
+
+        if self.ids.boton_rut_cliente.text == "Rut Cliente:":
+            noti.text += "Tiene que indicar un cliente.\n"
+
+        if self.ids.boton_departamentos.text == "Departamento:":
+            noti.text += "Tiene que indicar un departamento.\n"
+
+        if dias == "":
+            noti.text += "Tiene que indicar almenos 1 día de la semana"
+
+        if len(self.ids.ubicacion.text) <= 3:
+            noti.text += "Tiene que indicar una ubicacion.\n"
+
+        if len(self.ids.contenedor_objetos.children) == 0:
+            noti.text += "Debe indicar un producto almenos\n"
+
+        if self.chequear_objetos(self.ids.contenedor_objetos):
+            noti.text += "Los Productos tienen que tener un precio de mayor o igual a 0 y una cantidad minima de 1"
+
+        if not noti.text == "":
+            noti.open()
+            return
+
+        servicio_diario = ServicioDiarios(
             nombre_servicio=self.ids.nombre.text,
-            id_estado=self.coleccion_menu_estados.dato_guardar,
-            precio=int(self.ids.precio.text),
-            fecha_semana=self.__dias_diarios(),
             url_posicion=self.ids.url_posicion.text,
             ubicacion=self.ids.ubicacion.text,
-            rut_usuario=self.coleccion_menu_personas.dato_guardar,
-            rut_trabajador=self.coleccion_menu_trabajadores.dato_guardar,
-            descr=self.ids.descr.text,
-            toda_semana=self.toda_la_semana,
-            id_producto=self.coleccion_menu_productos.dato_guardar,
-            cantidad=int(self.ids.cantidad_productos.text)
+            id_estado=self.coleccion_menu_estados.dato_guardar,
+            rut_usuario=self.coleccion_menu_cliente.dato_guardar,
+            descripcion=self.ids.descr.text,
+            id_departamento=self.coleccion_menu_departamentos.dato_guardar,
+            dias_diarios=dias
         )
-        if not self.__prueba_check(objeto):
-            return
+        paquete = servicio_diario.preparar()
 
-        self.network.enviar(objeto.preparar())
+        productos = []
+        for elementos in self.ids.contenedor_objetos.children:
+            productos.append(elementos.generar())
+
+        paquete.update({"productos": productos})
+        self.network.enviar(paquete)
+
         info = self.network.recibir()
-        noti = Notificacion("Error", "")
         if info.get("estado"):
             noti.title = "Exito"
-            noti.text = "Se ha generado el servicio con Exito"
+            noti.text = f"Se ha registrado con exito el servidio: {servicio_diario.nombre_servicio}"
             noti.open()
             return
-        if info.get("condicion") == "REGISTRO":
-            noti.text += "Ha ocurrido un problema al gestionar este servicio\n"
-        if info.get("condicion") == "NETWORK":
-            noti.text += "Seha desconectado del servidor.\n"
+        noti.text = PROTOCOLOERROR[info.get("condicion")]
         noti.open()
-    def accion_boton(self, arg):
-        self.ids.botones_servicios_diarios.close_stack()
-    def __prueba_check(self, objeto):
-        noti = Notificacion("Error", "")
-        if not len(objeto.nombre_servicio) >= 5 and not len(objeto.nombre_servicio) <= 100:
-            noti.text += "El Nombre del servicio debe tener almenos entre 5 a 100 caracteres\n"
-        if self.ids.id_estado.text == "Estados":
-            noti.text += "El Estado debe ser seleccionado\n"
-        if objeto.id_producto is None:
-            noti.text += "Debe seleccionar un producto\n"
-        if objeto.id_producto == "":
-            noti.text += "La cantidad de productos debe ser un numero positivo\n"
-        if self.ids.precio.text == "":
-            noti.text += "El Precio debe ser un numero positivo\n"
-        if not len(objeto.fecha_semana) >= 1:
-            noti.text += "Tiene que seleccionar almenos un dia de la semana\n"
-        if not len(objeto.ubicacion) >= 5:
-            noti.text += "La Ubicación tiene que tener entre 5 a 250 caracteres\n"
-        if objeto.rut_usuario is None:
-            noti.text += "Rut del Cliente tiene que ser seleccionado\n"
-        if objeto.rut_trabajador is None:
-            noti.text += "Rut del Trabajador tiene que ser seleccionado\n"
-        if len(noti.text) >= 3:
-            noti.open()
-            return False
-        return True
+        return
 
     def __dias_diarios(self):
         dias_diarios = ""
@@ -97,25 +120,38 @@ class VServiciosDiarios(MDScreenAbstrac):
             dias_diarios += "6"
         if self.ids.domingo.active:
             dias_diarios += "7"
-        self.toda_la_semana = self.ids.toda_semana.active
-
         return dias_diarios
 
     def formatear(self):
-        self.nombre.text = ""
-        self.id_estado.text = "Estado"
-        self.descr.text = ""
-        self.precio.text = ""
+        self.ids.nombre.text = ""
+        self.ids.id_estado.text = "Estados:"
+        self.ids.boton_rut_cliente.text = "Rut Cliente:"
+        self.ids.boton_departamentos.text = "Departamento:"
+        self.ids.url_posicion.text = ""
+        self.ids.ubicacion.text = ""
+        self.ids.descr.text = ""
+        self.ids.lunes.active = False
+        self.ids.martes.active = False
+        self.ids.miercoles.active = False
+        self.ids.jueves.active = False
+        self.ids.viernes.active = False
+        self.ids.sabado.active = False
+        self.ids.domingo.active = False
+        self.ids.contenedor_objetos.clear_widgets()
+        self.coleccion_menu_departamentos.dato_guardar = None
+        self.coleccion_menu_cliente.dato_guardar = None
+        self.coleccion_menu_estados.dato_guardar = None
 
     def activar(self):
         super().activar()
         self.coleccion_menu_estados.generar_consulta("menu_estado")
-        self.coleccion_menu_personas.generar_consulta("menu_personas")
-        self.coleccion_menu_trabajadores.generar_consulta("menu_trabajadores")
-        self.coleccion_menu_productos.generar_consulta("menu_productos")
-
+        self.coleccion_menu_cliente.generar_consulta("menu_personas")
+        self.coleccion_menu_departamentos.generar_consulta("menu_departamentos")
+        self.menu_productos.generar_consulta("menu_productos")
 
     def actualizar(self, *dt):
+        if self.activo:
+            self.actualizar_total()
         return super().actualizar(*dt)
 
     def siguiente(self, *dt):

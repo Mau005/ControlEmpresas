@@ -206,7 +206,7 @@ class ServidorNetwork(Thread):
                 self.enviar(self.querys.lista_menu_empresas())
 
             if datos.get("estado") == "registro_servicio_diario":
-                self.registro_servicio_diario(datos.get("contenido"))
+                self.registro_servicio_diario(datos)
 
             if datos.get("estado") == "listado_notas_empresa_especifica":
                 self.enviar(self.querys.listado_notas_empresa_especifica(datos.get("contenido")))
@@ -221,10 +221,9 @@ class ServidorNetwork(Thread):
         self.cerrar()
 
     def registro_servicio_diario(self, contenido):
-        info = self.querys.registrar_servicio_diario(contenido)
-        if info.get("estado"):
-            return self.enviar(info)
-        return self.enviar({"estado": False, "condicion": "REGISTRO"})
+        if self.consultar_privilegios("CrearServicioMensual"):
+            return self.enviar(self.querys.registrar_servicio_diario(contenido))
+        return {"estado":False, "condicion":"PRIVILEGIOS"}
 
     def registrar_trabajador(self, contenido):
         if self.consultar_privilegios("RegistrarTrabajadores"):
