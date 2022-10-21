@@ -61,7 +61,7 @@ class VGastos(MDScreenAbstrac):
         capturar_fecha.open()
 
     def guardar_fecha(self, instancia, valor, rango_fechas):
-        self.fecha_asignada = rango_fechas[0]
+        self.fecha_asignada = valor
         self.ids.fecha_creacion.text = f"Fecha Creación: {self.fecha_asignada}"
 
     def formatear(self, *args):
