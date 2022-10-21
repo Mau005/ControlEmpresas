@@ -34,7 +34,7 @@ class VGastos(MDScreenAbstrac):
         objeto = RegistrarGastos(
             descripcion=self.ids.descripcion.text,
             saldo=int(self.ids.saldo.text),
-            fecha_creacion=self.fecha_asignada,
+            fecha_creacion=str(self.fecha_asignada),
             id_departamento=self.coleccion_departamento.dato_guardar,
             id_estado_gastos=self.coleccion_estado_gasto.dato_guardar
         )
@@ -61,9 +61,8 @@ class VGastos(MDScreenAbstrac):
         capturar_fecha.open()
 
     def guardar_fecha(self, instancia, valor, rango_fechas):
-        self.fecha_asignada = valor
+        self.fecha_asignada = rango_fechas[0]
         self.ids.fecha_creacion.text = f"Fecha Creación: {self.fecha_asignada}"
-        print(self.fecha_asignada)
 
     def formatear(self, *args):
         self.ids.departamento.text = "Departamento:"
