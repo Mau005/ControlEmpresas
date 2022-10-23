@@ -1,10 +1,15 @@
+import os
 from abc import abstractmethod
 
+from kivy.core.window import Window
 from kivy.metrics import dp
+from kivy.uix.modalview import ModalView
 from kivy.uix.scrollview import ScrollView
+from kivymd.toast import toast
 from kivymd.uix.bottomsheet import MDListBottomSheet
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.card import MDCard
+from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.label import MDLabel
 
 from kivymd.uix.screen import MDScreen
@@ -16,6 +21,66 @@ from kivymd.uix.textfield import MDTextField
 from entidades.menuitems import MenuGlobal
 from entidades.registronotas import RegistroNotas
 from entidades.serviciosproductos import ServiciosProductos
+
+
+class ControlArchivos(MDFileManager):
+    def __init__(self,  funcion = None, **kargs):
+        super().__init__(**kargs)
+        Window.bind(on_keyboard=self.events)
+        self.search = "dirs"
+        self.preview = True
+        self.manager_open = False
+        self.ruta = None
+        self.nombre_archivo = None
+        self.captura_archivo = NotificacionText("","Nombre Archivo", aceptar=None if funcion is None else funcion)
+
+    def file_manager_open(self):
+        self.show(os.path.expanduser("~"))  # output manager to the screen
+        self.manager_open = True
+
+    def select_path(self, path: str):
+        '''
+        It will be called when you click on the file name
+        or the catalog selection button.
+
+        :param path: path to the selected directory or file;
+        '''
+
+        self.ruta = path
+        self.captura_archivo.title = self.ruta
+        self.captura_archivo.open()
+        self.exit_manager()
+
+        toast(path)
+
+    def exit_manager(self, *args):
+        '''Called when the user reaches the root of the directory tree.'''
+
+        self.manager_open = False
+        self.close()
+
+    def events(self, instance, keyboard, keycode, text, modifiers):
+        '''Called when buttons are pressed on the mobile device.'''
+
+        if keyboard in (1001, 27):
+            if self.manager_open:
+                self.file_manager.back()
+        return True
+
+
+class ItemContable(TwoLineListItem):
+    def __init__(self, id_producto, tipo, precio, usuario, departamento, fecha, boton=None, **kargs):
+        # 1, 800000, 'admin', 'Transporte Hyndai', datetime.datetime(2022, 10, 12, 12, 3, 23)
+        self.id_producto = id_producto
+        self.tipo = tipo
+        self.precio = precio
+        self.departamento = departamento
+        self.usuario = "Sin Usuario" if usuario is None else usuario
+        self.fecha = fecha
+        self.boton = boton
+        super().__init__(**kargs)
+        self.text = f"ID: {self.id_producto} Tipo: {self.tipo} Precio: {self.precio}"
+        self.secondary_text = f"Creado: {self.usuario}, , Fecha: {self.fecha} Departamento: {self.departamento}"
 
 
 class ItemProductos(MDBoxLayout):
@@ -30,8 +95,10 @@ class ItemProductos(MDBoxLayout):
         super().__init__(kargs)
         self.nombre = MDLabel(text=f"{self.id_interno} {self.nombre}")
         self.precio = MDTextField(hint_text="Precio", text=precio, input_filter="int")
-        self.cantidad = MDTextField(hint_text="Cantidad", text=cantidad, input_filter="int", size_hint_x=None, width=dp(25))
-        self.boton_eliminar = MDRoundFlatButton(text="Eliminar", on_release=self.eliminar, size_hint_x=None, width=dp(15))
+        self.cantidad = MDTextField(hint_text="Cantidad", text=cantidad, input_filter="int", size_hint_x=None,
+                                    width=dp(25))
+        self.boton_eliminar = MDRoundFlatButton(text="Eliminar", on_release=self.eliminar, size_hint_x=None,
+                                                width=dp(15))
         self.orientation = "horizontal"
         self.size_hint_y = None
         self.height = dp(75)
@@ -259,7 +326,7 @@ class MDScreenAbstrac(MDScreen):
             self.network.enviar({"estado": "actualizar", "contenido": self.name})
             info = self.network.recibir()
             if not info.get("estado"):
-                noti = Notificacion("Error", info.get("contenido"))
+                noti = Notificacion("Error", info.get("condicion"))
                 noti.open()
                 self.__desconectar()
 
