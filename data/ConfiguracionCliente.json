@@ -1,1 +1,1 @@
-{"Usuario": {"correo": "admin", "contraseña": "dd3105f5a40070eaff30001b545b224bce14eaba", "boton": true}, "Cliente": {"version": 1.0}, "Servidor": {"ip": "192.168.100.119", "port": 7171}}
+{"Usuario": {"correo": "admin", "contraseña": "dd3105f5a40070eaff30001b545b224bce14eaba", "boton": true}, "Cliente": {"version": 1.0}, "Servidor": {"ip": "localhost", "port": 7171}}

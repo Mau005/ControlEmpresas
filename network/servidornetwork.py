@@ -170,9 +170,12 @@ class ServidorNetwork(Thread):
 
             if datos.get("estado") == "registrar_gasto":
                 if self.consultar_privilegios("CrearGastos"):
-                    self.enviar(self.querys.registrar_gasto(datos.get("contenido")))
+                    self.enviar(self.querys.registrar_gasto(datos.get("contenido"), self.cuenta))
                 else:
                     self.enviar({"estado": False, "condicion": "PRIVILEGIOS"})
+
+            if datos.get("estado") == "listado_gastos_fechas":
+                self.listado_gastos_fechas(datos)
 
             if datos.get("estado") == "registro_servicio":
                 self.registro_servicios(datos.get("contenido"))
@@ -223,7 +226,12 @@ class ServidorNetwork(Thread):
     def registro_servicio_diario(self, contenido):
         if self.consultar_privilegios("CrearServicioMensual"):
             return self.enviar(self.querys.registrar_servicio_diario(contenido))
-        return {"estado":False, "condicion":"PRIVILEGIOS"}
+        return self.enviar({"estado":False, "condicion":"PRIVILEGIOS"})
+
+    def listado_gastos_fechas(self, contenido):
+        if self.consultar_privilegios("ConsultarGastos"):
+            return self.enviar(self.querys.listado_gastos_fechas(contenido))
+        return self.enviar({"estado":False, "condicion":"PRIVILEGIOS"})
 
     def registrar_trabajador(self, contenido):
         if self.consultar_privilegios("RegistrarTrabajadores"):

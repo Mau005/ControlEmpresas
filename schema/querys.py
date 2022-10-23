@@ -187,15 +187,15 @@ class Querys():
         querys = f'INSERT INTO estado_gastos(nombre) VALUES("{nombre}")'
         self.bd.insertar(querys)
 
-    def registrar_gasto(self, contenido):
+    def registrar_gasto(self, contenido, cuenta):
         gastos = RegistrarGastos()
         gastos.__dict__ = her.recuperacion_sentencia(contenido).__dict__
 
         querys = """
-        INSERT INTO gastos(descripcion, saldo, fecha_creacion, id_departamento, id_estado_gastos)
-        VALUES({}, {}, {}, {}, {});
+        INSERT INTO gastos(descripcion, saldo, fecha_creacion, id_departamento, id_estado_gastos, id_cuenta)
+        VALUES({}, {}, {}, {}, {}, {});
         """.format(gastos.descripcion, gastos.saldo, gastos.fecha_creacion,
-                   gastos.id_departamento, gastos.id_estado_gastos)
+                   gastos.id_departamento, gastos.id_estado_gastos, cuenta.id_cuenta)
         return self.bd.insertar(querys)
 
     def lista_menu_empresas(self):
@@ -355,6 +355,34 @@ class Querys():
                 return {"estado": False, "condicion": "INSERCION"}
 
         return {"estado": True}
+
+    def listado_gastos_fechas(self, contenido):
+        fecha_inicio = contenido.get("fecha_inicio")
+        fecha_termino = contenido.get("fecha_termino")
+        departamento = contenido.get("departamento")
+        print(f"inicio: {fecha_inicio} termino: {fecha_termino} departamento: {departamento}")
+
+        sentencia = """
+        SELECT ga.id_gasto, eg.nombre, ga.saldo, CU.nombre_cuenta, dep.nombre_departamento, ga.fecha_creacion
+        FROM gastos ga
+        LEFT JOIN cuentas cu ON cu.id_cuenta = ga.id_cuenta
+        LEFT JOIN departamentos dep ON dep.id_departamento = ga.id_departamento
+        LEFT JOIN estado_gastos eg ON eg.id_estado_gastos = ga.id_estado_gastos
+        """
+
+        if fecha_termino == "Sin Asignar":
+            sentencia += f"WHERE ga.fecha_creacion = DATE('{fecha_inicio}')\n"
+        else:
+            sentencia += f"WHERE ga.fecha_creacion BETWEEN '{fecha_inicio}' AND '{fecha_termino}'\n"
+
+        if departamento is not None:
+            sentencia += f"AND ga.id_departamento = {departamento}"
+
+        sentencia += ";"
+        print(sentencia)
+        return self.bd.consultar(sentencia, all=True)
+
+
 
     def lista_empresas(self):
         querys = '''

@@ -5,8 +5,14 @@ import os
 import hashlib
 import random
 import uuid
+import pandas as pd
 
 class Herramientas:
+
+    @staticmethod
+    def generar_excel(ruta, nombre_archivo, lista_datos, columnas):
+        df_rss = pd.DataFrame(lista_datos, columns=columnas)
+        df_rss.to_excel(f"{ruta}\\{nombre_archivo}.xlsx", index=False)
 
     @staticmethod
     def cargar_archivo( ruta, mensaje):

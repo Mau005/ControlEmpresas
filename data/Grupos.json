@@ -34,7 +34,8 @@
             "VerProductos": true,
             "VerEmpresas": true,
             "RegistrarTrabajadores": true,
-            "RegistrarLocales": true
+            "RegistrarLocales": true,
+            "ConsultarGastos": true
 
         }
     }

@@ -1,0 +1,68 @@
+<VGastosFechas>:
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: dp(20)
+        padding: dp(10)
+        MDCard:
+            size_hint: .9, .9
+            elevation: 5
+            pos_hint: {"center_x": .5, "center_y": .5}
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                MDList:
+                    padding: dp(30)
+                    spacing: dp(25)
+                    MDLabel:
+                        text: "Solicitar Gastos Por Fechas"
+                        font_size: dp(25)
+                    MDRaisedButton:
+                        text: "00/00/00 al 00/00/00"
+                        id: rango_fechas
+                        on_release:root.desplegar_fechas()
+
+                    MDRaisedButton:
+                        id: departamentos
+                        text: "Departamento:"
+                    MDBoxLayout:
+                        size_hint_y: None
+                        height: dp(250)
+                        MDCard:
+                            line_color:(0.2, 0.2, 0.2, 0.8)
+                            style: "outlined"
+                            shadow_softness: 12
+                            shadow_offset: (0, 2)
+                            ScrollView:
+                                do_scroll_x: False
+                                do_scroll_y: True
+                                MDList:
+                                    id: contenedor_gastos
+                    MDLabel:
+                        text: "Total Gasto:"
+                        style: "H5"
+                        id: total_gastos
+
+                    MDRaisedButton:
+                        text: "Exportar Excel"
+                        on_release: root.desplegar_archivos()
+
+
+        MDCard:
+            orientation: "vertical"
+            size_hint: .9, .1
+            elevation: 5
+            pos_hint: {"center_x": .5, "center_y": .5}
+            padding: dp(5)
+            MDBoxLayout:
+                adaptive_size: True
+                spacing: dp(12)
+                pos_hint: {"center_x": .5, "center_y": .5}
+                MDRoundFlatButton:
+                    text: "Buscar"
+                    on_release: root.crear()
+                MDRoundFlatButton:
+                    text: "Formatear"
+                    on_release: root.formatear()
+                MDRoundFlatButton:
+                    text: "Volver"
+                    on_release: root.siguiente()
