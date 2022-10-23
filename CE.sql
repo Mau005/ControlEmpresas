@@ -112,12 +112,12 @@ fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
 
 CREATE TABLE servicios_mensuales (
 id_servicios INT(11) PRIMARY KEY NOT NULL,
-fecha_inicio DATETIME NOT NULL,
-fecha_termino DATETIME NOT NULL);
+fecha_inicio DATE NOT NULL,
+fecha_termino DATE NOT NULL);
 
 CREATE TABLE servicios_diarios (
 id_servicios INT(11) PRIMARY KEY NOT NULL,
-dias_ferias VARCHAR(7) NOT NULL);
+dias_diarios VARCHAR(7) NOT NULL);
 
 CREATE TABLE registro_servicio (
 id_registro_servicio INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -173,7 +173,8 @@ descripcion TEXT(250),
 saldo INT(11) NOT NULL,
 fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 id_departamento INT(11) NOT NULL,
-id_estado_gastos INT(11) NOT NULL);
+id_estado_gastos INT(11) NOT NULL,
+id_cuenta INT(11) NOT NULL);
 
 CREATE TABLE estado_gastos (
 id_estado_gastos INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -211,3 +212,4 @@ ALTER TABLE servicios_productos ADD CONSTRAINT servicios_productos_id_producto_p
 ALTER TABLE servicios_productos ADD CONSTRAINT servicios_productos_id_servicio_servicios_id_servicios FOREIGN KEY (id_servicio) REFERENCES servicios(id_servicios) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE gastos ADD CONSTRAINT gastos_id_departamento_departamentos_id_departamento FOREIGN KEY (id_departamento) REFERENCES departamentos(id_departamento) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE gastos ADD CONSTRAINT gastos_id_estado_gastos_estado_gastos_id_estado_gastos FOREIGN KEY (id_estado_gastos) REFERENCES estado_gastos(id_estado_gastos) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE gastos ADD CONSTRAINT gastos_id_cuenta_cuentas_id_cuenta FOREIGN KEY (id_cuenta) REFERENCES cuentas(id_cuenta) ON DELETE CASCADE ON UPDATE CASCADE;

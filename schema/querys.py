@@ -72,7 +72,7 @@ class Querys():
         empresa.__dict__ = objeto.__dict__
 
         querys = '''
-        INSERT INTO EMPRESAS(rut_empresa, nombre_empresa, giro_empresa, direccion_empresa, correo_empresa, 
+        INSERT INTO empresas(rut_empresa, nombre_empresa, giro_empresa, direccion_empresa, correo_empresa, 
         correo_respaldo, telefono_empresa, celular_empresa)
         VALUES({}, {}, {}, {}, {}, {}, {}, {});
         '''.format(empresa.rut_empresa, empresa.nombre_empresa, empresa.giro_empresa, empresa.direccion_empresa,
