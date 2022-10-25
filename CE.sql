@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS personas_notas;
 DROP TABLE IF EXISTS servicios;
 DROP TABLE IF EXISTS servicios_mensuales;
 DROP TABLE IF EXISTS servicios_diarios;
-DROP TABLE IF EXISTS registro_servicio;
+DROP TABLE IF EXISTS tickets;
 DROP TABLE IF EXISTS productos;
 DROP TABLE IF EXISTS facturas;
 DROP TABLE IF EXISTS facturas_productos;
@@ -119,12 +119,13 @@ CREATE TABLE servicios_diarios (
 id_servicios INT(11) PRIMARY KEY NOT NULL,
 dias_diarios VARCHAR(7) NOT NULL);
 
-CREATE TABLE registro_servicio (
-id_registro_servicio INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
-rut_persona VARCHAR(12) NOT NULL,
+CREATE TABLE tickets (
+id_ticket INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
 id_servicios INT(11) NOT NULL,
 fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-fecha_termino DATETIME NOT NULL);
+fecha_termino DATETIME NOT NULL,
+id_estado INT(11) NOT NULL,
+descripcion TEXT(250));
 
 CREATE TABLE productos (
 id_producto INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -197,8 +198,8 @@ ALTER TABLE servicios ADD CONSTRAINT servicios_rut_usuario_personas_rut_persona 
 ALTER TABLE servicios ADD CONSTRAINT servicios_id_departamento_departamentos_id_departamento FOREIGN KEY (id_departamento) REFERENCES departamentos(id_departamento) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE servicios_mensuales ADD CONSTRAINT servicios_mensuales_id_servicios_servicios_id_servicios FOREIGN KEY (id_servicios) REFERENCES servicios(id_servicios) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE servicios_diarios ADD CONSTRAINT servicios_diarios_id_servicios_servicios_id_servicios FOREIGN KEY (id_servicios) REFERENCES servicios(id_servicios) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE registro_servicio ADD CONSTRAINT registro_servicio_rut_persona_trabajadores_rut_persona FOREIGN KEY (rut_persona) REFERENCES trabajadores(rut_persona) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE registro_servicio ADD CONSTRAINT registro_servicio_id_servicios_servicios_id_servicios FOREIGN KEY (id_servicios) REFERENCES servicios(id_servicios) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE tickets ADD CONSTRAINT tickets_id_servicios_servicios_id_servicios FOREIGN KEY (id_servicios) REFERENCES servicios(id_servicios) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE tickets ADD CONSTRAINT tickets_id_estado_estados_id_estado FOREIGN KEY (id_estado) REFERENCES estados(id_estado) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE productos ADD CONSTRAINT productos_id_local_locales_id_local FOREIGN KEY (id_local) REFERENCES locales(id_local) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE facturas_productos ADD CONSTRAINT facturas_productos_folio_factura_facturas_folio_factura FOREIGN KEY (folio_factura) REFERENCES facturas(folio_factura) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE facturas_productos ADD CONSTRAINT facturas_productos_id_producto_productos_id_producto FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE CASCADE ON UPDATE CASCADE;
