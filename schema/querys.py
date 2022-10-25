@@ -79,7 +79,30 @@ class Querys():
                    empresa.correo_empresa,
                    empresa.correo_respaldo, empresa.telefono_empresa, empresa.celular_empresa)
         return self.bd.insertar(querys)
+    def buscar_persona(self, rut):
+        querys = """
+        SELECT * 
+        FROM personas
+        WHERE rut_persona = "{}"
+        """.format(rut)
+        return self.bd.consultar(rut)
 
+    def buscar_mis_rutas_id_departamento(self, cuenta):
+        querys = """
+        SELECT *
+        FROM servicios se
+        INNER JOIN servicios_mensuales seme ON seme.id_servicios = se.id_servicios
+        WHERE se.id_departamento = {}
+        """.format(cuenta.id_departamento)
+
+    def buscar_persona_id_cuenta(self, cuenta):
+        querys = """
+        SELECT pe.rut_persona, pe.nombres, pe.apellidos, pe.telefono, pe.celular, pe.correo
+        FROM cuentas cu
+        INNER JOIN personas pe ON pe.id_cuenta = cu.id_cuenta
+        where cu.id_cuenta = {}
+        """.format(cuenta.id_cuenta)
+        return self.bd.consultar(querys)
     def registrar_personas_empresas(self, rut_empresa, rut_persona):
         """
         Methodo utilizado para gestionar empresas de usuarios
@@ -425,6 +448,17 @@ class Querys():
 
     def lista_menu_productos(self):
         querys = "SELECT ID_PRODUCTO, NOMBRE_PRODUCTO FROM productos;"
+        return self.bd.consultar(querys, all=True)
+
+    def mis_servicios(self, persona):
+        querys = """
+        SELECT se.id_servicios, pe.rut_persona, se.nombre_servicio,  se.fecha_creacion, se.id_estado, es.nombre_estado
+        FROM cuentas cu
+        INNER JOIN personas pe ON pe.id_cuenta = cu.id_cuenta
+        INNER JOIN servicios se ON se.rut_usuario = pe.rut_persona
+        INNER JOIN estados es ON es.id_estado = se.id_estado
+        WHERE pe.rut_persona = "{}"
+        """.format(persona.rut_persona)
         return self.bd.consultar(querys, all=True)
 
     def listado_notas_empresa_especifica(self, contenido):

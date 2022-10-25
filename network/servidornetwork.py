@@ -3,7 +3,7 @@ from core.constantes import TAMANIO_PAQUETE, TIMEPOESPERAUSUARIO
 from core.herramientas import Herramientas as her
 from entidades.registronotas import RegistroNotas
 from entidades.registrocuentas import RegistroCuentas
-from entidades.registrotrabajador import RegistroTrabajador
+from entidades.registropersonas import RegistroPersonas
 from network.recuperacion_cuenta import RecuperacionCuenta
 from entidades.registrousaurios import RegistroUsuarios
 from servicios_correos.base_correos import Base_Correos
@@ -15,6 +15,7 @@ class ServidorNetwork(Thread):
         Thread.__init__(self)
         self.__variable_usuarios()
         self.cuenta = RegistroCuentas()
+        self.persona = RegistroPersonas()
         self.cliente = cliente
         self.direccion = direccion
         self.querys = querys
@@ -72,6 +73,18 @@ class ServidorNetwork(Thread):
                                           acceso=info["datos"][4],
                                           serializacion=her.generar_numero_unico())
 
+            # pe.rut_persona, pe.nombres, pe.apellidos, pe.telefono, pe.celular, pe.correo
+            persona_temp = self.querys.buscar_persona_id_cuenta(self.cuenta)
+            if persona_temp.get("estado"):
+                self.persona = RegistroPersonas(
+                    rut_persona=persona_temp["datos"][0],
+                    nombres=persona_temp["datos"][1],
+                    apellidos=persona_temp["datos"][2],
+                    telefono=persona_temp["datos"][3],
+                    celular=persona_temp["datos"][4],
+                    correo=persona_temp["datos"][5],
+                )
+
             info.update({"MOTD": self.info["Servidor"]["MOTD"], "condicion": "iniciando"})
             self.control_network.agregar_hilo(self)
 
@@ -88,6 +101,7 @@ class ServidorNetwork(Thread):
     def desconectar(self):
         self.control_network.hilos_cliente.pop(self.cuenta.nombre_cuenta)
         self.cuenta = RegistroUsuarios()
+        self.persona = RegistroPersonas()
 
     def registrar_empresas(self, empresa):
         if self.consultar_privilegios("CrearEmpresas"):
@@ -211,6 +225,9 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "registro_servicio_diario":
                 self.registro_servicio_diario(datos)
 
+            if datos.get("estado") == "mis servicios":
+                self.enviar(self.querys.mis_servicios(self.persona))
+
             if datos.get("estado") == "listado_notas_empresa_especifica":
                 self.enviar(self.querys.listado_notas_empresa_especifica(datos.get("contenido")))
 
@@ -226,12 +243,12 @@ class ServidorNetwork(Thread):
     def registro_servicio_diario(self, contenido):
         if self.consultar_privilegios("CrearServicioMensual"):
             return self.enviar(self.querys.registrar_servicio_diario(contenido))
-        return self.enviar({"estado":False, "condicion":"PRIVILEGIOS"})
+        return self.enviar({"estado": False, "condicion": "PRIVILEGIOS"})
 
     def listado_gastos_fechas(self, contenido):
         if self.consultar_privilegios("ConsultarGastos"):
             return self.enviar(self.querys.listado_gastos_fechas(contenido))
-        return self.enviar({"estado":False, "condicion":"PRIVILEGIOS"})
+        return self.enviar({"estado": False, "condicion": "PRIVILEGIOS"})
 
     def registrar_trabajador(self, contenido):
         if self.consultar_privilegios("RegistrarTrabajadores"):
