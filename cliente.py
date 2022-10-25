@@ -29,11 +29,11 @@ from ventanas.vserviciosdiarios import VServiciosDiarios
 
 class ControlEmpresas(MDApp):
     # Kastachaña: ordenar separar en idioma aymara
-
+    #nohup ./server &
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.theme_cls.theme_style = "Dark"
-        self.theme_cls.primary_palette = "BlueGray"
+        #self.theme_cls.theme_style = "Dark"
+        #self.theme_cls.primary_palette = "BlueGray"
         self.network = ClienteNetwork()
         self.manejador = MDScreenManager()
         self.__cargar_ventanas()
