@@ -9,7 +9,7 @@ from network.control_network import Control_Network
 import threading, time
 from servicios_correos.servicio_correos import Servicio_Correos
 
-MOTD= """
+MOTD = """
  ____  __.                __                .__                          
 |    |/ _|____    _______/  |______    ____ |  |__ _____    ____ _____   
 |      < \__  \  /  ___/\   __\__  \ _/ ___\|  |  \ \__  \  /    \ \__  \  
@@ -19,6 +19,7 @@ MOTD= """
 Creado por Mau
 https://github.com/Mau005
 """
+
 
 class Server:
     # Kastachaña: ordenar separar en idioma aymara
@@ -62,7 +63,6 @@ class Server:
             input("Precione para continuar")
             sys.exit()
 
-
     def actualizar(self):
         while self.enfuncionamiento:
             self.tiempo_ejecucion += 1
@@ -97,18 +97,20 @@ if __name__ == "__main__":
             bd = BaseDatos(info.get("Mysql"))
             querys = Querys(bd)
             import getpass
+
             try:
                 print("[PREPARANDO] Indicame la contraseña para el usuario admin: ")
                 contra = getpass.getpass()
                 print("[PREPARANDO] Indicame nuevamente la contraseña: ")
                 contra2 = getpass.getpass()
                 if len(contra) >= 3 and contra == contra2:
-                    querys.registrar_cuenta("admin", contra, acceso = 5)
+                    querys.registrar_cuenta("admin", contra, acceso=5)
                     print("[OK] Usuario admin registrado con exito")
             except Exception as err:
                 print('ERROR:', err)
 
             from entidades.registroempresas import RegistroEmpresas
+
             print("[PREPARANDO] Registrando tablas minimas para funcionar")
             base_string = "Persona Natural"
             base_empresa = RegistroEmpresas(rut_empresa="11.111.111-1",
@@ -138,4 +140,3 @@ if __name__ == "__main__":
     else:
         servidor = Server()
         servidor.iniciar()
-

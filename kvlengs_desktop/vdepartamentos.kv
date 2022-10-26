@@ -1,0 +1,52 @@
+<VDepartamentos>:
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: dp(20)
+        padding: dp(10)
+        MDCard:
+            size_hint: .9, .9
+            elevation: 5
+            pos_hint: {"center_x": .5, "center_y": .5}
+
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                MDList:
+                    padding: dp(30)
+                    spacing: dp(25)
+                    MDLabel:
+                        text: "Crear Departamento"
+                        font_size: dp(25)
+                        haling: "center"
+                    MDTextField:
+                        hint_text: "Nombre Departamento"
+                        id:nombre_grupo
+                        helper_text: "max 50 caracteres"
+                    MDTextField:
+                        id: desc_grupo
+                        hint_text: "Descripción: "
+                        helper_text: "max 12 caracteres"
+                        multiline: True
+                    MDRaisedButton:
+                        text: "Local:"
+                        id: menu_local
+
+        MDCard:
+            orientation: "vertical"
+            size_hint: .9, .1
+            elevation: 5
+            pos_hint: {"center_x": .5, "center_y": .5}
+            padding: dp(5)
+            MDBoxLayout:
+                adaptive_size: True
+                spacing: dp(12)
+                pos_hint: {"center_x": .5, "center_y": .5}
+                MDRoundFlatButton:
+                    text: "Crear"
+                    on_release: root.crear()
+                MDRoundFlatButton:
+                    text: "Formatear"
+                    on_release: root.formatear()
+                MDRoundFlatButton:
+                    text: "Volver"
+                    on_release: root.siguiente()

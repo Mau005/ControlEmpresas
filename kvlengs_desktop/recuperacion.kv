@@ -1,0 +1,37 @@
+<VRecuperacion>:
+    ScrollView:
+        do_scroll_x : False
+        do_scroll_y: True
+        MDList:
+            padding: dp(55)
+            spacing: dp(20)
+            MDLabel:
+                text: "Recuperación de cuenta de Usuario"
+                font_size: dp(30)
+            MDTextField:
+                hint_text: "Contraseña"
+                id: contraseña
+                password: True
+                icon_left: "key"
+
+            MDTextField:
+                hint_text: "Repetir Contraseña"
+                id: contraseña2
+                password: True
+                icon_left: "key"
+
+            MDBoxLayout:
+                adaptive_size: True
+                orientation: "horizontal"
+                spacing: "12dp"
+                pos_hint: {"center_x": .5, "center_y": .5}
+                MDRoundFlatButton:
+                    text: "Cambiar"
+                    on_release: root.cambiar_contraseña()
+                    pos_hint: {"center_x": .5, "center_y": .5}
+                    halign: "center"
+                MDRoundFlatButton:
+                    text: "Cancelar"
+                    on_release: root.volver()
+                    pos_hint: {"center_x": .5, "center_y": .5}
+                    halign: "center"

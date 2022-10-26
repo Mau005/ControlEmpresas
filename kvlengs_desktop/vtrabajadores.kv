@@ -1,0 +1,58 @@
+<VTrabajadores>:
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: dp(20)
+        padding: dp(10)
+        MDCard:
+            size_hint: .9, .9
+            elevation: 5
+            pos_hint: {"center_x": .5, "center_y": .5}
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                MDList:
+                    padding: dp(30)
+                    spacing: dp(25)
+                    MDLabel:
+                        text: "Asignar Trabajador"
+                        font_size: dp(25)
+                        haling: "center"
+                    MDRaisedButton:
+                        text: "Rut Trabajador:"
+                        id: botton_rut_accion
+
+                    MDRaisedButton:
+                        text: "Departamento:"
+                        id: botton_id_departamento
+
+                    MDTextField:
+                        hint_text: "Sueldo"
+                        input_filter: "int"
+                        id: sueldo_trabajador
+
+                    MDTextField:
+                        id: dia_pago
+                        hint_text: "Día de Pago: "
+                        helper_text: "dias del mes entre 1 y 31"
+                        input_filter: "int"
+
+        MDCard:
+            orientation: "vertical"
+            size_hint: .9, .1
+            elevation: 5
+            pos_hint: {"center_x": .5, "center_y": .5}
+            padding: dp(5)
+            MDBoxLayout:
+                adaptive_size: True
+                spacing: dp(12)
+                pos_hint: {"center_x": .5, "center_y": .5}
+                MDRoundFlatButton:
+                    text: "Crear"
+                    on_release: root.crear()
+                MDRoundFlatButton:
+                    text: "Formatear"
+                    on_release: root.formatear()
+                MDRoundFlatButton:
+                    text: "Volver"
+                    on_release: root.siguiente()
+

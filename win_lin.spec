@@ -16,7 +16,9 @@ a = Analysis(
     win_private_assemblies=False,
     cipher=None,
     noarchive=False,
+
 )
+
 pyz = PYZ(a.pure, a.zipped_data, cipher=None)
 
 exe = EXE(
@@ -24,6 +26,7 @@ exe = EXE(
     a.scripts,
     a.binaries,
     a.zipfiles,
+
     a.datas,
     *[Tree(p) for p in (sdl2.dep_bins + glew.dep_bins)],
     debug=False,

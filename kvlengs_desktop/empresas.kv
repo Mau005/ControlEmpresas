@@ -1,0 +1,94 @@
+
+
+<VEmpresas>:
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: dp(20)
+        padding: dp(10)
+        MDCard:
+            elevation: 5
+            pos_hint: {"center_x": .5, "center_y": .5}
+            size_hint: .9,.9
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                MDList:
+                    padding: dp(30)
+                    MDTextField:
+                        id: rut_empresa
+                        hint_text: "Rut Empresa*"
+                        max_text_length: 12
+                        helper_text_mode: "on_focus"
+                        helper_text: "Ingrese rut sin puntos y con '-': 18888888-5"
+
+                    MDTextField:
+                        id: nombre_empresa
+                        hint_text: "Nombre Empresa*"
+                        max_text_length: 150
+                        helper_text_mode: "on_error"
+                        helper_text: "Maxima cantidad de caracteres es de 150"
+
+                    MDTextField:
+                        id: giro_empresa
+                        hint_text: "Giro*"
+                        max_text_length: 150
+                        helper_text_mode: "on_error"
+                        helper_text: "Maxima cantidad de caracteres es de 150"
+
+
+                    MDTextField:
+                        id: direccion_empresa
+                        hint_text: "Direccion*"
+                        max_text_length: 150
+                        helper_text_mode: "on_error"
+                        helper_text: "Maxima cantidad de caracteres es de 150"
+
+                    MDTextField:
+                        id: telefono_empresa
+                        hint_text: "Telefono"
+                        max_text_length: 14
+                        helper_text_mode: "on_focus"
+                        helper_text: "022XXXXXXXX"
+
+                    MDTextField:
+                        id: celular_empresa
+                        max_text_length: 14
+                        hint_text: "Celular*"
+                        helper_text_mode: "on_focus"
+                        helper_text: "+569XXXXXXXX"
+
+                    MDTextField:
+                        id: correo_empresa
+                        hint_text: "Correo*"
+                        max_text_length: 150
+                        helper_text_mode: "on_focus"
+                        helper_text: "ejemplo@tudominio.cl"
+
+                    MDTextField:
+                        id: correo_respaldo_empresa
+                        max_text_length: 150
+                        hint_text: "Correo Respaldo"
+                        helper_text_mode: "on_focus"
+                        helper_text: "ejemplo@tudominio.cl"
+
+        MDCard:
+            orientation: "vertical"
+            size_hint: .9, .1
+            elevation: 5
+            pos_hint: {"center_x": .5, "center_y": .5}
+            padding: dp(5)
+            MDBoxLayout:
+                adaptive_size: True
+                spacing: dp(12)
+                pos_hint: {"center_x": .5, "center_y": .5}
+                MDRoundFlatButton:
+                    text: "Crear"
+                    on_release: root.crear()
+                MDRoundFlatButton:
+                    text: "Formatear"
+                    on_release: root.formatear()
+                MDRoundFlatButton:
+                    text: "Volver"
+                    on_release: root.siguiente()
+
+            

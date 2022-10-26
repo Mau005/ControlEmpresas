@@ -1,0 +1,246 @@
+<Casa>:
+    MDBoxLayout:
+        orientation: "horizontal"
+        MDNavigationRail:
+            anchor: "center"
+            size_hint_x: .1
+            elevation: .4
+            MDNavigationRailItem:
+                text: "Casa"
+                icon: "home"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.cambiar_screen("casa")
+
+
+            MDNavigationRailItem:
+                text: "Herramientas"
+                icon: "tools"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.cambiar_screen("herramientas")
+
+
+            MDNavigationRailItem:
+                text: "Mi Cuenta"
+                icon: "account"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.cambiar_screen("cuenta")
+
+            MDNavigationRailItem:
+                text: "Git"
+                icon: "git"
+                font_name: "nasalization-rg.ttf"
+
+        ScreenManager:
+            orientation: "horizontal"
+            id: manejador_menus
+
+            Screen:
+                name: "casa"
+                FitImage:
+                    source: "data/imagenes/wallpaper4.jpg"
+            Screen:
+                name: "herramientas"
+                FitImage:
+                    source: "data/imagenes/wallpaper4.jpg"
+
+                MDStackLayout:
+                    padding: dp(30)
+                    spacing: dp(30)
+                    MDCard:
+                        elevation: 5
+                        size_hint: .5,.5
+                        orientation: "vertical"
+                        radius: 45
+                        MDLabel:
+                            font_size: dp(45)
+                            text: "Crear"
+                            halign: "center"
+                            size_hint_y: .1
+                        ScrollView:
+                            do_scroll_x: False
+                            do_scroll_y: True
+                            MDList:
+                                padding: dp(35)
+                                spacing: dp(20)
+                                id: contenedor_notificaciones
+
+                                OneLineListItem:
+                                    text: "Crear Servicios Mensuales"
+                                    on_release: root.cambiar_ventanta("serviciosmensuales")
+                                OneLineListItem:
+                                    text: "Crear Servicios Diarios"
+                                    on_release: root.cambiar_ventanta("serviciosdiarios")
+                                OneLineListItem:
+                                    text: "Crear Usuarios"
+                                    on_release: root.cambiar_ventanta("personas")
+                                OneLineListItem:
+                                    text: "Crear Empresas"
+                                    on_release: root.cambiar_ventanta("empresas")
+
+                                OneLineListItem:
+                                    text: "Crear Productos"
+                                    on_release: root.cambiar_ventanta("productos")
+                                OneLineListItem:
+                                    text: "Crear Locales"
+                                    on_release: root.cambiar_ventanta("locales")
+                                OneLineListItem:
+                                    text: "Crear Departamento"
+                                    on_release: root.cambiar_ventanta("departamentos")
+                                OneLineListItem:
+                                    text: "Crear Gastos"
+                                    on_release: root.cambiar_ventanta("gastos")
+                    MDCard:
+                        elevation: 5
+                        size_hint: .5,.5
+                        orientation: "vertical"
+                        radius: 45
+                        MDLabel:
+                            size_hint_y: .1
+                            font_size: dp(45)
+                            text: "Listados"
+                            halign: "center"
+                        ScrollView:
+                            do_scroll_x: False
+                            do_scroll_y: True
+                            MDList:
+                                padding: dp(35)
+                                spacing: dp(20)
+
+                                OneLineListItem:
+                                    text: "Listado De Empresas"
+                                    on_release: root.cambiar_ventanta("listaempresas")
+                                OneLineListItem:
+                                    text: "Listado De Personas"
+                                    on_release: root.cambiar_ventanta("lista_personas")
+                                OneLineListItem:
+                                    text: "Listado De Productos"
+                                    on_release: root.cambiar_ventanta("listaproductos")
+                                OneLineListItem:
+                                    text: "Listado De Registro de Empresas"
+                                    on_release: root.cambiar_ventanta("lista_menu_empresas")
+                                OneLineListItem:
+                                    text: "Listado De Gastos"
+                                    on_release: root.cambiar_ventanta("gastos_fechas")
+                    MDCard:
+                        elevation: 5
+                        size_hint: .5,.5
+                        orientation: "vertical"
+                        radius: 45
+                        MDLabel:
+                            size_hint_y: .1
+                            font_size: dp(45)
+                            text: "Listados"
+                            halign: "center"
+                        ScrollView:
+                            do_scroll_x: False
+                            do_scroll_y: True
+                            MDList:
+                                padding: dp(35)
+                                spacing: dp(20)
+                                OneLineListItem:
+                                    text: "Asignar Notas Empresas"
+                                    on_release: root.cambiar_ventanta("notasempresas")
+                                OneLineListItem:
+                                    text: "Asignar Notas Personas"
+                                    on_release: root.cambiar_ventanta("notaspersonas")
+                                OneLineListItem:
+                                    text: "Asignar Trabajador"
+                                    on_release: root.cambiar_ventanta("trabajadores")
+
+            Screen:
+                name: "cuenta"
+                FitImage:
+                    source: "data/imagenes/wallpaper4.jpg"
+                MDStackLayout:
+                    padding: dp(30)
+                    spacing: dp(30)
+                    MDCard:
+                        elevation: 5
+                        size_hint: .5,.5
+                        orientation: "vertical"
+                        MDLabel:
+                            font_size: dp(45)
+                            text: "Listados"
+                            halign: "center"
+                        ScrollView:
+                            do_scroll_x: False
+                            do_scroll_y: True
+                            MDList:
+                                padding: dp(35)
+                                spacing: dp(20)
+
+<Casa2>:
+    lista_productos:lista_productos
+
+    FitImage:
+        source: "data/imagenes/wallpaper2.jpg"
+    MDCard:
+        orientation: "vertical"
+        size_hint: .9, .9
+        elevation: 5
+        pos_hint : {"center_x": .5, "center_y": .5}
+
+        MDBottomNavigation:
+            MDBottomNavigationItem:
+                name: 'screen 1'
+                text: 'Mis Notificaciones'
+                icon: 'note'
+
+                ScrollView:
+                    do_scroll_x: False
+                    do_scroll_y: True
+                    MDList:
+                        padding: dp(35)
+                        spacing: dp(20)
+                        id: contenedor_notificaciones
+
+
+
+
+            MDBottomNavigationItem:
+                name: 'screen 2'
+                text: 'Herramientas'
+                icon: 'tools'
+
+                ScrollView:
+                    do_scroll_x: False
+                    do_scroll_y: True
+                    MDList:
+                        padding: dp(35)
+                        spacing: dp(20)
+                        MDLabel:
+                            text: 'Herramientas'
+                            halign: 'center'
+                            font_size: dp(45)
+
+
+
+
+
+
+            MDBottomNavigationItem:
+                name: 'Configuraciòn'
+                text: "Configuracion"
+                icon: 'account'
+
+                ScrollView:
+                    do_scroll_x: False
+                    do_scroll_y: True
+                    MDList:
+                        id: lista_productos
+                        padding: dp(35)
+                        spacing: dp(20)
+                        MDLabel:
+                            text: "Configuración"
+                            halign: "center"
+                            font_size: dp(45)
+                        OneLineListItem:
+                            text: "Mi Cuenta"
+                        OneLineListItem:
+                            text: "Themas"
+                        OneLineListItem:
+                            text: "Ayuda"
+                        OneLineListItem:
+                            text: "Salir"
+                            on_release: root.salir()
+

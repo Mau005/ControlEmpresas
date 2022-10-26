@@ -1,0 +1,71 @@
+<Entrada>:
+    entrada_usuario:entrada_usuario
+    pass_usuario:pass_usuario
+    FitImage:
+        source: "data/imagenes/wallpaper2.jpg"
+    MDCard:
+        orientation: 'vertical'
+        size_hint: .4,.6
+        elevation: 5
+        pos_hint: {"center_x": .5, "center_y": .5}
+
+
+        FitImage:
+            source: "icon.png"
+            size_hint_y: .5
+
+        MDBoxLayout:
+            orientation: "vertical"
+            padding: dp(20)
+
+            MDGridLayout:
+                cols:1
+                size_hint_y: .1
+                MDTextField:
+                    id:entrada_usuario
+                    icon_left: "email"
+                    hint_text: "Usuario"
+
+                MDTextField:
+                    id: pass_usuario
+                    password: True
+                    icon_left: 'key'
+                    hint_text: 'Contraseña'
+
+            MDGridLayout:
+                cols: 2
+                size_hint_y: None
+                height: dp(20)
+                MDLabel:
+                    text: "Guardar Usuario"
+                MDCheckbox:
+                    id: usuario_guardar
+
+            MDBoxLayout:
+                size_hint_y: .1
+                adaptive_size: True
+                pos_hint: {"center_x": .5, "center_y": .5}
+
+                MDRectangleFlatButton:
+                    text: "Conectar"
+                    pos_hint: {"center_x": .5, "center_y": .5}
+                    halign: "center"
+                    on_release: root.ingresar_usuario(entrada_usuario.text, pass_usuario.text)
+
+        MDBoxLayout:
+            size_hint_y: .1
+            adaptive_size: True
+            spacing: dp(12)
+            pos_hint: {"center_x": .5, "center_y": .5}
+            MDIconButton:
+                text: "Cambiar IP"
+                icon: "ip-network"
+                on_release: root.accion_boton("configurar ip")
+            MDIconButton:
+                icon : "account-box"
+                text: "Recuperar Cuenta"
+                on_release: root.accion_boton("recuperar")
+            MDIconButton:
+                icon: "exit-run"
+                text: "Salir"
+                on_release: root.accion_boton("salir")

@@ -1,0 +1,31 @@
+
+
+<MiCuenta>:
+    MDCard:
+        size_hint: .9, .9
+        elevation: 5
+        pos_hint: {"center_x":.5, "center_y":.5}
+        padding: dp(25)
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            MDList:
+                MDTextField:
+                    hint_text: "Nombre de Cuenta"
+                    id: nombre_cuenta
+                MDTextField:
+                    hint_text: "Contraseña"
+                    id:contra
+                MDTextField:
+                    hint_text: "Repetir Contraseña"
+                    id:contra2
+
+            MDBoxLayout:
+                orientation: "horizontal"
+                adaptive_size: True
+
+                MDRaisedButton:
+                    text: "Editar"
+                MDRaisedButton:
+                    text: "Volver"
+                    on_release: root.siguiente()

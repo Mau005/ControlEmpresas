@@ -46,6 +46,9 @@ class Casa(MDScreenAbstrac):
 
         #super().activar()
 
+    def cambiar_screen(self, name):
+        self.ids.manejador_menus.current = name
+
     def crear_servicios(self):
         self.manager.current = "servicios"
 

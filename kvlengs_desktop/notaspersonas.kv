@@ -1,0 +1,48 @@
+<VNotasPersonas>:
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: dp(20)
+        padding: dp(10)
+        MDCard:
+            elevation: 5
+            pos_hint: {"center_x": .5, "center_y": .5}
+            size_hint: .9,.9
+            ScrollView:
+                do_scroll_x: False
+                do_scroll_y: True
+                MDList:
+                    spacing: dp(15)
+                    padding: dp(45)
+                    MDRaisedButton:
+                        text: "Rut Persona:"
+                        id: boton_persona
+
+                    MDTextField:
+                        id: nota_persona
+                        size_hint_y : None
+                        hint_text: "Nota"
+                        height: dp(300)
+                        multiline: True
+
+            
+    
+        MDCard:
+            orientation: "vertical"
+            size_hint: .9, .1
+            elevation: 5
+            pos_hint: {"center_x": .5, "center_y": .5}
+            padding: dp(5)
+            MDBoxLayout:
+                adaptive_size: True
+                spacing: dp(12)
+                pos_hint: {"center_x": .5, "center_y": .5}
+                MDRoundFlatButton:
+                    text: "Crear"
+                    on_release: root.crear()
+                MDRoundFlatButton:
+                    text: "Formatear"
+                    on_release: root.formatear()
+                MDRoundFlatButton:
+                    text: "Volver"
+                    on_release: root.siguiente()
+
