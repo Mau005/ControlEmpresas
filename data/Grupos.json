@@ -17,6 +17,7 @@
         },
         "5":{
             "Nombre":"Administradores",
+            "TodoPoderoso": true,
             "CrearEmpresas": true,
             "Crearusuarios": true,
             "CrearServicios": true,
@@ -35,7 +36,8 @@
             "VerEmpresas": true,
             "RegistrarTrabajadores": true,
             "RegistrarLocales": true,
-            "ConsultarGastos": true
+            "ConsultarGastos": true,
+            "EditarNotas": true
 
         }
     }
