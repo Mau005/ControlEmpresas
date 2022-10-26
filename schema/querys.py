@@ -79,6 +79,7 @@ class Querys():
                    empresa.correo_empresa,
                    empresa.correo_respaldo, empresa.telefono_empresa, empresa.celular_empresa)
         return self.bd.insertar(querys)
+
     def buscar_persona(self, rut):
         querys = """
         SELECT * 
@@ -103,6 +104,7 @@ class Querys():
         where cu.id_cuenta = {}
         """.format(cuenta.id_cuenta)
         return self.bd.consultar(querys)
+
     def registrar_personas_empresas(self, rut_empresa, rut_persona):
         """
         Methodo utilizado para gestionar empresas de usuarios
@@ -160,6 +162,15 @@ class Querys():
             self.registrar_personas_empresas(personas.rut_empresa, personas.rut_persona)
             return {"estado": True}
         return {"estado": False, "condicion": "REGISTRARCUENTA"}
+
+    def actualizar_nota(self, datos):
+
+        querys = '''
+        UPDATE notas
+        SET nota = "{}"
+        WHERE id_nota = {}
+        '''.format(datos["nota"], datos["id"])
+        return self.bd.insertar(querys)
 
     def registrar_estados(self, nombre):
         """
@@ -404,8 +415,6 @@ class Querys():
         sentencia += ";"
         print(sentencia)
         return self.bd.consultar(sentencia, all=True)
-
-
 
     def lista_empresas(self):
         querys = '''

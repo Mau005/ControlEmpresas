@@ -20,7 +20,9 @@ class RegistroPersonas:
     Celular: {}
     Correo: {}
     Id Cuenta: {}
-    """.format(self.rut_persona, self.nombres, self.apellidos, self.telefono, self.celular, self.correo, self.id_cuenta)
+    Ubicacion: {}
+    """.format(self.rut_persona, self.nombres, self.apellidos, self.telefono, self.celular, self.correo,
+               self.id_cuenta, self.ubicacion)
 
     def preparar(self):
         return {"estado": "registrar_persona", "contenido": self}

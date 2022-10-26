@@ -229,6 +229,9 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "listado_notas_empresa_especifica":
                 self.enviar(self.querys.listado_notas_empresa_especifica(datos.get("contenido")))
 
+            if datos.get("estado") == "editar_nota":
+                self.actualizar_nota(datos)
+
             if datos.get("estado") == "cierre_abrupto":
                 print(f"Se Desconecta usuario: {self.cuenta.nombre_cuenta}")
                 self.control_network.pendientes_desconexion.append(self.cuenta.nombre_cuenta)
@@ -237,6 +240,11 @@ class ServidorNetwork(Thread):
             #    self.enviar({"estado": False, "condicion": "datos"})
 
         self.cerrar()
+        
+    def actualizar_nota(self, datos):
+        if self.consultar_privilegios("EditarNotas"):
+            return self.enviar(self.querys.actualizar_nota(datos))
+        return self.enviar({"estado":False,"condicion": "PRIVILEGIOS"})
 
     def registro_servicio_diario(self, contenido):
         if self.consultar_privilegios("CrearServicioMensual"):
@@ -329,4 +337,7 @@ class ServidorNetwork(Thread):
             self.enviar({"estado": True})
 
     def consultar_privilegios(self, consulta):
-        return self.grupos.get(str(self.cuenta.acceso)).get(consulta)
+        consulta = self.grupos.get(str(self.cuenta.acceso)).get(consulta)
+        if consulta is not None or "TodoPoderoso":
+            return True
+        return False
