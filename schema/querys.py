@@ -436,6 +436,38 @@ class Querys():
                    trabajador.sueldo, trabajador.dia_pago)
         return self.bd.insertar(querys)
 
+    def buscar_persona_rut(self, datos):
+        querys= '''
+        SELECT pe.rut_persona, pe.nombres, pe.apellidos, pe.telefono, pe.celular, pe.correo, pe.ubicacion, cu.nombre_cuenta
+        FROM personas pe
+        INNER JOIN cuentas cu ON cu.id_cuenta = pe.id_cuenta
+        WHERE pe.rut_persona = "{}"
+        '''.format(datos.get("rut"))
+        info = self.bd.consultar(querys)
+        if info.get("estado"):
+            if len(info.get("datos")) >= 1:
+                datos = info.get("datos")
+                maqueta = RegistroPersonas(
+                    rut_persona=datos[0],
+                    nombres=datos[1],
+                    apellidos=datos[2],
+                    telefono=datos[3],
+                    celular=datos[4],
+                    correo=datos[5],
+                    ubicacion=datos[6],
+                    id_cuenta=datos[7]
+                )
+                return {"estado":True, "datos":maqueta}
+            return {"estado":False, "condicion":"SIN_DATOS"}
+        return {"estado":False, "condicion":"SINSELECCION"}
+
+    def lista_personas(self):
+        querys = """
+        SELECT rut_persona, CONCAT(nombres, ' ', apellidos) AS nombres
+        FROM personas
+        """
+        return self.bd.consultar(querys, all=True)
+
     def registrar_locales(self, objeto):
         objeto = her.recuperacion_sentencia(objeto)
         local = RegistrarLocales()

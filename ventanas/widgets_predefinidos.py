@@ -18,13 +18,15 @@ from kivymd.uix.button import MDRoundFlatButton
 from kivymd.uix.list import TwoLineListItem, ThreeLineListItem, MDList
 from kivymd.uix.textfield import MDTextField
 
+from core.constantes import PROTOCOLOERROR
 from entidades.menuitems import MenuGlobal
 from entidades.registronotas import RegistroNotas
+from entidades.registropersonas import RegistroPersonas
 from entidades.serviciosproductos import ServiciosProductos
 
 
 class ControlArchivos(MDFileManager):
-    def __init__(self,  funcion = None, **kargs):
+    def __init__(self, funcion=None, **kargs):
         super().__init__(**kargs)
         Window.bind(on_keyboard=self.events)
         self.search = "dirs"
@@ -32,7 +34,7 @@ class ControlArchivos(MDFileManager):
         self.manager_open = False
         self.ruta = None
         self.nombre_archivo = None
-        self.captura_archivo = NotificacionText("","Nombre Archivo", aceptar=None if funcion is None else funcion)
+        self.captura_archivo = NotificacionText("", "Nombre Archivo", aceptar=None if funcion is None else funcion)
 
     def file_manager_open(self):
         self.show(os.path.expanduser("~"))  # output manager to the screen
@@ -254,6 +256,21 @@ class MDTwoLine(TwoLineListItem):
         self.network = network
 
 
+class MDTwoLinePersonas(TwoLineListItem):
+    def __init__(self, titulo, contenido, network, **kwargs):
+        super().__init__(**kwargs)
+        self.titulo = titulo
+        self.secondary_text = contenido
+        self.network = network
+        self.dialogo = InformacionPersona(self.network, f"Rut: {self.titulo}", self.titulo)
+
+        self.bind(on_release=self.abrir)
+
+    def abrir(self, *args):
+        self.dialogo.activar()
+        self.dialogo.open()
+
+
 class NotificacionText(MDDialog):
 
     def __init__(self, title, ayuda, aceptar=None, **kargs):
@@ -294,6 +311,86 @@ class Notificacion(MDDialog):
         self.dismiss()
 
 
+class InformacionPersona(MDDialog):
+    def __init__(self, network, titulo, rut, **kwargs):
+        self.title = titulo
+        self.network = network
+        self.rut_principal = rut
+
+        self.contenedor_principal = MDBoxLayout(padding=dp(15))
+        self.scroll = ScrollView(do_scroll_x=False, do_scroll_y=True, size_hint=[None, None],width=dp(250), height=dp(100))
+        self.contenedor = MDList()
+
+        self.scroll.add_widget(self.contenedor)
+        self.contenedor_principal.add_widget(self.scroll)
+
+        self.maqueta = None
+
+        self.rut = MDTextField(hint_text="Rut", disabled=True)
+        self.nombres = MDTextField(hint_text="Nombres")
+        self.apellidos = MDTextField(hint_text="Nombres")
+        self.telefono = MDTextField(hint_text="Telefono")
+        self.celular = MDTextField(hint_text="Celular")
+        self.correo = MDTextField(hint_text="Correo")
+        self.ubicacion = MDTextField(hint_text="ubicacion")
+        self.cuenta = MDTextField(hint_text="Cuenta", disabled=True)
+        self.contenedor.add_widget(self.rut)
+        self.contenedor.add_widget(self.nombres)
+        self.contenedor.add_widget(self.apellidos)
+        self.contenedor.add_widget(self.telefono)
+        self.contenedor.add_widget(self.celular)
+        self.contenedor.add_widget(self.correo)
+        self.contenedor.add_widget(self.ubicacion)
+        self.contenedor.add_widget(self.cuenta)
+        self.type = "custom"
+
+        self.editar = MDRoundFlatButton(text="Editar", on_release=self.chequear)
+        self.cancelar = MDRoundFlatButton(text="Cerrar", on_release=self.salir)
+        self.buttons = [self.editar, self.cancelar]
+        super().__init__(**kwargs)
+        self.add_widget(self.contenedor_principal)
+
+
+
+    def chequear(self, *args):
+        noti = Notificacion("Error", "")
+        if self.nombres.text == "":
+            noti.text += "Debe Tener contenido el Nombre.\n"
+        if self.apellidos.text == "":
+            noti.text += "Debe Tener contenido el Apellido.\n"
+        if self.celular.text == "":
+            noti.text += "Debe Tener contenido el Celular.\n"
+        if self.correo.text == "":
+            noti.text += "Debe Tener contenido el Correo.\n"
+
+        if len(noti.text) >= 1:
+            noti.open()
+            return False
+        return True
+
+    def activar(self):
+        self.network.enviar({"estado": "buscar_persona_rut", "rut": self.rut_principal})
+        info = self.network.recibir()
+        if info.get("estado"):
+            self.maqueta = RegistroPersonas()
+            self.maqueta.__dict__ = info.get("datos").__dict__
+            self.rut.text = self.maqueta.rut_persona
+            self.nombres.text = self.maqueta.nombres
+            self.apellidos.text = self.maqueta.apellidos
+            self.telefono.text = self.maqueta.telefono if self.maqueta.telefono is not None else "No Asignado"
+            self.celular.text = self.maqueta.celular
+            self.correo.text = self.maqueta.correo
+            self.ubicacion.text = self.maqueta.ubicacion if self.maqueta.ubicacion is not None else "No Asignado"
+            self.cuenta.text = self.maqueta.id_cuenta
+            return
+        noti = Notificacion("Error", PROTOCOLOERROR[info.get("condicion")])
+        noti.open()
+        return
+
+    def salir(self, *Arg):
+        self.dismiss()
+
+
 class MDScreenAbstrac(MDScreen):
 
     @abstractmethod
@@ -326,7 +423,8 @@ class MDScreenAbstrac(MDScreen):
             self.network.enviar({"estado": "actualizar", "contenido": self.name})
             info = self.network.recibir()
             if not info.get("estado"):
-                noti = Notificacion("Error", info.get("condicion") if info.get("condicion") is not None else "Se ha perdido Conexion del servidor")
+                noti = Notificacion("Error", info.get("condicion") if info.get(
+                    "condicion") is not None else "Se ha perdido Conexion del servidor")
                 noti.open()
                 self.__desconectar()
 
@@ -370,8 +468,9 @@ class ItemNotaEmpresa(ItemCard):
         self.nota = MDTextField(hint_text="Nota", text=self.maqueta.nota, multiline=True)
         self.rut_empresa = MDTextField(hint_text="Rut Empresa:", text=self.maqueta.rut_asociado, disabled=True)
         self.correo = MDTextField(hint_text="Usuario", text=self.maqueta.id_cuenta, disabled=True)
-        self.fecha_creacion = MDTextField(hint_text="Fecha Creación", text=str(self.maqueta.fecha_creacion), disabled=True)
-        self.editar = MDRoundFlatButton(text= "Editar", on_release=self.editar_nota)
+        self.fecha_creacion = MDTextField(hint_text="Fecha Creación", text=str(self.maqueta.fecha_creacion),
+                                          disabled=True)
+        self.editar = MDRoundFlatButton(text="Editar", on_release=self.editar_nota)
 
         self.contenedor.add_widget(self.id_registro)
         self.scroll.add_widget(self.nota)
@@ -392,7 +491,7 @@ class ItemNotaEmpresa(ItemCard):
         info = self.network.recibir()
 
         if info.get("estado"):
-            noti = Notificacion("Exito","Se ha editado con exito!")
+            noti = Notificacion("Exito", "Se ha editado con exito!")
             noti.open()
             return
 

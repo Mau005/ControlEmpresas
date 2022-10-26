@@ -10,7 +10,6 @@ class RegistroPersonas:
         self.id_cuenta = kargs.get("id_cuenta")
         self.rut_empresa = kargs.get("rut_empresa")
         self.ubicacion = kargs.get("ubicacion")
-
     def __str__(self):
         return """
     Rut Persona: {}

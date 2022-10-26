@@ -232,6 +232,12 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "editar_nota":
                 self.actualizar_nota(datos)
 
+            if datos.get("estado") == "buscar_persona_rut":
+                self.enviar(self.querys.buscar_persona_rut(datos))
+
+            if datos.get("estado") == "lista_personas":
+                self.enviar(self.querys.lista_personas())
+
             if datos.get("estado") == "cierre_abrupto":
                 print(f"Se Desconecta usuario: {self.cuenta.nombre_cuenta}")
                 self.control_network.pendientes_desconexion.append(self.cuenta.nombre_cuenta)
