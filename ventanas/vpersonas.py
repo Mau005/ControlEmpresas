@@ -33,7 +33,8 @@ class VPersonas(MDScreenAbstrac):
                                       telefono=self.ids.telefono.text,
                                       celular=self.ids.celular.text,
                                       correo=self.ids.correo_sistema.text,
-                                      rut_empresa=self.colecciones_empresas.dato_guardar)
+                                      rut_empresa=self.colecciones_empresas.dato_guardar,
+                                      ubicacion=self.ids.ubicacion_persona.text)
             self.network.enviar(objeto.preparar())
             info = self.network.recibir()
             if info.get("estado"):
