@@ -152,10 +152,10 @@ class Querys():
         if cuenta.get("estado"):
             personas = her.recuperacion_sentencia(personas)
             querys = '''
-            INSERT INTO personas(rut_persona, nombres, apellidos, telefono, celular, correo, id_cuenta)
-            VALUES({}, {}, {}, {}, {}, {}, {}); 
+            INSERT INTO personas(rut_persona, nombres, apellidos, telefono, celular, correo, id_cuenta,  ubicacion)
+            VALUES({}, {}, {}, {}, {}, {}, {}, {}); 
             '''.format(personas.rut_persona, personas.nombres, personas.apellidos, personas.telefono, personas.celular,
-                       personas.correo, cuenta["ultimo_id"])
+                       personas.correo, cuenta["ultimo_id"], personas.ubicacion)
             self.bd.insertar(querys)
             self.registrar_personas_empresas(personas.rut_empresa, personas.rut_persona)
             return {"estado": True}
@@ -386,7 +386,7 @@ class Querys():
         print(f"inicio: {fecha_inicio} termino: {fecha_termino} departamento: {departamento}")
 
         sentencia = """
-        SELECT ga.id_gasto, eg.nombre, ga.saldo, CU.nombre_cuenta, dep.nombre_departamento, ga.fecha_creacion
+        SELECT ga.id_gasto, eg.nombre, ga.saldo, cu.nombre_cuenta, dep.nombre_departamento, ga.fecha_creacion
         FROM gastos ga
         LEFT JOIN cuentas cu ON cu.id_cuenta = ga.id_cuenta
         LEFT JOIN departamentos dep ON dep.id_departamento = ga.id_departamento
