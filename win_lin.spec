@@ -2,7 +2,6 @@
 
 import sys
 import os
-
 from kivy_deps import sdl2, glew
 
 from kivymd import hooks_path as kivymd_hooks_path

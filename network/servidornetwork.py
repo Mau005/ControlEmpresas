@@ -1,7 +1,5 @@
 from threading import Thread
-from core.constantes import TAMANIO_PAQUETE, TIMEPOESPERAUSUARIO
 from core.herramientas import Herramientas as her
-from entidades.registronotas import RegistroNotas
 from entidades.registrocuentas import RegistroCuentas
 from entidades.registropersonas import RegistroPersonas
 from network.recuperacion_cuenta import RecuperacionCuenta
@@ -43,7 +41,7 @@ class ServidorNetwork(Thread):
 
     def recibir(self):
         try:
-            datos = self.cliente.recv(TAMANIO_PAQUETE)
+            datos = self.cliente.recv(self.info["Servidor"]["paquetes"])
         except ConnectionResetError:
             return {"estado": "cierre_abrupto"}
 
@@ -320,7 +318,7 @@ class ServidorNetwork(Thread):
         self.enviar({"estado": "saludo", "contenido": "Mensaje desde el servidor FDP"})
 
     def actualizar_ventanas(self, contenido):
-        if self.tiempo_actividad >= TIMEPOESPERAUSUARIO:
+        if self.tiempo_actividad >= 60 * self.info["Servidor"]["TIMEPOESPERAUSUARIO"]:
             self.enviar({"estado": False, "contenido": "Se ha expirado el tiempo de seccion activa."})
             self.control_network.agregar_pendiente_hilos(self.cuenta.nombre_cuenta)
         if self.ventana_actual == contenido:

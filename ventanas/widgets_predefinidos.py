@@ -326,7 +326,7 @@ class MDScreenAbstrac(MDScreen):
             self.network.enviar({"estado": "actualizar", "contenido": self.name})
             info = self.network.recibir()
             if not info.get("estado"):
-                noti = Notificacion("Error", info.get("condicion"))
+                noti = Notificacion("Error", info.get("condicion") if info.get("condicion") is not None else "Se ha perdido Conexion del servidor")
                 noti.open()
                 self.__desconectar()
 

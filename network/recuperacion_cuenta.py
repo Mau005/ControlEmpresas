@@ -1,4 +1,3 @@
-from core.constantes import TIEMPOESPERADIGITO
 from core.herramientas import Herramientas as her
 
 
@@ -17,6 +16,7 @@ class RecuperacionCuenta():
         self.intentos = 0
         self.servicio_correos = servicio_correos
         self.control_network = control_network
+        self.tiempo_recuperacion = 60 * her.cargar_json("data/ConfiguracionServidor.json")["Servidor"]["TIEMPOESPERADIGITO"]
 
     def iniciar(self, correo):
         """
@@ -26,7 +26,6 @@ class RecuperacionCuenta():
         """
         self.correo = correo
         self.digito = str(her.numero_aleatorio())
-        self.tiempo_recuperacion = TIEMPOESPERADIGITO
         mensaje = her.cargar_archivo("data/correos/Recuperacion_Cuenta.msg", "Se cargo mensaje correo")
         self.servicio_correos.enviar_mensaje(self.correo, "kastachana: Recuperación de Cuenta", mensaje.format(self.correo, self.digito))
         self.control_network.agregar_control_recuperacion(self.correo, self.digito)

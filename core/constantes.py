@@ -1,4 +1,4 @@
-TAMANIO_PAQUETE = 1024
+TAMANIO_PAQUETE = 2048
 IP = "localhost"
 PORT = 7171
 
@@ -11,11 +11,5 @@ PROTOCOLOERROR = {"USUARIOACTIVO": "Usuario ya se encuentra activo en el sistema
                   "REGISTRARCUENTA":"Hubo un problema al poder registrar la cuenta de este usuario",
                   "RUT_EXISTE":"Este usuario ya se encuentra registrado",
                   "SINSELECCION":"No Se ha ingresado una seleccion correspondiente"}
-
-ERRORPRIVILEGIOS = "No tienes los privilegios para ejercer esta accion"
-TIEMPOACTUALIZAR = 1  # segundos
-REVISARCORREOS = 2
-TIMEPOESPERAUSUARIO = 60 * 5
-TIEMPOESPERADIGITO = 60 * 5
 
 DIA_SEMANA = {1: "Lunes", 2: "Martes", 3: "Miercoles", 4: "Jueves", 5: "Viernes", 6: "Sabado", 7: "Domingo"}

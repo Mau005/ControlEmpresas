@@ -10,7 +10,13 @@
         "MOTD": "Bienvenido a Kastachana",
         "Version": 0.1,
         "ip": "localhost",
-        "port": 7171
+        "port": 7171,
+        "paquetes": 2048,
+        "TIEMPOACTUALIZAR": 1,
+        "REVISARCORREOS": 2,
+        "TIMEPOESPERAUSUARIO": 5,
+        "TIEMPOESPERADIGITO": 5
+
     },
     "Correo": {
         "correo": "no-reply@lostrespinos.cl",
