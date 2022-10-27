@@ -20,6 +20,14 @@ class VPersonas(MDScreenAbstrac):
             noti.text += "El Correo debe ser correcto ejemplo: tuempresa@tudominio.cl\n"
             estado = False
 
+        if len(self.ids.celular.text) > 12:
+            noti.text += "El Celular debe tener almenos 12 caracteres\n"
+            estado = False
+
+        if len(self.ids.telefono.text) > 13:
+            noti.text += "El Telefono debe tener almenos 12 caracteres\n"
+            estado = False
+
         rut_verificado = her.verificar_rut(self.ids.rut.text)
 
         if not rut_verificado[0]:

@@ -26,9 +26,10 @@
                 on_release: root.cambiar_screen("cuenta")
 
             MDNavigationRailItem:
-                text: "Git"
-                icon: "git"
+                text: "Salir"
+                icon: "exit-run"
                 font_name: "nasalization-rg.ttf"
+                on_release: root.salir()
 
         ScreenManager:
             orientation: "horizontal"
@@ -64,8 +65,9 @@
                                 spacing: dp(20)
                                 id: contenedor_notificaciones
 
-                                OneLineListItem:
+                                TwoLineListItem:
                                     text: "Crear Servicios Mensuales"
+                                    secondary_text: "Podra crear servicios de tipo mensual."
                                     on_release: root.cambiar_ventanta("serviciosmensuales")
                                 OneLineListItem:
                                     text: "Crear Servicios Diarios"
@@ -129,7 +131,7 @@
                         MDLabel:
                             size_hint_y: .1
                             font_size: dp(45)
-                            text: "Listados"
+                            text: "Asignar"
                             halign: "center"
                         ScrollView:
                             do_scroll_x: False
@@ -160,7 +162,7 @@
                         orientation: "vertical"
                         MDLabel:
                             font_size: dp(45)
-                            text: "Listados"
+                            text: "Mi Cuenta"
                             halign: "center"
                         ScrollView:
                             do_scroll_x: False
@@ -168,79 +170,12 @@
                             MDList:
                                 padding: dp(35)
                                 spacing: dp(20)
-
-<Casa2>:
-    lista_productos:lista_productos
-
-    FitImage:
-        source: "data/imagenes/wallpaper2.jpg"
-    MDCard:
-        orientation: "vertical"
-        size_hint: .9, .9
-        elevation: 5
-        pos_hint : {"center_x": .5, "center_y": .5}
-
-        MDBottomNavigation:
-            MDBottomNavigationItem:
-                name: 'screen 1'
-                text: 'Mis Notificaciones'
-                icon: 'note'
-
-                ScrollView:
-                    do_scroll_x: False
-                    do_scroll_y: True
-                    MDList:
-                        padding: dp(35)
-                        spacing: dp(20)
-                        id: contenedor_notificaciones
-
-
-
-
-            MDBottomNavigationItem:
-                name: 'screen 2'
-                text: 'Herramientas'
-                icon: 'tools'
-
-                ScrollView:
-                    do_scroll_x: False
-                    do_scroll_y: True
-                    MDList:
-                        padding: dp(35)
-                        spacing: dp(20)
-                        MDLabel:
-                            text: 'Herramientas'
-                            halign: 'center'
-                            font_size: dp(45)
-
-
-
-
-
-
-            MDBottomNavigationItem:
-                name: 'Configuraciòn'
-                text: "Configuracion"
-                icon: 'account'
-
-                ScrollView:
-                    do_scroll_x: False
-                    do_scroll_y: True
-                    MDList:
-                        id: lista_productos
-                        padding: dp(35)
-                        spacing: dp(20)
-                        MDLabel:
-                            text: "Configuración"
-                            halign: "center"
-                            font_size: dp(45)
-                        OneLineListItem:
-                            text: "Mi Cuenta"
-                        OneLineListItem:
-                            text: "Themas"
-                        OneLineListItem:
-                            text: "Ayuda"
-                        OneLineListItem:
-                            text: "Salir"
-                            on_release: root.salir()
-
+                                MDTextField:
+                                    hint_text: "Usuario"
+                                    disabled: True
+                                MDTextField:
+                                    hint_text: "Contraseña"
+                                MDTextField:
+                                    hint_text: "Repetir Contraseña"
+                                MDRaisedButton:
+                                    text: "Editar"
