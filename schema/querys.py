@@ -1,5 +1,6 @@
 from entidades.registrargastos import RegistrarGastos
 from entidades.registrarlocales import RegistrarLocales
+from entidades.registrocuentas import RegistroCuentas
 from entidades.registronotas import RegistroNotas
 from entidades.registroempresas import RegistroEmpresas
 from entidades.registrardepartamento import RegistrarDepartamento
@@ -437,7 +438,7 @@ class Querys():
         return self.bd.insertar(querys)
 
     def buscar_persona_rut(self, datos):
-        querys= '''
+        querys = '''
         SELECT pe.rut_persona, pe.nombres, pe.apellidos, pe.telefono, pe.celular, pe.correo, pe.ubicacion, cu.nombre_cuenta
         FROM personas pe
         INNER JOIN cuentas cu ON cu.id_cuenta = pe.id_cuenta
@@ -457,9 +458,9 @@ class Querys():
                     ubicacion=datos[6],
                     id_cuenta=datos[7]
                 )
-                return {"estado":True, "datos":maqueta}
-            return {"estado":False, "condicion":"SIN_DATOS"}
-        return {"estado":False, "condicion":"SINSELECCION"}
+                return {"estado": True, "datos": maqueta}
+            return {"estado": False, "condicion": "SIN_DATOS"}
+        return {"estado": False, "condicion": "SINSELECCION"}
 
     def lista_personas(self):
         querys = """
@@ -528,3 +529,35 @@ class Querys():
         VALUES ('{}', '{}')
         """.format(id_grupo, rut_Trabajador)
         return self.bd.insertar(querys)
+
+    def buscar_trabajador_rut(self, rut: str) -> RegistroTrabajador:
+        querys = """
+        SELECT * 
+        FROM trabajadores
+        WHERE rut_persona = '{}'
+        """.format(rut)
+        # rut_persona	id_departamento	sueldo	dia_pago
+        info = self.bd.consultar(querys)
+        if info.get("estado"):
+            datos = info.get("datos")
+            return RegistroTrabajador(rut_persona=datos[0],
+                                      id_departamento=datos[1],
+                                      sueldo=datos[2],
+                                      dia_pago=datos[3])
+        return None
+
+    def buscar_servicios(self, trabajador: RegistroTrabajador):
+        if trabajador is None:
+            return {"estado":False}
+        querys = """
+        SELECT ser.id_servicios, ser.nombre_servicio, ser.url_posicion, ser.ubicacion, ser.descripcion,
+        pe.nombres, pe.apellidos, pe.celular, pe.telefono,
+        est.nombre_estado
+        
+        FROM servicios ser
+        INNER JOIN personas pe ON pe.rut_persona = ser.rut_usuario
+        INNER JOIN estados est ON est.id_estado = ser.id_estado
+        WHERE ser.id_departamento = {}
+        """.format(trabajador.id_departamento)
+        print(querys)
+        return self.bd.consultar(querys, all=True)

@@ -1,33 +1,30 @@
 
 
-<VNotasEmpresas>:
+<VListaNotasPersonas>:
+    contenedor_registros:contenedor_registros
     MDBoxLayout:
         orientation: "vertical"
         spacing: dp(20)
         padding: dp(10)
         MDCard:
+            size_hint_y: .15
             elevation: 5
             pos_hint: {"center_x": .5, "center_y": .5}
-            size_hint: .9,.9
-            ScrollView:
-                do_scroll_x: False
-                do_scroll_y: True
-                MDList:
-                    padding: dp(45)
-                    spacing: dp(15)
-                    MDRaisedButton:
-                        text: "Rut Empresa:"
-                        id: boton_empresas
-
-                    MDTextField:
-                        id: nota_empresas
-                        size_hint_y : None
-                        hint_text: "Nota"
-                        height: dp(300)
-                        multiline: True
-                        max_text_length: 250
-                        helper_text_mode: "on_error"
-                        helper_text: "maximo 250 caracteres"
+            padding: dp(15)
+            MDBoxLayout:
+                pos_hint: {"center_x": .5, "center_y": .5}
+                MDLabel:
+                    text: "Buscar: "
+                MDRoundFlatButton:
+                    text: "Rut Persona"
+                    id: rut_persona
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+            MDList:
+                id: contenedor_registros
+                spacing: dp(15)
+                padding: dp(20)
 
         MDCard:
             orientation: "vertical"
@@ -40,7 +37,7 @@
                 spacing: dp(12)
                 pos_hint: {"center_x": .5, "center_y": .5}
                 MDRoundFlatButton:
-                    text: "Crear"
+                    text: "Buscar Empresas"
                     on_release: root.crear()
                 MDRoundFlatButton:
                     text: "Formatear"

@@ -1,11 +1,12 @@
+
 <VServiciosMensuales>:
     MDBoxLayout:
         orientation: "vertical"
         spacing: dp(20)
         padding: dp(10)
-        MDCard:
+        MDCardPre:
             orientation: "vertical"
-            elevation: 5
+            radius: 45
             pos_hint: {"center_x": .5, "center_y": .5}
             size_hint: .9,.9
             spacing: dp(40)
@@ -23,14 +24,14 @@
                     MDTextField:
                         hint_text: "Nombre Servicio:"
                         id: nombre
-                    MDRaisedButton:
+                    MDRoundFlatButton:
                         id: id_estado
                         text: "Estados:"
                         pos_hint: {"center_x": .5, "center_y": .5}
-                    MDRaisedButton:
+                    MDRoundFlatButton:
                         text: "Rut Cliente:"
                         id: boton_rut_cliente
-                    MDRaisedButton:
+                    MDRoundFlatButton:
                         text: "Departamento:"
                         id: boton_departamentos
                     MDTextField:
@@ -53,10 +54,9 @@
                     MDBoxLayout:
                         size_hint_y: None
                         height: dp(200)
-                        MDCard:
-                            style: "outlined"
-                            elevation: 4
+                        MDCardPre:
                             orientation: "vertical"
+                            radius: 45
                             ScrollView:
                                 do_scroll_x: False
                                 do_scroll_y: True
@@ -88,10 +88,10 @@
                     MDRaisedButton:
                         text: "Agregar Producto"
                         id:btn_agregar_productos
-        MDCard:
+        MDCardPre:
+            size_hint: .9,.1
             orientation: "vertical"
-            size_hint: .9, .1
-            elevation: 5
+            radius: 45
             pos_hint: {"center_x": .5, "center_y": .5}
             padding: dp(5)
             MDBoxLayout:
@@ -107,5 +107,3 @@
                 MDRoundFlatButton:
                     text: "Volver"
                     on_release: root.siguiente()
-
-                

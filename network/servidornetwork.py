@@ -2,6 +2,7 @@ from threading import Thread
 from core.herramientas import Herramientas as her
 from entidades.registrocuentas import RegistroCuentas
 from entidades.registropersonas import RegistroPersonas
+from entidades.registrotrabajador import RegistroTrabajador
 from network.recuperacion_cuenta import RecuperacionCuenta
 from entidades.registrousaurios import RegistroUsuarios
 from servicios_correos.base_correos import Base_Correos
@@ -14,6 +15,7 @@ class ServidorNetwork(Thread):
         self.__variable_usuarios()
         self.cuenta = RegistroCuentas()
         self.persona = RegistroPersonas()
+        self.trabajador = None
         self.cliente = cliente
         self.direccion = direccion
         self.querys = querys
@@ -82,10 +84,9 @@ class ServidorNetwork(Thread):
                     celular=persona_temp["datos"][4],
                     correo=persona_temp["datos"][5],
                 )
-
+                self.trabajador = self.querys.buscar_trabajador_rut(self.persona.rut_persona)
             info.update({"MOTD": self.info["Servidor"]["MOTD"], "condicion": "iniciando"})
             self.control_network.agregar_hilo(self)
-
             return self.enviar(info)
         self.cuenta = RegistroCuentas()
         return self.enviar({"estado": False, "condicion": "CONTRASEÑAS"})
@@ -237,6 +238,9 @@ class ServidorNetwork(Thread):
 
             if datos.get("estado") == "lista_personas":
                 self.enviar(self.querys.lista_personas())
+
+            if datos.get("estado") == "mis trabajos":
+                self.enviar(self.querys.buscar_servicios(self.trabajador))
 
             if datos.get("estado") == "cierre_abrupto":
                 print(f"Se Desconecta usuario: {self.cuenta.nombre_cuenta}")

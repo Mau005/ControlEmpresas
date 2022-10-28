@@ -6,7 +6,7 @@ from kivy.properties import ObjectProperty
 
 
 class Contenido(MDBoxLayout):
-    '''Custom content.'''
+    pass
 
 
 class Casa(MDScreenAbstrac):
@@ -15,8 +15,9 @@ class Casa(MDScreenAbstrac):
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
         self.mis_servicios = None
+        self.mis_trabajos = None
 
-    def activar(self):
+    def activar_servicios(self):
         self.network.enviar({"estado": "mis servicios"})
         info = self.network.recibir()
 
@@ -38,13 +39,34 @@ class Casa(MDScreenAbstrac):
                             tertiary_text=f"Estado: {elementos[5]}"
                         )
                     )
-        #self.network.enviar({"estado":"mis rutas"})
-        #info = self.network.recibir()
 
-        #if info.get("estado"):
-        #    pass
+    def activar_servicios_trabajador(self):
+        self.network.enviar({"estado": "mis trabajos"})
+        info = self.network.recibir()
 
-        #super().activar()
+        if info.get("estado"):
+            if not len(info.get("datos")) == 0:
+                self.mis_trabajos = MDExpansionPanel(
+                    icon="arrow-right-bold-hexagon-outline",
+                    content=Contenido(orientation="vertical"),
+                    panel_cls=MDExpansionPanelOneLine(
+                        text="Mis Trabajos",
+                    )
+                )
+                self.ids.contenedor_notificaciones.add_widget(self.mis_trabajos)
+                for elementos in info.get("datos"):
+                    self.mis_trabajos.content.add_widget(
+                        MDExpansionPanelThreeLine(
+                            text=f"Servicio {elementos[0]} {elementos[1]} Estado: {elementos[9]}",
+                            secondary_text=f"Ubicación: {elementos[3]}",
+                            tertiary_text=f"Descripción: {elementos[4]}"
+                        )
+                    )
+
+    def activar(self):
+        self.ids.contenedor_notificaciones.clear_widgets()
+        self.activar_servicios()
+        self.activar_servicios_trabajador()
 
     def cambiar_screen(self, name):
         self.ids.manejador_menus.current = name

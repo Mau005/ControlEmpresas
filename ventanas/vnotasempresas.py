@@ -14,6 +14,11 @@ class VNotasEmpresas(MDScreenAbstrac):
             noti = Notificacion("Error", "Debe indicar una nota para gestionarla")
             noti.open()
             return
+        if len(self.ids.nota_empresas.text) > 250:
+            noti = Notificacion("Error", "Las Notas deben tener un maximo de 250 caracteres")
+            noti.open()
+            return
+
         if self.ids.boton_empresas.text == "Rut Empresa:":
             noti = Notificacion("Error", "Debe indicar que empresa")
             noti.open()

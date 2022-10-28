@@ -14,6 +14,10 @@ class VNotasPersonas(MDScreenAbstrac):
             noti = Notificacion("Error", "Debe indicar una nota para gestionarla")
             noti.open()
             return
+        if len(self.ids.nota_persona.text) > 250:
+            noti = Notificacion("Error", "Las Notas deben ser ingresadas en 250 caracteres")
+            noti.open()
+            return
         if self.ids.boton_persona.text == "Rut Persona:":
             noti = Notificacion("Error", "Debe indicar que persona")
             noti.open()
