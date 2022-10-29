@@ -230,6 +230,9 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "listado_notas_empresa_especifica":
                 self.enviar(self.querys.listado_notas_empresa_especifica(datos.get("contenido")))
 
+            if datos.get("estado") == "listado_notas_persona_especifica":
+                self.enviar(self.querys.listado_notas_persona_especifica(datos.get("contenido")))
+
             if datos.get("estado") == "editar_nota":
                 self.actualizar_nota(datos)
 

@@ -523,6 +523,26 @@ class Querys():
         datos.update({"datos": lista_notas})
         return datos
 
+    def listado_notas_persona_especifica(self, contenido):
+        querys = """
+            SELECT n.id_nota, pe.rut_persona, n.nota, n.fecha_creacion, cu.nombre_cuenta
+            FROM notas n
+            INNER JOIN personas_notas pe
+                ON pe.id_nota = n.id_nota
+            INNER JOIN cuentas cu
+                ON cu.id_cuenta = n.id_cuenta
+            WHERE pe.rut_persona = "{}"
+            GROUP BY n.fecha_creacion DESC;
+        """.format(contenido)
+        datos = self.bd.consultar(querys, all=True)
+        lista_notas = []
+        for nota in datos.get("datos"):
+            lista_notas.append(RegistroNotas(id_registro=nota[0], rut_asociado=nota[1],
+                                             nota=nota[2], fecha_creacion=nota[3],
+                                             id_cuenta=nota[4]))
+        datos.update({"datos": lista_notas})
+        return datos
+
     def asignar_grupo(self, rut_Trabajador, id_grupo):
         querys = """
         INSERT INTO grupos_trabajadores(ID_GRUPO, RUT_TRABAJADOR) 

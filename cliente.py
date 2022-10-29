@@ -3,6 +3,9 @@ from kivymd.uix.screenmanager import MDScreenManager
 from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.core.window import Window
+
+from ventanas.vlistanotaspersonas import VListaNotasPersonas
+
 Window.maximize()
 
 from ventanas.vgastos_fechas import VGastosFechas
@@ -66,6 +69,8 @@ class ControlEmpresas(MDApp):
         self.vserviciosdiarios = VServiciosDiarios(self.network, self.manejador, "serviciosdiarios", siguiente="casa")
         self.vgastos_fechas = VGastosFechas(self.network, self.manejador, "gastos_fechas", siguiente="casa")
         self.vlistapersonas = VListasPersonas(self.network, self.manejador, "lista_personas", siguiente="casa")
+        self.vlistanotaspersonas = VListaNotasPersonas(self.network, self.manejador, "lista_notas_personas",
+                                                       siguiente="casa")
 
         self.manejador.add_widget(self.login)
         self.manejador.add_widget(self.casa)
@@ -87,6 +92,7 @@ class ControlEmpresas(MDApp):
         self.manejador.add_widget(self.vserviciosdiarios)
         self.manejador.add_widget(self.vgastos_fechas)
         self.manejador.add_widget(self.vlistapersonas)
+        self.manejador.add_widget(self.vlistanotaspersonas)
         self.login.activar()
 
     def actualizar(self, dt):
