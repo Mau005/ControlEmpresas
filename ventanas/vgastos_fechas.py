@@ -52,8 +52,8 @@ class VGastosFechas(MDScreenAbstrac):
             self.ids.rango_fechas.text = f"{str(self.fecha_inicio)} al {str(self.fecha_termino)}"
             return
         self.fecha_inicio = rango_fecha[0]
-        self.fecha_termino = "Sin Asignar"
-        self.ids.rango_fechas.text = f"{str(self.fecha_inicio)} al {str(self.fecha_termino)}"
+        self.fecha_termino = None
+        self.ids.rango_fechas.text = f"{str(self.fecha_inicio)} al Sin Asignar"
         return
 
     def crear(self, *arg):
@@ -63,7 +63,7 @@ class VGastosFechas(MDScreenAbstrac):
 
         estructura = {"estado": "listado_gastos_fechas",
                       "fecha_inicio": str(self.fecha_inicio),
-                      "fecha_termino": str(self.fecha_termino),
+                      "fecha_termino": str(self.fecha_termino) if self.fecha_termino is not None else None,
                       "departamento": self.coleccion_departamentos.dato_guardar}
 
         self.network.enviar(estructura)
@@ -108,6 +108,8 @@ class VGastosFechas(MDScreenAbstrac):
         self.ids.departamentos.text = "Departamento:"
         self.ids.contenedor_gastos.clear_widgets()
         self.ids.total_gastos.text = "Total Gasto:"
+        self.fecha_termino = None
+        self.fecha_inicio = None
         self.lista_datos = []
         self.gastototal = 0
         self.coleccion_departamentos.dato_guardar = None
