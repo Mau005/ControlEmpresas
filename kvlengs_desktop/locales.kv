@@ -3,51 +3,59 @@
 
 <VLocales>:
     MDBoxLayout:
-        orientation: "vertical"
-        spacing: dp(20)
-        padding: dp(10)
-        MDCard:
-            size_hint: .9, .9
-            elevation: 5
-            pos_hint: {"center_x": .5, "center_y": .5}
-            ScrollView:
-                do_scroll_x: False
-                do_scroll_y: True
-                MDList:
-                    padding: dp(30)
-                    spacing: dp(25)
-                    MDLabel:
-                        text: "Crear Locales"
-                        font_size: dp(25)
-                    MDTextField:
-                        hint_text: "Nombre Local"
-                        id:nombre_local
-                        helper_text: "max 100 caracteres"
-                    MDTextField:
-                        id: telefono
-                        hint_text: "Telefono: "
-                        helper_text: "max 12 caracteres"
-                    MDTextField:
-                        id: direccion
-                        hint_text: "Direccion"
-                        helper_text: "calle numero, comuna"
+        orientation: "horizontal"
+        MDNavigationRail:
+            anchor: "center"
+            size_hint_x: .1
+            elevation: .4
+            MDNavigationRailItem:
+                text: "Gastos por Fechas"
+                icon: "arrow-down-bold-hexagon-outline"
+                font_name: "nasalization-rg.ttf"
 
-        MDCard:
+            MDNavigationRailItem:
+                text: "Crear"
+                icon: "pencil"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.crear()
+
+            MDNavigationRailItem:
+                text: "Limpiar"
+                icon: "autorenew"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.formatear()
+
+
+            MDNavigationRailItem:
+                text: "Volver"
+                icon: "keyboard-return"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.siguiente()
+        MDBoxLayout:
             orientation: "vertical"
-            size_hint: .9, .1
-            elevation: 5
-            pos_hint: {"center_x": .5, "center_y": .5}
-            padding: dp(5)
-            MDBoxLayout:
-                adaptive_size: True
-                spacing: dp(12)
+            spacing: dp(20)
+            padding: dp(10)
+            MDCardPre:
+                size_hint: .9, .9
                 pos_hint: {"center_x": .5, "center_y": .5}
-                MDRoundFlatButton:
-                    text: "Crear"
-                    on_release: root.crear()
-                MDRoundFlatButton:
-                    text: "Formatear"
-                    on_release: root.formatear()
-                MDRoundFlatButton:
-                    text: "Volver"
-                    on_release: root.siguiente()
+                ScrollView:
+                    do_scroll_x: False
+                    do_scroll_y: True
+                    MDList:
+                        padding: dp(30)
+                        spacing: dp(25)
+                        MDLabel:
+                            text: "Crear Locales"
+                            font_size: dp(25)
+                        MDTextField:
+                            hint_text: "Nombre Local"
+                            id:nombre_local
+                            helper_text: "max 100 caracteres"
+                        MDTextField:
+                            id: telefono
+                            hint_text: "Telefono: "
+                            helper_text: "max 12 caracteres"
+                        MDTextField:
+                            id: direccion
+                            hint_text: "Direccion"
+                            helper_text: "calle numero, comuna"

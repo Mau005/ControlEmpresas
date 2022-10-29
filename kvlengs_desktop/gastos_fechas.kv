@@ -1,68 +1,74 @@
 <VGastosFechas>:
     MDBoxLayout:
-        orientation: "vertical"
-        spacing: dp(20)
-        padding: dp(10)
-        MDCard:
-            size_hint: .9, .9
-            elevation: 5
-            pos_hint: {"center_x": .5, "center_y": .5}
-            ScrollView:
-                do_scroll_x: False
-                do_scroll_y: True
-                MDList:
-                    padding: dp(30)
-                    spacing: dp(25)
-                    MDLabel:
-                        text: "Solicitar Gastos Por Fechas"
-                        font_size: dp(25)
-                    MDRaisedButton:
-                        text: "00/00/00 al 00/00/00"
-                        id: rango_fechas
-                        on_release:root.desplegar_fechas()
+        orientation: "horizontal"
+        MDNavigationRail:
+            anchor: "center"
+            size_hint_x: .1
+            elevation: .4
+            MDNavigationRailItem:
+                text: "Gastos por Fechas"
+                icon: "arrow-down-bold-hexagon-outline"
+                font_name: "nasalization-rg.ttf"
 
-                    MDRaisedButton:
-                        id: departamentos
-                        text: "Departamento:"
-                    MDBoxLayout:
-                        size_hint_y: None
-                        height: dp(250)
-                        MDCard:
-                            line_color:(0.2, 0.2, 0.2, 0.8)
-                            style: "outlined"
-                            shadow_softness: 12
-                            shadow_offset: (0, 2)
-                            ScrollView:
-                                do_scroll_x: False
-                                do_scroll_y: True
-                                MDList:
-                                    id: contenedor_gastos
-                    MDLabel:
-                        text: "Total Gasto:"
-                        style: "H5"
-                        id: total_gastos
+            MDNavigationRailItem:
+                text: "Buscar"
+                icon: "layers-search-outline"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.crear()
 
-                    MDRaisedButton:
-                        text: "Exportar Excel"
-                        on_release: root.desplegar_archivos()
+            MDNavigationRailItem:
+                text: "Limpiar"
+                icon: "autorenew"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.formatear()
 
 
-        MDCard:
+            MDNavigationRailItem:
+                text: "Volver"
+                icon: "keyboard-return"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.siguiente()
+        MDBoxLayout:
             orientation: "vertical"
-            size_hint: .9, .1
-            elevation: 5
-            pos_hint: {"center_x": .5, "center_y": .5}
-            padding: dp(5)
-            MDBoxLayout:
-                adaptive_size: True
-                spacing: dp(12)
+            spacing: dp(20)
+            padding: dp(10)
+            MDCardPre:
+                size_hint: .9, .9
                 pos_hint: {"center_x": .5, "center_y": .5}
-                MDRoundFlatButton:
-                    text: "Buscar"
-                    on_release: root.crear()
-                MDRoundFlatButton:
-                    text: "Formatear"
-                    on_release: root.formatear()
-                MDRoundFlatButton:
-                    text: "Volver"
-                    on_release: root.siguiente()
+                ScrollView:
+                    do_scroll_x: False
+                    do_scroll_y: True
+                    MDList:
+                        padding: dp(30)
+                        spacing: dp(25)
+                        MDLabel:
+                            text: "Solicitar Gastos Por Fechas"
+                            font_size: dp(25)
+
+                        MDBoxLayout:
+                            adaptive_size: True
+                            pos_hint: {"center_x":.5, "center_y": .5}
+                            MDRoundFlatButton:
+                                id: departamentos
+                                text: "Departamento:"
+                            MDRoundFlatButton:
+                                text: "00/00/00 al 00/00/00"
+                                id: rango_fechas
+                                on_release:root.desplegar_fechas()
+                        MDBoxLayout:
+                            size_hint_y: None
+                            height: dp(250)
+                            MDCardPre:
+                                ScrollView:
+                                    do_scroll_x: False
+                                    do_scroll_y: True
+                                    MDList:
+                                        id: contenedor_gastos
+                        MDLabel:
+                            text: "Total Gasto:"
+                            style: "H5"
+                            id: total_gastos
+
+                        MDRoundFlatButton:
+                            text: "Exportar Excel"
+                            on_release: root.desplegar_archivos()

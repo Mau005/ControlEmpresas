@@ -1,4 +1,4 @@
-from ventanas.widgets_predefinidos import MDScreenAbstrac, MDTreeLine
+from ventanas.widgets_predefinidos import MDScreenAbstrac, MDTreeLine, Notificacion
 from kivy.properties import ObjectProperty
 
 
@@ -28,6 +28,9 @@ class VListaProductos(MDScreenAbstrac):
                 self.contenedor.add_widget(obj)
         super().activar()
 
+    def crear(self, *args):
+        noti = Notificacion("Error", "Se Encuentra contruyendo esta seccion")
+        noti.open()
     def siguiente(self, *dt):
         self.formatear()
         return super().siguiente(*dt)

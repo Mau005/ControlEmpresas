@@ -111,19 +111,19 @@ class Entrada(MDScreenAbstrac):
             noti.open()
             return None
 
-        if info.get("condicion") == "recuperacion":
+        condicion = info.get("condicion")
+
+        if condicion == "recuperacion":
             self.noti_recuperacion_digito.open()
-
-        elif info.get("condicion") == "usuarioactivo":
-            noti = Notificacion("Error", "Usuario ya se encuentra ingresado.")
-
-        elif info.get("condicion") == "contraseñas":
-            noti = Notificacion("Error", "Usuario o Contraseñas incorrectas")
-
-        elif info.get("condicion") == "NETWORK":  # condicion local
+            return
+        elif condicion == "NETWORK":  # condicion local
             noti = Notificacion("Error", PROTOCOLOERROR[
                 info.get("condicion")] + " Desea intentar conectarse Nuevamente? ",
                                 funcion_concurrente=self.network.iniciar)
+            noti.open()
+            return
+        else:
+            noti = Notificacion("Error", PROTOCOLOERROR[condicion])
             noti.open()
             return
 

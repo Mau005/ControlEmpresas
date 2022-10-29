@@ -2,136 +2,148 @@
 
 <VServiciosDiarios>:
     MDBoxLayout:
-        orientation: "vertical"
-        spacing: dp(20)
-        padding: dp(10)
-        MDCard:
-            orientation: "vertical"
-            elevation: 5
-            pos_hint: {"center_x": .5, "center_y": .5}
-            size_hint: .9,.9
-            spacing: dp(40)
-            MDLabel:
-                halign: "center"
-                font_size : dp(30)
-                size_hint_y: .1
-                text: "Registrar Servicios Diarios"
-            ScrollView:
-                do_scroll_x: False
-                do_scroll_y: True
-                MDList:
-                    padding: dp(30)
-                    spacing: dp(15)
-                    MDTextField:
-                        hint_text: "Nombre Servicio:"
-                        id: nombre
-                    MDRaisedButton:
-                        id: id_estado
-                        text: "Estados:"
-                        pos_hint: {"center_x": .5, "center_y": .5}
-                    MDRaisedButton:
-                        text: "Rut Cliente:"
-                        id: boton_rut_cliente
-                    MDRaisedButton:
-                        text: "Departamento:"
-                        id: boton_departamentos
-                    MDTextField:
-                        hint_text: "URL Posicion:"
-                        id: url_posicion
-                    MDTextField:
-                        hint_text: "Ubicacion:"
-                        id: ubicacion
-                    MDTextField:
-                        id:descr
-                        hint_text: "Descripcion:"
-                        multiline: True
-                    MDGridLayout:
-                        cols: 4
-                        size_hint_y: None
-                        height: dp(350)
-                        MDLabel:
-                            text: "Lunes"
-                        MDCheckbox:
-                            id: lunes
-                        MDLabel:
-                            text: "Martes"
-                        MDCheckbox:
-                            id: martes
-                        MDLabel:
-                            text: "Miercoles"
-                        MDCheckbox:
-                            id: miercoles
-                        MDLabel:
-                            text: "Jueves"
-                        MDCheckbox:
-                            id: jueves
-                        MDLabel:
-                            text: "Viernes"
-                        MDCheckbox:
-                            id: viernes
-                        MDLabel:
-                            text: "Sabado"
-                        MDCheckbox:
-                            id: sabado
-                        MDLabel:
-                            text: "Domingo"
-                        MDCheckbox:
-                            id: domingo
+        orientation: "horizontal"
+        MDNavigationRail:
+            anchor: "center"
+            size_hint_x: .1
+            elevation: .4
+            MDNavigationRailItem:
+                text: "Crear Servicios"
+                icon: "arrow-down-bold-hexagon-outline"
+                font_name: "nasalization-rg.ttf"
 
-                    MDBoxLayout:
-                        size_hint_y: None
-                        height: dp(200)
-                        MDCard:
-                            style: "outlined"
-                            elevation: 4
-                            orientation: "vertical"
-                            ScrollView:
-                                do_scroll_x: False
-                                do_scroll_y: True
-                                MDList:
-                                    id:contenedor_objetos
-                    MDBoxLayout:
-                        orientation: "vertical"
-                        size_hint_y: None
-                        height: dp(75)
-                        MDLabel:
-                            theme_text_color: "Custom"
-                            text_color : 0, 1, 0, 1
-                            text: "NETO"
-                            id: neto
-                            font_style: "H5"
-                        MDLabel:
-                            theme_text_color: "Custom"
-                            text_color : 0, 1, 0, 1
-                            text: "IVA"
-                            font_style: "H5"
-                            id: iva
-                        MDLabel:
-                            theme_text_color: "Custom"
-                            text_color : 0, 1, 0, 1
-                            font_style: "H5"
-                            text: "Total: "
-                            id: total_servicio_mensual
+            MDNavigationRailItem:
+                text: "Crear"
+                icon: "pencil"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.crear()
 
-                    MDRaisedButton:
-                        text: "Agregar Producto"
-                        id:btn_agregar_productos
-        MDCard:
+            MDNavigationRailItem:
+                text: "Limpiar"
+                icon: "autorenew"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.formatear()
+
+
+            MDNavigationRailItem:
+                text: "Volver"
+                icon: "keyboard-return"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.siguiente()
+        MDBoxLayout:
             orientation: "vertical"
-            size_hint: .9, .1
-            elevation: 5
-            pos_hint: {"center_x": .5, "center_y": .5}
-            padding: dp(5)
-            MDBoxLayout:
-                adaptive_size: True
-                spacing: dp(12)
+            spacing: dp(20)
+            padding: dp(10)
+            MDCardPre:
+                orientation: "vertical"
+                orientation: "vertical"
                 pos_hint: {"center_x": .5, "center_y": .5}
-                MDRoundFlatButton:
-                    text: "Crear"
-                    on_release: root.crear()
-                MDRoundFlatButton:
-                    text: "Formatear"
-                    on_release: root.formatear()
-                MDRoundFlatButton:
-                    text: "Volver"
-                    on_release: root.siguiente()
+                size_hint: .9,.9
+                spacing: dp(40)
+                MDLabel:
+                    halign: "center"
+                    font_size : dp(30)
+                    size_hint_y: .1
+                    text: "Registrar Servicios Diarios"
+                ScrollView:
+                    do_scroll_x: False
+                    do_scroll_y: True
+                    MDList:
+                        padding: dp(30)
+                        spacing: dp(15)
+                        MDTextField:
+                            hint_text: "Nombre Servicio:"
+                            id: nombre
+                        MDBoxLayout:
+                            adaptive_size: True
+                            spacing: dp(15)
+                            pos_hint: {"center_x":.5, "center_y":.5}
+                            MDRoundFlatButton:
+                                id: id_estado
+                                text: "Estados:"
+                                pos_hint: {"center_x": .5, "center_y": .5}
+                            MDRoundFlatButton:
+                                text: "Rut Cliente:"
+                                id: boton_rut_cliente
+                            MDRoundFlatButton:
+                                text: "Departamento:"
+                                id: boton_departamentos
+                        MDTextField:
+                            hint_text: "URL Posicion:"
+                            id: url_posicion
+                        MDTextField:
+                            hint_text: "Ubicacion:"
+                            id: ubicacion
+                        MDTextField:
+                            id:descr
+                            hint_text: "Descripcion:"
+                            multiline: True
+                        MDGridLayout:
+                            cols: 6
+                            size_hint_y: None
+                            height: dp(350)
+                            MDLabel:
+                                text: "Lunes"
+                            MDCheckbox:
+                                id: lunes
+                            MDLabel:
+                                text: "Martes"
+                            MDCheckbox:
+                                id: martes
+                            MDLabel:
+                                text: "Miercoles"
+                            MDCheckbox:
+                                id: miercoles
+                            MDLabel:
+                                text: "Jueves"
+                            MDCheckbox:
+                                id: jueves
+                            MDLabel:
+                                text: "Viernes"
+                            MDCheckbox:
+                                id: viernes
+                            MDLabel:
+                                text: "Sabado"
+                            MDCheckbox:
+                                id: sabado
+                            MDLabel:
+                                text: "Domingo"
+                            MDCheckbox:
+                                id: domingo
+
+                        MDBoxLayout:
+                            size_hint_y: None
+                            height: dp(200)
+                            MDCardPre:
+                                orientation: "vertical"
+                                ScrollView:
+                                    do_scroll_x: False
+                                    do_scroll_y: True
+                                    MDList:
+                                        id:contenedor_objetos
+                        MDBoxLayout:
+                            orientation: "vertical"
+                            size_hint_y: None
+                            height: dp(75)
+                            MDLabel:
+                                theme_text_color: "Custom"
+                                text_color : 0, 1, 0, 1
+                                text: "NETO"
+                                id: neto
+                                font_style: "H5"
+                            MDLabel:
+                                theme_text_color: "Custom"
+                                text_color : 0, 1, 0, 1
+                                text: "IVA"
+                                font_style: "H5"
+                                id: iva
+                            MDLabel:
+                                theme_text_color: "Custom"
+                                text_color : 0, 1, 0, 1
+                                font_style: "H5"
+                                text: "Total: "
+                                id: total_servicio_mensual
+
+                        MDRoundFlatButton:
+                            text: "Agregar Producto"
+                            id:btn_agregar_productos

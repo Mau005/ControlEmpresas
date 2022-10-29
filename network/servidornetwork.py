@@ -63,7 +63,6 @@ class ServidorNetwork(Thread):
             return self.enviar({"estado": False, "condicion": "USUARIOACTIVO"})
 
         info = self.querys.consultar_cuenta(self.cuenta.nombre_cuenta, self.cuenta.contraseña)
-        print(f"Info vale esto: {info}")
         if info.get("estado"):
             self.intentos = 0
             self.cuenta = RegistroCuentas(id_cuenta=info["datos"][0],

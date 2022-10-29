@@ -35,6 +35,7 @@ class VNotasEmpresas(MDScreenAbstrac):
             noti = Notificacion("Exito",
                                 f"Se ha registrado una nota  a la empresa: {self.coleccion_empresas.dato_guardar}")
             noti.open()
+            self.formatear()
             return
 
         noti = Notificacion("Error", PROTOCOLOERROR(info.get("condicion")))

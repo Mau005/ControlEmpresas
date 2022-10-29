@@ -3,45 +3,54 @@
 <VListaNotasEmpresas>:
     contenedor_registros:contenedor_registros
     MDBoxLayout:
-        orientation: "vertical"
-        spacing: dp(20)
-        padding: dp(10)
-        MDCard:
-            size_hint_y: .15
-            elevation: 5
-            pos_hint: {"center_x": .5, "center_y": .5}
-            padding: dp(15)
-            MDBoxLayout:
-                pos_hint: {"center_x": .5, "center_y": .5}
-                MDLabel:
-                    text: "Buscar: "
-                MDRoundFlatButton:
-                    text: "Rut Empresa"
-                    id: rut_empresa
-        ScrollView:
-            do_scroll_x: False
-            do_scroll_y: True
-            MDList:
-                id: contenedor_registros
-                spacing: dp(15)
-                padding: dp(20)
+        orientation: "horizontal"
+        MDNavigationRail:
+            anchor: "center"
+            size_hint_x: .1
+            elevation: .4
+            MDNavigationRailItem:
+                text: "Lista Notas Empresas"
+                icon: "arrow-down-bold-hexagon-outline"
+                font_name: "nasalization-rg.ttf"
 
-        MDCard:
+            MDNavigationRailItem:
+                text: "Buscar"
+                icon: "layers-search-outline"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.crear()
+
+            MDNavigationRailItem:
+                text: "Limpiar"
+                icon: "autorenew"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.formatear()
+
+
+            MDNavigationRailItem:
+                text: "Volver"
+                icon: "keyboard-return"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.siguiente()
+        MDBoxLayout:
             orientation: "vertical"
-            size_hint: .9, .1
-            elevation: 5
-            pos_hint: {"center_x": .5, "center_y": .5}
-            padding: dp(5)
-            MDBoxLayout:
-                adaptive_size: True
-                spacing: dp(12)
+            spacing: dp(20)
+            padding: dp(10)
+            MDCardPre:
+                orientation: "vertical"
                 pos_hint: {"center_x": .5, "center_y": .5}
-                MDRoundFlatButton:
-                    text: "Buscar Empresas"
-                    on_release: root.crear()
-                MDRoundFlatButton:
-                    text: "Formatear"
-                    on_release: root.formatear()
-                MDRoundFlatButton:
-                    text: "Volver"
-                    on_release: root.siguiente()
+                padding: dp(15)
+                MDBoxLayout:
+                    size_hint_y: None
+                    height: dp(35)
+                    MDLabel:
+                        text: "Buscar: "
+                    MDRoundFlatButton:
+                        text: "Rut Empresa"
+                        id: rut_empresa
+                ScrollView:
+                    do_scroll_x: False
+                    do_scroll_y: True
+                    MDList:
+                        id: contenedor_registros
+                        spacing: dp(15)
+                        padding: dp(20)

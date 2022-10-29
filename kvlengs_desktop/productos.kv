@@ -1,61 +1,69 @@
 <VProductos>:
     MDBoxLayout:
-        orientation: "vertical"
-        spacing: dp(20)
-        padding: dp(10)
-        MDCard:
-            elevation: 5
-            pos_hint: {"center_x": .5, "center_y": .5}
-            size_hint: .9,.9
-            ScrollView:
-                do_scroll_x: False
-                do_scroll_y: True
-                MDList:
-                    padding: dp(30)
-                    MDTextField:
-                        id: nombre_producto
-                        hint_text: "Nombre Producto*"
-                        max_text_length: 100
-                        helper_text_mode: "on_error"
-                        helper_text: "Maximo de 100 caracteres"
+        orientation: "horizontal"
+        MDNavigationRail:
+            anchor: "center"
+            size_hint_x: .1
+            elevation: .4
+            MDNavigationRailItem:
+                text: "Crear Productos"
+                icon: "arrow-down-bold-hexagon-outline"
+                font_name: "nasalization-rg.ttf"
 
-                    MDTextField:
-                        id: descripcion
-                        hint_text: "Descripción"
-                        max_text_length: 250
-                        multiline: True
-                        helper_text_mode: "on_error"
-                        helper_text: "Maximo de 250 caracteres"
+            MDNavigationRailItem:
+                text: "Crear"
+                icon: "pencil"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.crear()
 
-                    MDTextField:
-                        id: cantidad
-                        hint_text: "Cantidad*"
-                        max_text_length: 11
-                        helper_text_mode: "on_focus"
-                        input_filter: 'int'
-                        helper_text: "Ingrese la cantida de productos"
+            MDNavigationRailItem:
+                text: "Limpiar"
+                icon: "autorenew"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.formatear()
 
-                    MDRaisedButton:
-                        text: "Local:"
-                        id: menu_local
 
-        MDCard:
+            MDNavigationRailItem:
+                text: "Volver"
+                icon: "keyboard-return"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.siguiente()
+
+        MDBoxLayout:
             orientation: "vertical"
-            size_hint: .9, .1
-            elevation: 5
-            pos_hint: {"center_x": .5, "center_y": .5}
-            padding: dp(5)
-            MDBoxLayout:
-                adaptive_size: True
-                spacing: dp(12)
+            spacing: dp(20)
+            padding: dp(10)
+            MDCardPre:
                 pos_hint: {"center_x": .5, "center_y": .5}
-                MDRoundFlatButton:
-                    text: "Crear"
-                    on_release: root.crear()
-                MDRoundFlatButton:
-                    text: "Formatear"
-                    on_release: root.formatear()
-                MDRoundFlatButton:
-                    text: "Volver"
-                    on_release: root.siguiente()
+                size_hint: .9,.9
+                ScrollView:
+                    do_scroll_x: False
+                    do_scroll_y: True
+                    MDList:
+                        padding: dp(30)
+                        MDTextField:
+                            id: nombre_producto
+                            hint_text: "Nombre Producto*"
+                            max_text_length: 100
+                            helper_text_mode: "on_error"
+                            helper_text: "Maximo de 100 caracteres"
 
+                        MDTextField:
+                            id: descripcion
+                            hint_text: "Descripción"
+                            max_text_length: 250
+                            multiline: True
+                            helper_text_mode: "on_error"
+                            helper_text: "Maximo de 250 caracteres"
+
+                        MDTextField:
+                            id: cantidad
+                            hint_text: "Cantidad*"
+                            max_text_length: 11
+                            helper_text_mode: "on_focus"
+                            input_filter: 'int'
+                            helper_text: "Ingrese la cantida de productos"
+
+                        MDRoundFlatButton:
+                            text: "Local:"
+                            id: menu_local

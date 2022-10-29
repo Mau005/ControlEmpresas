@@ -1,47 +1,56 @@
 <VListaProductos>:
     contenedor:contenedor
     MDBoxLayout:
-        orientation: "vertical"
-        spacing: dp(20)
-        padding: dp(10)
+        orientation: "horizontal"
+        MDNavigationRail:
+            anchor: "center"
+            size_hint_x: .1
+            elevation: .4
+            MDNavigationRailItem:
+                text: "Lista Productos"
+                icon: "arrow-down-bold-hexagon-outline"
+                font_name: "nasalization-rg.ttf"
 
-        MDCard:
-            size_hint_x: .9
-            elevation: 5
-            padding: dp(35)
-            pos_hint: {"center_x": .5, "center_y": .5}
-            ScrollView:
-                do_scroll_y: True
-                do_scroll_x: False
-                MDList:
-                    id: contenedor
+            MDNavigationRailItem:
+                text: "Buscar"
+                icon: "layers-search-outline"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.crear()
 
-                    MDBoxLayout:
-                        orientation: 'horizontal'
-                        size_hint_y: None
-                        height: dp(15)
-                        MDLabel:
-                            text: "Buscar ID: "
-                        MDTextField:
-                            hint_text: "Ejemplo: 431"
-                        MDFlatButton:
-                            text: "Buscar"
-        MDCard:
+            MDNavigationRailItem:
+                text: "Limpiar"
+                icon: "autorenew"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.formatear()
+
+
+            MDNavigationRailItem:
+                text: "Volver"
+                icon: "keyboard-return"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.siguiente()
+        MDBoxLayout:
             orientation: "vertical"
-            size_hint: .9, .1
-            elevation: 5
-            pos_hint: {"center_x": .5, "center_y": .5}
-            padding: dp(5)
-            MDBoxLayout:
-                adaptive_size: True
-                spacing: dp(12)
+            spacing: dp(20)
+            padding: dp(10)
+
+            MDCardPre:
+                size_hint_x: .9
+                padding: dp(35)
                 pos_hint: {"center_x": .5, "center_y": .5}
-                MDRoundFlatButton:
-                    text: "Crear"
-                    on_release: root.crear()
-                MDRoundFlatButton:
-                    text: "Formatear"
-                    on_release: root.formatear()
-                MDRoundFlatButton:
-                    text: "Volver"
-                    on_release: root.siguiente()
+                ScrollView:
+                    do_scroll_y: True
+                    do_scroll_x: False
+                    MDList:
+                        id: contenedor
+
+                        MDBoxLayout:
+                            orientation: 'horizontal'
+                            size_hint_y: None
+                            height: dp(15)
+                            MDLabel:
+                                text: "Buscar ID: "
+                            MDTextField:
+                                hint_text: "Ejemplo: 431"
+                            MDFlatButton:
+                                text: "Buscar"

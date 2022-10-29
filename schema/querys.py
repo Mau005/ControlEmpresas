@@ -63,14 +63,24 @@ class Querys():
         '''.format(productos.nombre_producto, productos.descripcion, productos.cantidad, productos.id_local)
         return self.bd.insertar(querys)
 
-    def registrar_empresas(self, objeto):
+    def buscar_empresa_rut(self, rut):
+        querys = """
+        SELECT *
+        FROM empresas
+        WHERE rut_empresa = {}
+        """.format(rut)
+        return self.bd.consultar(querys)
+
+    def registrar_empresas(self, objeto: RegistroEmpresas):
         """
         Methodo utilizado para gestionar registros de empresas
         objeto es tipo RegistroEmpresas()
         """
-        objeto = her.recuperacion_sentencia(objeto)
-        empresa = RegistroEmpresas()
-        empresa.__dict__ = objeto.__dict__
+        empresa = her.recuperacion_sentencia(objeto)
+
+        check = self.buscar_empresa_rut(objeto.rut_empresa)
+        if check.get("estado"):
+            return {"estado": False, "condicion": "EMPRESA_EXISTE"}
 
         querys = '''
         INSERT INTO empresas(rut_empresa, nombre_empresa, giro_empresa, direccion_empresa, correo_empresa, 

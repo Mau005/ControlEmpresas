@@ -1,3 +1,4 @@
+from core.constantes import PROTOCOLOERROR
 from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion
 from entidades.registroempresas import RegistroEmpresas
 from core.herramientas import Herramientas as her
@@ -58,7 +59,7 @@ class VEmpresas(MDScreenAbstrac):
                 self.siguiente()
                 return None
 
-            noti = Notificacion("Error", info.get("condicion"))
+            noti = Notificacion("Error", PROTOCOLOERROR[info.get("condicion")])
             noti.open()
             return None
 
