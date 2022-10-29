@@ -128,7 +128,7 @@ class Herramientas:
         verificador_rut = rut[1] # vamos el ultimo digito verificador
         formato = "0123456789k" #formato
         
-        contenido_rut += rut[1]
+        contenido_rut += rut[1].lower()
         
         verificador_bool = [False for x in range(0,len(contenido_rut))]
         
@@ -143,7 +143,7 @@ class Herramientas:
             return False, f"No se puede comprobar el rut correctamente"
         
         formato_nuevo = f"{rut[0][:2]}.{rut[0][2:5]}.{rut[0][5:8]}" #es procesar el rut devido a la cantida dde informacion
-        return True, f"{formato_nuevo}-{rut[1]}"
+        return True, f"{formato_nuevo}-{rut[1].lower()}"
     
 if __name__ == "__main__":
     test = Herramientas()
