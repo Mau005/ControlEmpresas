@@ -171,11 +171,10 @@ class Querys():
                        personas.correo, cuenta["ultimo_id"], personas.ubicacion)
             self.bd.insertar(querys)
             self.registrar_personas_empresas(personas.rut_empresa, personas.rut_persona)
-            return {"estado": True}
+            return {"estado": True, "cuenta": nombre_cuenta}
         return {"estado": False, "condicion": "REGISTRARCUENTA"}
 
     def actualizar_nota(self, datos):
-
         querys = '''
         UPDATE notas
         SET nota = "{}"

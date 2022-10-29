@@ -15,8 +15,8 @@ class VEmpresas(MDScreenAbstrac):
         longitud = 1
         noti = Notificacion("Error", "")
         estado = True
-        if not (len(self.ids.rut_empresa.text) == 10):
-            noti.text += "Debe tener 10 caracteres el RUT de Empresa ejemplo xxxxxxxx-x\n"
+        if not (9 <= len(self.ids.rut_empresa.text) <= 10):
+            noti.text += "Debe tener entre 9 y 10 caracteres el RUT de Empresa ejemplo xxxxxxxx-x\n"
             estado = False
         if not (len(self.ids.nombre_empresa.text) >= longitud):
             noti.text += "Debe tener Contenido el Nombre de Empresa\n"
