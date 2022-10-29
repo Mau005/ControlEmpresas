@@ -444,29 +444,30 @@ class MDScreenAbstrac(MDScreen):
 class ItemCard(MDCard):
     def __init__(self, **kargs):
         super().__init__(**kargs)
-        self.elevation = 3
         self.orientation = 'vertical'
+        self.style = "outlined"
+        self.line_color = [.2, .2, .2, 1]
+        self.md_bg_color = "#f8f5f4"
         self.size_hint_y = None
         self.height = dp(420)
         self.padding = dp(20)
-        self.adaptative_size = True
+        self.adaptative_heigth = True
         self.contenedor = MDList(size_hint_y=None, size=self.size)
         self.add_widget(self.contenedor)
 
 
-class ItemNotaEmpresa(ItemCard):
-    def __init__(self, network, objeto, **kargs):
+class ItemNotas(ItemCard):
+    def __init__(self, network, objeto: RegistroNotas, **kargs):
         super().__init__(**kargs)
 
-        self.maqueta = RegistroNotas()
-        self.maqueta.__dict__ = objeto.__dict__
+        self.maqueta = objeto
         self.network = network
 
         self.scroll = ScrollView(do_scroll_x=False, do_scroll_y=True, size_hint_y=None, height=dp(100))
         self.id_registro = MDTextField(hint_text="ID Registro", text=str(self.maqueta.id_registro), disabled=True,
                                        mode="fill")
         self.nota = MDTextField(hint_text="Nota", text=self.maqueta.nota, multiline=True)
-        self.rut_empresa = MDTextField(hint_text="Rut Empresa:", text=self.maqueta.rut_asociado, disabled=True)
+        self.rut_empresa = MDTextField(hint_text="Rut:", text=self.maqueta.rut_asociado, disabled=True)
         self.correo = MDTextField(hint_text="Usuario", text=self.maqueta.id_cuenta, disabled=True)
         self.fecha_creacion = MDTextField(hint_text="Fecha Creación", text=str(self.maqueta.fecha_creacion),
                                           disabled=True)

@@ -3,9 +3,8 @@
         orientation: "vertical"
         spacing: dp(20)
         padding: dp(10)
-        MDCard:
+        MDCardPre:
             size_hint: .9, .9
-            elevation: 5
             pos_hint: {"center_x": .5, "center_y": .5}
             ScrollView:
                 do_scroll_x: False
@@ -27,11 +26,7 @@
                     MDBoxLayout:
                         size_hint_y: None
                         height: dp(250)
-                        MDCard:
-                            line_color:(0.2, 0.2, 0.2, 0.8)
-                            style: "outlined"
-                            shadow_softness: 12
-                            shadow_offset: (0, 2)
+                        MDCardPre:
                             ScrollView:
                                 do_scroll_x: False
                                 do_scroll_y: True
@@ -47,10 +42,9 @@
                         on_release: root.desplegar_archivos()
 
 
-        MDCard:
+        MDCardPre:
             orientation: "vertical"
             size_hint: .9, .1
-            elevation: 5
             pos_hint: {"center_x": .5, "center_y": .5}
             padding: dp(5)
             MDBoxLayout:

@@ -1,4 +1,4 @@
-from ventanas.widgets_predefinidos import MDScreenAbstrac, ItemNotaEmpresa
+from ventanas.widgets_predefinidos import MDScreenAbstrac, ItemNotas
 from ventanas.widgets_predefinidos import MenuEntidades
 
 
@@ -31,7 +31,7 @@ class VListaNotasEmpresas(MDScreenAbstrac):
             if info.get("estado"):
                 self.formatear()
                 for objetos in info.get("datos"):
-                    obj = ItemNotaEmpresa(self.network, objetos)
+                    obj = ItemNotas(self.network, objetos)
                     self.objetos_widgets.append(obj)
                     self.ids.contenedor_registros.add_widget(obj)
 

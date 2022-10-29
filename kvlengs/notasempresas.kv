@@ -5,8 +5,7 @@
         orientation: "vertical"
         spacing: dp(20)
         padding: dp(10)
-        MDCard:
-            elevation: 5
+        MDCardPre:
             pos_hint: {"center_x": .5, "center_y": .5}
             size_hint: .9,.9
             ScrollView:
@@ -29,10 +28,9 @@
                         helper_text_mode: "on_error"
                         helper_text: "maximo 250 caracteres"
 
-        MDCard:
+        MDCardPre:
             orientation: "vertical"
             size_hint: .9, .1
-            elevation: 5
             pos_hint: {"center_x": .5, "center_y": .5}
             padding: dp(5)
             MDBoxLayout:
