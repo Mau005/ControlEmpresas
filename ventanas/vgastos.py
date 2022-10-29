@@ -12,8 +12,8 @@ class VGastos(MDScreenAbstrac):
         self.fecha_asignada = None
         self.coleccion_departamento = MenuEntidades(self.network, "Departamento:",
                                                     "Departamento:", self.ids.departamento, filtro="int")
-        self.coleccion_estado_gasto = MenuEntidades(self.network, "Estado Gasto:",
-                                                    "Estado Gasto:", self.ids.estado_gasto, filtro="int")
+        self.coleccion_estado_gasto = MenuEntidades(self.network, "Tipo Gasto:",
+                                                    "Tipo Gasto:", self.ids.estado_gasto, filtro="int")
 
     def crear(self, *args):
         noti = Notificacion("Error", "")

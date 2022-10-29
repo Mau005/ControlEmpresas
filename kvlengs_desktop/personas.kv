@@ -1,90 +1,98 @@
 <VPersonas>:
     MDBoxLayout:
-        orientation: "vertical"
-        spacing: dp(20)
-        padding: dp(10)
-        MDCard:
-            elevation: 5
-            pos_hint: {"center_x": .5, "center_y": .5}
-            size_hint: .9,.9
-            ScrollView:
-                do_scroll_x: False
-                do_scroll_y: True
-                MDList:
-                    spacing: dp(25)
-                    padding: dp(35)
-                    MDTextField:
-                        id: rut
-                        max_text_length: 8
-                        hint_text: "Rut Persona*"
-                        max_text_length: 10
-                        helper_text_mode: "on_focus"
-                        helper_text: "Ingrese rut sin puntos y con '-': 18888888-5"
+        orientation: "horizontal"
+        MDNavigationRail:
+            anchor: "center"
+            size_hint_x: .1
+            elevation: .4
+            MDNavigationRailItem:
+                text: "Personas"
+                icon: "home"
+                font_name: "nasalization-rg.ttf"
 
-                    MDTextField:
-                        id: nombres
-                        hint_text: "Nombres"
-                        helper_text_mode: "on_error"
-                        max_text_length: 150
-                        helper_text: "Maximo 150 caracteres"
-                    MDTextField:
-                        id: apellidos
-                        hint_text: "Apellidos: "
-                        max_text_length: 150
-                        helper_text_mode: "on_error"
-                        helper_text: "Minimo 3 caracteres y maximo 150"
+            MDNavigationRailItem:
+                text: "Crear"
+                icon: "home"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.crear()
 
-                    MDTextField:
-                        id: telefono
-                        hint_text: "Telefono"
-                        max_text_length: 12
-                        helper_text_mode: "on_error"
-                        helper_text: "maximo 12 caracteres"
+            MDNavigationRailItem:
+                text: "Limpiar"
+                icon: "tools"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.formatear()
 
-                    MDTextField:
-                        id: celular
-                        hint_text: "Celular"
-                        max_text_length: 12
-                        helper_text_mode: "on_error"
-                        helper_text: "maximo 12 caracteres"
 
-                    MDTextField:
-                        id: correo_sistema
-                        max_text_length: 150
-                        hint_text: "Correo"
-                        required: "@"
-                        helper_text_mode: "on_error"
-                        helper_text: "debe incluir una @"
-
-                    MDRaisedButton:
-                        text: "Empresa: "
-                        id: boton_rut_empresas
-
-                    MDTextField:
-                        id: ubicacion_persona
-                        max_text_length: 100
-                        hint_text: "Ubicacion"
-                        helper_text: "maximo 100 caracteres"
-
-        MDCard:
+            MDNavigationRailItem:
+                text: "Volver"
+                icon: "account"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.siguiente()
+        MDBoxLayout:
             orientation: "vertical"
-            size_hint: .9, .1
-            elevation: 5
-            pos_hint: {"center_x": .5, "center_y": .5}
-            padding: dp(5)
-            MDBoxLayout:
-                adaptive_size: True
-                spacing: dp(12)
+            spacing: dp(20)
+            padding: dp(10)
+            MDCardPre:
                 pos_hint: {"center_x": .5, "center_y": .5}
-                MDRoundFlatButton:
-                    text: "Crear"
-                    on_release: root.crear()
-                MDRoundFlatButton:
-                    text: "Formatear"
-                    on_release: root.formatear()
-                MDRoundFlatButton:
-                    text: "Volver"
-                    on_release: root.siguiente()
+                size_hint: .9,.9
+                ScrollView:
+                    do_scroll_x: False
+                    do_scroll_y: True
+                    MDList:
+                        spacing: dp(25)
+                        padding: dp(35)
+                        MDTextField:
+                            id: rut
+                            max_text_length: 8
+                            hint_text: "Rut Persona*"
+                            max_text_length: 10
+                            helper_text_mode: "on_focus"
+                            helper_text: "Ingrese rut sin puntos y con '-': 18888888-5"
 
+                        MDTextField:
+                            id: nombres
+                            hint_text: "Nombres"
+                            helper_text_mode: "on_error"
+                            max_text_length: 150
+                            helper_text: "Maximo 150 caracteres"
+
+                        MDTextField:
+                            id: apellidos
+                            hint_text: "Apellidos: "
+                            max_text_length: 150
+                            helper_text_mode: "on_error"
+                            helper_text: "Minimo 3 caracteres y maximo 150"
+
+                        MDTextField:
+                            id: telefono
+                            hint_text: "Telefono"
+                            max_text_length: 12
+                            helper_text_mode: "on_error"
+                            helper_text: "maximo 12 caracteres"
+
+                        MDTextField:
+                            id: celular
+                            hint_text: "Celular"
+                            max_text_length: 12
+                            helper_text_mode: "on_error"
+                            helper_text: "maximo 12 caracteres"
+
+                        MDTextField:
+                            id: correo_sistema
+                            max_text_length: 150
+                            hint_text: "Correo"
+                            required: "@"
+                            helper_text_mode: "on_error"
+                            helper_text: "debe incluir una @"
+
+                        MDRoundFlatButton:
+                            text: "Empresa: "
+                            id: boton_rut_empresas
+
+                        MDTextField:
+                            id: ubicacion_persona
+                            max_text_length: 100
+                            hint_text: "Ubicacion"
+                            helper_text: "maximo 100 caracteres"
 
             

@@ -68,6 +68,7 @@ class VPersonas(MDScreenAbstrac):
         self.ids.apellidos.text = ""
         self.ids.telefono.text = ""
         self.ids.celular.text = ""
+        self.ids.ubicacion_persona.text = ""
         self.ids.correo_sistema.text = ""
         self.ids.boton_rut_empresas.text = "Empresa:"
         self.colecciones_empresas.dato_guardar = None
