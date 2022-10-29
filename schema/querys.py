@@ -405,7 +405,7 @@ class Querys():
         LEFT JOIN estado_gastos eg ON eg.id_estado_gastos = ga.id_estado_gastos
         """
 
-        if fecha_termino == "Sin Asignar":
+        if fecha_termino is None:
             sentencia += f"WHERE ga.fecha_creacion = DATE('{fecha_inicio}')\n"
         else:
             sentencia += f"WHERE ga.fecha_creacion BETWEEN '{fecha_inicio}' AND '{fecha_termino}'\n"
@@ -548,7 +548,7 @@ class Querys():
 
     def buscar_servicios(self, trabajador: RegistroTrabajador):
         if trabajador is None:
-            return {"estado":False}
+            return {"estado": False}
         querys = """
         SELECT ser.id_servicios, ser.nombre_servicio, ser.url_posicion, ser.ubicacion, ser.descripcion,
         pe.nombres, pe.apellidos, pe.celular, pe.telefono,
@@ -559,5 +559,4 @@ class Querys():
         INNER JOIN estados est ON est.id_estado = ser.id_estado
         WHERE ser.id_departamento = {}
         """.format(trabajador.id_departamento)
-        print(querys)
         return self.bd.consultar(querys, all=True)

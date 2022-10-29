@@ -9,7 +9,7 @@ from ventanas.vgastos_fechas import VGastosFechas
 from ventanas.vlistapersonas import VListasPersonas
 from ventanas.vserviciosmensuales import VServiciosMensuales
 
-Builder.load_file("kvlengs_desktop/root.kv")
+Builder.load_file("kvlengs/root.kv")
 
 from ventanas.vlistanotasempresas import VListaNotasEmpresas
 from ventanas.vdepartamentos import VDepartamentos

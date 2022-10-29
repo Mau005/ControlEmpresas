@@ -122,10 +122,11 @@ if __name__ == "__main__":
                                             correo_respaldo="",
                                             celular_empresa="")
             querys.registrar_empresas(base_empresa)
-            querys.registrar_estados("OPERATIVO")
+            querys.registrar_estados("PREPARACION")
             querys.registrar_estados("DETENIDO")
             querys.registrar_estados("SINIESTRADO")
             querys.registrar_estados("TRANSLADO")
+            querys.registrar_estados("RETIRADO")
             querys.registrar_estado_gastos("COMUNES")
             querys.registrar_estado_gastos("REMUNERACIONES")
             querys.registrar_estado_gastos("TRANSPORTES")
