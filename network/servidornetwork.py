@@ -339,7 +339,7 @@ class ServidorNetwork(Thread):
 
     def actualizar_ventanas(self, contenido):
         if self.tiempo_actividad >= 60 * self.info["Servidor"]["TIMEPOESPERAUSUARIO"]:
-            self.enviar({"estado": False, "contenido": "Se ha expirado el tiempo de seccion activa."})
+            self.enviar({"estado": False, "condicion": "EXPIRACION"})
             self.control_network.agregar_pendiente_hilos(self.cuenta.nombre_cuenta)
         if self.ventana_actual == contenido:
             self.enviar({"estado": True})
