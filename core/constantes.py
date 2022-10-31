@@ -12,6 +12,7 @@ PROTOCOLOERROR = {"USUARIOACTIVO": "Usuario ya se encuentra activo en el sistema
                   "RUT_EXISTE":"Este usuario ya se encuentra registrado",
                   "EMPRESA_EXISTE":"Esta empresa ya se encuentra registrado",
                   "SIN_DATOS": "La consulta pedida, no tiene información",
-                  "SINSELECCION":"No Se ha ingresado una seleccion correspondiente"}
+                  "SINSELECCION":"No Se ha ingresado una seleccion correspondiente",
+                  "EXPIRACION": "Se ha expirado el tiempo de seccion activa."}
 
 DIA_SEMANA = {1: "Lunes", 2: "Martes", 3: "Miercoles", 4: "Jueves", 5: "Viernes", 6: "Sabado", 7: "Domingo"}
