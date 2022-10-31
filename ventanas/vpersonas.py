@@ -13,7 +13,7 @@ class VPersonas(MDScreenAbstrac):
     def crear(self, *args):
         noti = Notificacion("Error", "")
         estado = True
-        if  not (9 <= len(self.ids.rut.text) <= 10):
+        if not (9 <= len(self.ids.rut.text) <= 10):
             noti.text += "El rut debe tener entre 9 y 10 caracteres ejemplo: 11222333-4\n"
             estado = False
         if not "@" in self.ids.correo_sistema.text:
