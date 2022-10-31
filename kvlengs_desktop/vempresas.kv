@@ -1,0 +1,33 @@
+
+
+<VEmpresas>:
+    MDBoxLayout:
+        id: contenedor_principal
+        orientation: "horizontal"
+        MDNavigationRail:
+            anchor: "center"
+            size_hint_x: .1
+            elevation: .4
+            MDNavigationRailItem:
+                text: "Empresas"
+                icon: "arrow-down-bold-hexagon-outline"
+                font_name: "nasalization-rg.ttf"
+
+            MDNavigationRailItem:
+                text: "Crear"
+                icon: "pencil"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.crear()
+
+            MDNavigationRailItem:
+                text: "Limpiar"
+                icon: "autorenew"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.formatear()
+
+
+            MDNavigationRailItem:
+                text: "Volver"
+                icon: "keyboard-return"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.siguiente()

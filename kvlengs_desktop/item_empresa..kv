@@ -1,5 +1,3 @@
-
-
 <VEmpresas>:
     MDBoxLayout:
         orientation: "horizontal"
@@ -8,28 +6,22 @@
             size_hint_x: .1
             elevation: .4
             MDNavigationRailItem:
-                text: "Empresas"
+                text: "Editar Empresa"
                 icon: "arrow-down-bold-hexagon-outline"
                 font_name: "nasalization-rg.ttf"
 
             MDNavigationRailItem:
-                text: "Crear"
+                text: "Editar"
                 icon: "pencil"
                 font_name: "nasalization-rg.ttf"
                 on_release: root.crear()
-
-            MDNavigationRailItem:
-                text: "Limpiar"
-                icon: "autorenew"
-                font_name: "nasalization-rg.ttf"
-                on_release: root.formatear()
-
 
             MDNavigationRailItem:
                 text: "Volver"
                 icon: "keyboard-return"
                 font_name: "nasalization-rg.ttf"
                 on_release: root.siguiente()
+
         MDBoxLayout:
             orientation: "vertical"
             spacing: dp(20)
@@ -46,6 +38,7 @@
                             id: rut_empresa
                             hint_text: "Rut Empresa*"
                             max_text_length: 10
+                            disabled: True
                             helper_text_mode: "on_focus"
                             helper_text: "Ingrese rut sin puntos y con '-': 18888888-5"
 
