@@ -14,7 +14,7 @@
         "paquetes": 2048,
         "TIEMPOACTUALIZAR": 1,
         "REVISARCORREOS": 2,
-        "TIMEPOESPERAUSUARIO": 5,
+        "TIMEPOESPERAUSUARIO": 15,
         "TIEMPOESPERADIGITO": 5
 
     },
