@@ -93,7 +93,7 @@ fullscreen = 0
 #icon.adaptive_background.filename = %(source.dir)s/data/icon_bg.png
 
 # (list) Permissions
-android.permissions = INTERNET, EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE, MANAGE_DOCUMENTS
+android.permissions = INTERNET
 
 # (list) features (adds uses-feature -tags to manifest)
 #android.features = android.hardware.usb.host
@@ -303,7 +303,7 @@ android.allow_backup = True
 #p4a.fork = kivy
 
 # (str) python-for-android branch to use, defaults to master
-p4a.branch = develop
+#p4a.branch = develop
 
 # (str) python-for-android specific commit to use, defaults to HEAD, must be within p4a.branch
 #p4a.commit = HEAD
