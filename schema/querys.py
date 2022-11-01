@@ -1,3 +1,5 @@
+from typing import Dict
+
 from entidades.registrargastos import RegistrarGastos
 from entidades.registrarlocales import RegistrarLocales
 from entidades.registrocuentas import RegistroCuentas
@@ -13,7 +15,7 @@ from entidades.serviciomensual import ServicioMensual
 from entidades.serviciosproductos import ServiciosProductos
 
 
-class Querys():
+class Querys:
 
     def __init__(self, bd):
         self.bd = bd
@@ -49,7 +51,7 @@ class Querys():
         datos = self.bd.consultar(querys)
         return datos
 
-    def registrar_productos(self, objeto):
+    def registrar_productos(self, objeto: RegistroProductos) -> dict:
         """
         Methodo utilizado para gestionar registros de productos
         objeto es de tipo RegistroProductos()
@@ -63,13 +65,45 @@ class Querys():
         '''.format(productos.nombre_producto, productos.descripcion, productos.cantidad, productos.id_local)
         return self.bd.insertar(querys)
 
-    def buscar_empresa_rut(self, rut):
+    def buscar_empresa_rut(self, rut) -> dict[str, RegistroEmpresas | bool] | dict[str, str | bool]:
         querys = """
         SELECT *
         FROM empresas
-        WHERE rut_empresa = {}
+        WHERE rut_empresa = "{}";
         """.format(rut)
-        return self.bd.consultar(querys)
+        datos = self.bd.consultar(querys)
+        if datos.get("estado"):
+            datos = datos.get("datos")
+            empresa = RegistroEmpresas(
+                rut_empresa=datos[0],
+                nombre_empresa=datos[1],
+                giro_empresa=datos[2],
+                direccion_empresa=datos[3],
+                correo_empresa=datos[4],
+                correo_respaldo=datos[5],
+                telefono_empresa=datos[6],
+                celular_empresa=datos[7]
+            )
+            return {"estado": True, "datos": empresa}
+
+        return {"estado": False, "condicion": "NOSEENCUENTRA"}
+
+    def editar_empresa(self, empresa: RegistroEmpresas) -> dict:
+        empresa = her.recuperacion_sentencia(empresa)
+        querys = """
+        UPDATE empresas
+        SET nombre_empresa = {},
+        giro_empresa = {},
+        direccion_empresa = {},
+        telefono_empresa = {},
+        celular_empresa = {},
+        correo_empresa = {},
+        correo_respaldo = {}
+        WHERE rut_empresa = {};
+        """.format(empresa.nombre_empresa, empresa.giro_empresa, empresa.direccion_empresa,
+                   empresa.telefono_empresa, empresa.celular_empresa, empresa.correo_empresa,
+                   empresa.correo_respaldo, empresa.rut_empresa)
+        return self.bd.insertar(querys)
 
     def registrar_empresas(self, objeto: RegistroEmpresas):
         """

@@ -1,4 +1,4 @@
-from ventanas.widgets_predefinidos import MDScreenAbstrac, MDTwoLine
+from ventanas.widgets_predefinidos import MDScreenAbstrac, MDTwoLine, MDTwoLineObjecto
 from kivy.properties import ObjectProperty
 
 
@@ -22,7 +22,7 @@ class VListasEmpresas(MDScreenAbstrac):
 
         if info.get("estado"):
             for x in info.get("datos"):
-                obj = MDTwoLine(x[0], x[1], self.network)
+                obj = MDTwoLineObjecto(x[0], x[1], self.network, self.manager, "editar_empresa", "buscar_empresa_rut")
                 self.contenido_empresas.append(obj)
                 self.contenedor.add_widget(obj)
         super().activar()

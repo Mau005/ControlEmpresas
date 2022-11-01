@@ -4,6 +4,7 @@ from kivy.clock import Clock
 from kivy.lang import Builder
 from kivy.core.window import Window
 
+from ventanas.editar_empresa import EditarEmpresa
 from ventanas.vlistanotaspersonas import VListaNotasPersonas
 
 Window.maximize()
@@ -53,11 +54,11 @@ class ControlEmpresas(MDApp):
         self.vempresas = VEmpresas(self.network, self.manejador, "empresas", siguiente="casa")
         self.vnotasempresas = VNotasEmpresas(self.network, self.manejador, "notasempresas", siguiente="casa")
         self.vlistaempresas = VListasEmpresas(self.network, self.manejador, "listaempresas", siguiente="casa")
-        # self.vlistaservicios = VListadoServicios(self.network, self.manejador, "listaservicios", siguiente="casa")
+        self.veditarempresa = EditarEmpresa(self.network, self.manejador, "editar_empresa", siguiente="listaempresas")
+
         self.vproductos = VProductos(self.network, self.manejador, "productos", siguiente="casa")
         self.vrecuperacion = VRecuperacion(self.network, self.manejador, "recuperacion", volver="entrada")
         self.vlistaproductos = VListaProductos(self.network, self.manejador, "listaproductos", siguiente="casa")
-        # self.vserviciosdiarios = VServiciosDiarios(self.network, self.manejador, "serviciosdiarios", siguiente="casa")
         self.vtrabajadores = VTrabajadores(self.network, self.manejador, "trabajadores", siguiente="casa")
         self.vlocales = VLocales(self.network, self.manejador, "locales", siguiente="casa")
         self.vlistanotasempresas = VListaNotasEmpresas(self.network, self.manejador, "lista_menu_empresas",
@@ -69,6 +70,7 @@ class ControlEmpresas(MDApp):
         self.vserviciosdiarios = VServiciosDiarios(self.network, self.manejador, "serviciosdiarios", siguiente="casa")
         self.vgastos_fechas = VGastosFechas(self.network, self.manejador, "gastos_fechas", siguiente="casa")
         self.vlistapersonas = VListasPersonas(self.network, self.manejador, "lista_personas", siguiente="casa")
+
         self.vlistanotaspersonas = VListaNotasPersonas(self.network, self.manejador, "lista_notas_personas",
                                                        siguiente="casa")
 
@@ -79,7 +81,6 @@ class ControlEmpresas(MDApp):
         self.manejador.add_widget(self.vempresas)
         self.manejador.add_widget(self.vnotasempresas)
         self.manejador.add_widget(self.vlistaempresas)
-        # self.manejador.add_widget(self.vlistaservicios)
         self.manejador.add_widget(self.vproductos)
         self.manejador.add_widget(self.vrecuperacion)
         self.manejador.add_widget(self.vlistaproductos)
@@ -93,6 +94,7 @@ class ControlEmpresas(MDApp):
         self.manejador.add_widget(self.vgastos_fechas)
         self.manejador.add_widget(self.vlistapersonas)
         self.manejador.add_widget(self.vlistanotaspersonas)
+        self.manejador.add_widget(self.veditarempresa)
         self.login.activar()
 
     def actualizar(self, dt):

@@ -1,0 +1,20 @@
+<EditarEmpresa>:
+    MDCardPre:
+        orientation: "vertical"
+        size_hint: .9, .9
+        pos_hint: {"center_x":.5, "center_y":.5}
+        MDBoxLayout:
+            id: contenedor
+
+        MDBoxLayout:
+            size_hint_y: .1
+            adaptive_size: True
+            spacing: dp(15)
+            pos_hint: {"center_x":.5, "center_y":.5}
+            MDRoundFlatButton:
+                text: "Editar"
+                on_release: root.editar()
+            MDRoundFlatButton:
+                text: "Volver"
+                on_release: root.siguiente()
+

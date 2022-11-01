@@ -1,0 +1,29 @@
+
+
+<VEmpresas>:
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDBoxLayout:
+            id: contenedor_principal
+
+
+        MDCardPre:
+            orientation: "vertical"
+            size_hint: .9, .1
+            pos_hint: {"center_x": .5, "center_y": .5}
+            padding: dp(5)
+            MDBoxLayout:
+                adaptive_size: True
+                spacing: dp(12)
+                pos_hint: {"center_x": .5, "center_y": .5}
+                MDRoundFlatButton:
+                    text: "Crear"
+                    on_release: root.crear()
+                MDRoundFlatButton:
+                    text: "Formatear"
+                    on_release: root.formatear()
+                MDRoundFlatButton:
+                    text: "Volver"
+                    on_release: root.siguiente()
+

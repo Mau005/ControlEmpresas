@@ -1,6 +1,7 @@
 from threading import Thread
 from core.herramientas import Herramientas as her
 from entidades.registrocuentas import RegistroCuentas
+from entidades.registroempresas import RegistroEmpresas
 from entidades.registropersonas import RegistroPersonas
 from entidades.registrotrabajador import RegistroTrabajador
 from network.recuperacion_cuenta import RecuperacionCuenta
@@ -238,6 +239,12 @@ class ServidorNetwork(Thread):
             if datos.get("estado") == "buscar_persona_rut":
                 self.enviar(self.querys.buscar_persona_rut(datos))
 
+            if datos.get("estado") == "buscar_empresa_rut":
+                self.buscar_empresa_rut(datos.get("contenido"))
+
+            if datos.get("estado") == "editar_empresa":
+                self.editar_empresa(datos.get("contenido"))
+
             if datos.get("estado") == "lista_personas":
                 self.enviar(self.querys.lista_personas())
 
@@ -252,11 +259,21 @@ class ServidorNetwork(Thread):
             #    self.enviar({"estado": False, "condicion": "datos"})
 
         self.cerrar()
-        
+
+    def buscar_empresa_rut(self, rut: str):
+        if self.consultar_privilegios("BuscarEmpresa"):
+            return self.enviar(self.querys.buscar_empresa_rut(rut))
+        return self.enviar({"estado": False, "condicion": "PRIVILEGIOS"})
+
+    def editar_empresa(self, empresa: RegistroEmpresas):
+        if self.consultar_privilegios("EditarEmpresa"):
+            return self.enviar(self.querys.editar_empresa(empresa))
+        return self.enviar({"estado": False, "condicion": "PRIVIELGIOS"})
+
     def actualizar_nota(self, datos):
         if self.consultar_privilegios("EditarNotas"):
             return self.enviar(self.querys.actualizar_nota(datos))
-        return self.enviar({"estado":False,"condicion": "PRIVILEGIOS"})
+        return self.enviar({"estado": False, "condicion": "PRIVILEGIOS"})
 
     def registro_servicio_diario(self, contenido):
         if self.consultar_privilegios("CrearServicioMensual"):
