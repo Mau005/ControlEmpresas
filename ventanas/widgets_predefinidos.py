@@ -249,12 +249,34 @@ class MDTreeLine(ThreeLineListItem):
 
 
 class MDTwoLine(TwoLineListItem):
-    def __init__(self, titulo, contenido, network, **kwargs):
+    def __init__(self, identificador, contenido, network, **kwargs):
         super().__init__(**kwargs)
-        self.text = titulo
+        self.text = identificador
         self.secondary_text = contenido
         self.network = network
 
+
+class MDTwoLineObjecto(MDTwoLine):
+    def __init__(self, identificador, contenido, network, manager, siguiente: str, consulta: str, **kwargs):
+        super().__init__(identificador, contenido, network, **kwargs)
+        self.consulta = consulta
+        self.siguiente = siguiente
+        self.manager = manager
+        self.bind(on_release = self.activar)
+
+    def activar(self, *args):
+        self.network.enviar({"estado": self.consulta, "contenido": self.text})
+        info = self.network.recibir()
+
+        if info.get("estado"):
+            self.manager.get_screen(self.siguiente).activar(info.get("datos"))
+            self.manager.current = self.siguiente
+            return
+
+
+        noti = Notificacion("Error", PROTOCOLOERROR[info.get("condicion")])
+        noti.open()
+        return
 
 class MDTwoLinePersonas(TwoLineListItem):
     def __init__(self, titulo, contenido, network, **kwargs):
@@ -318,7 +340,8 @@ class InformacionPersona(MDDialog):
         self.rut_principal = rut
 
         self.contenedor_principal = MDBoxLayout(padding=dp(15))
-        self.scroll = ScrollView(do_scroll_x=False, do_scroll_y=True, size_hint=[None, None],width=dp(250), height=dp(100))
+        self.scroll = ScrollView(do_scroll_x=False, do_scroll_y=True, size_hint=[None, None], width=dp(250),
+                                 height=dp(100))
         self.contenedor = MDList()
 
         self.scroll.add_widget(self.contenedor)
@@ -349,8 +372,6 @@ class InformacionPersona(MDDialog):
         self.buttons = [self.editar, self.cancelar]
         super().__init__(**kwargs)
         self.add_widget(self.contenedor_principal)
-
-
 
     def chequear(self, *args):
         noti = Notificacion("Error", "")
