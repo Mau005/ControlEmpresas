@@ -93,7 +93,8 @@ class VGastosFechas(MDScreenAbstrac):
             return
 
         self.lista_datos.append([None, None, None, None, None, None, self.gastototal])
-        her.generar_excel(self.archivo.ruta, self.archivo.captura_archivo.campo.text, self.lista_datos, self.columnas)
+        noti = Notificacion("Error", "Lo lamento esta funcion aun no esta integrada")
+       # her.generar_excel(self.archivo.ruta, self.archivo.captura_archivo.campo.text, self.lista_datos, self.columnas)
 
     def formatear(self, *args):
         self.ids.rango_fechas.text = "00/00/00 al 00/00/00"

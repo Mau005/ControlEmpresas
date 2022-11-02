@@ -5,19 +5,19 @@ import hashlib
 import random
 import uuid
 
-import kivy
+#import kivy
 
-if kivy.utils.platform != 'android':
-    import pandas as pd
+#if kivy.utils.platform != 'android':
+#    import pandas as pd
 
 
 class Herramientas:
 
-    @staticmethod
-    def generar_excel(ruta, nombre_archivo, lista_datos, columnas):
-        if kivy.utils.platform != 'android':
-            df_rss = pd.DataFrame(lista_datos, columns=columnas)
-            df_rss.to_excel(f"{ruta}\\{nombre_archivo}.xlsx", index=False)
+ #   @staticmethod
+ #   def generar_excel(ruta, nombre_archivo, lista_datos, columnas):
+  #      if kivy.utils.platform != 'android':
+  #          df_rss = pd.DataFrame(lista_datos, columns=columnas)
+  #          df_rss.to_excel(f"{ruta}\\{nombre_archivo}.xlsx", index=False)
 
     @staticmethod
     def cargar_archivo(ruta, mensaje):
