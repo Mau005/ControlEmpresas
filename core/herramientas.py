@@ -1,21 +1,26 @@
-
 import pickle
 import json
 import os
 import hashlib
 import random
 import uuid
-import pandas as pd
+
+import kivy
+
+if kivy.utils.platform != 'android':
+    import pandas as pd
+
 
 class Herramientas:
 
     @staticmethod
     def generar_excel(ruta, nombre_archivo, lista_datos, columnas):
-        df_rss = pd.DataFrame(lista_datos, columns=columnas)
-        df_rss.to_excel(f"{ruta}\\{nombre_archivo}.xlsx", index=False)
+        if kivy.utils.platform != 'android':
+            df_rss = pd.DataFrame(lista_datos, columns=columnas)
+            df_rss.to_excel(f"{ruta}\\{nombre_archivo}.xlsx", index=False)
 
     @staticmethod
-    def cargar_archivo( ruta, mensaje):
+    def cargar_archivo(ruta, mensaje):
         if os.path.exists(ruta):
             archivo = open(ruta, "r", encoding="utf-8")
             print("[OK] ", mensaje)
@@ -29,11 +34,11 @@ class Herramientas:
     @staticmethod
     def numero_aleatorio():
         return random.randint(100000, 999999)
-    
+
     @staticmethod
     def empaquetar(paquete):
         return pickle.dumps(paquete)
-    
+
     @staticmethod
     def desenpaquetar(paquete):
         try:
@@ -41,28 +46,28 @@ class Herramientas:
         except EOFError as error:
             print(error, "Cierre abrupto por parte del servidor")
             return {"estado": False, "condicion": "Caida abrupta del servidor"}
-    
+
     @staticmethod
     def cifrado_sha1(mensaje):
         contenido = hashlib.sha1(mensaje.encode())
         return contenido.hexdigest()
-    
+
     @staticmethod
     def cargar_json(ruta):
         if os.path.exists(ruta):
-            archivo = open(ruta, "r" , encoding = "utf-8")
+            archivo = open(ruta, "r", encoding="utf-8")
             return json.load(archivo)
         return None
-        
+
     @staticmethod
     def escribir_json(contenido, ruta):
         if os.path.exists(ruta):
-            archivo = open(ruta,"w", encoding = "utf-8")
+            archivo = open(ruta, "w", encoding="utf-8")
             json.dump(contenido, archivo, ensure_ascii=False)
             archivo.close()
 
     @staticmethod
-    def generar_nombres(datos1, datos2, contador = 0):
+    def generar_nombres(datos1, datos2, contador=0):
         """
         Methodo usado para generar nombres
         de usuarios segun sus nombres y apellidos
@@ -79,9 +84,8 @@ class Herramientas:
             datos2 = datos2
 
         if contador >= 1:
-            return (datos1 + (datos2+"0"+str(contador))).lower()
+            return (datos1 + (datos2 + "0" + str(contador))).lower()
         return (datos1 + datos2).lower()
-
 
     @staticmethod
     def recuperacion_sentencia(objeto):
@@ -148,7 +152,8 @@ class Herramientas:
         else:
             formato_nuevo = f"{rut[0][:1]}.{rut[0][1:4]}.{rut[0][4:8]}"  # es procesar el rut devido a la cantida dde informacion
         return True, f"{formato_nuevo}-{rut[1].lower()}"
-    
+
+
 if __name__ == "__main__":
     test = Herramientas()
     print(test.verificar_rut("18881888-2"))
