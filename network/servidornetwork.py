@@ -3,7 +3,6 @@ from core.herramientas import Herramientas as her
 from entidades.registrocuentas import RegistroCuentas
 from entidades.registroempresas import RegistroEmpresas
 from entidades.registropersonas import RegistroPersonas
-from entidades.registrotrabajador import RegistroTrabajador
 from network.recuperacion_cuenta import RecuperacionCuenta
 from entidades.registrousaurios import RegistroUsuarios
 from servicios_correos.base_correos import Base_Correos
@@ -37,7 +36,7 @@ class ServidorNetwork(Thread):
             self.tiempo_actividad += 1
 
         if self.recuperacion_cuenta.activo:
-            self.recuperacion_cuenta.actualizar()
+            self.recuperacion_cuenta.actuaactualizar()
 
     def enviar(self, datos):
         return self.cliente.send(her.empaquetar(datos))
@@ -49,7 +48,9 @@ class ServidorNetwork(Thread):
             return {"estado": "cierre_abrupto"}
 
         if datos != b'':
-            return her.desenpaquetar(datos)
+            paquete = her.desenpaquetar(datos)
+            print("Paquete enviado", paquete)
+            return paquete
         return {"estado": "cierre_abrupto"}
 
     def login(self, datos):
@@ -121,6 +122,9 @@ class ServidorNetwork(Thread):
             return self.enviar(self.querys.registrar_servicio_mensual(contenido))
         return self.enviar({"estado": False, "condicion": "PRIVILEGIOS"})
 
+    def actualizar_cambios(self):
+        self.tiempo_actividad = 0
+
     def run(self):
         while self.enfuncionamiento:
             datos = self.recibir()
@@ -138,9 +142,11 @@ class ServidorNetwork(Thread):
 
             if datos.get("estado") == "registrar_local":
                 self.registrar_local(datos.get("contenido"))
+                self.actualizar_cambios()
 
             if datos.get("estado") == "servicio_mensual":
                 self.registrar_servicio_mensual(datos)
+                self.actualizar_cambios()
 
             if datos.get("estado") == "desconectar":
                 self.desconectar()
@@ -156,15 +162,18 @@ class ServidorNetwork(Thread):
 
             if datos.get("estado") == "registro_empresa":
                 self.registrar_empresas(datos.get("contenido"))
+                self.actualizar_cambios()
 
             if datos.get("estado") == "registro_productos":
                 self.registrar_productos(datos.get("contenido"))
+                self.actualizar_cambios()
 
             if datos.get("estado") == "lista_empresas":
                 self.listado_empresas()
 
             if datos.get("estado") == "registrar_departamento":
                 self.enviar(self.querys.registrar_departamento(datos.get("contenido")))
+                self.actualizar_cambios()
 
             if datos.get("estado") == "menu_locales":
                 self.enviar(self.querys.lista_menu_locales())
@@ -180,10 +189,12 @@ class ServidorNetwork(Thread):
 
             if datos.get("estado") == "registro_notas_empresas":
                 self.registro_notas_empresas(datos.get("contenido"))
+                self.actualizar_cambios()
 
             if datos.get("estado") == "registrar_gasto":
                 if self.consultar_privilegios("CrearGastos"):
                     self.enviar(self.querys.registrar_gasto(datos.get("contenido"), self.cuenta))
+                    self.actualizar_cambios()
                 else:
                     self.enviar({"estado": False, "condicion": "PRIVILEGIOS"})
 
@@ -192,12 +203,15 @@ class ServidorNetwork(Thread):
 
             if datos.get("estado") == "registro_servicio":
                 self.registro_servicios(datos.get("contenido"))
+                self.actualizar_cambios()
 
             if datos.get("estado") == "registro_notas_personas":
                 self.registro_notas_personas(datos.get("contenido"))
+                self.actualizar_cambios()
 
             if datos.get("estado") == "registrar_persona":
                 self.registrar_persona(datos.get("contenido"))
+                self.actualizar_cambios()
 
             if datos.get("estado") == "listadoservicios":
                 self.listado_servicios()
@@ -214,6 +228,7 @@ class ServidorNetwork(Thread):
 
             if datos.get("estado") == "registrar_trabajador":
                 self.registrar_trabajador(datos.get("contenido"))
+                self.actualizar_cambios()
 
             if datos.get("estado") == "menu_trabajadores":
                 self.enviar(self.querys.lista_menu_trabajadores())
@@ -223,6 +238,7 @@ class ServidorNetwork(Thread):
 
             if datos.get("estado") == "registro_servicio_diario":
                 self.registro_servicio_diario(datos)
+                self.actualizar_cambios()
 
             if datos.get("estado") == "mis servicios":
                 self.enviar(self.querys.mis_servicios(self.persona))
@@ -235,6 +251,7 @@ class ServidorNetwork(Thread):
 
             if datos.get("estado") == "editar_nota":
                 self.actualizar_nota(datos)
+                self.actualizar_cambios()
 
             if datos.get("estado") == "buscar_persona_rut":
                 self.enviar(self.querys.buscar_persona_rut(datos))
@@ -244,6 +261,7 @@ class ServidorNetwork(Thread):
 
             if datos.get("estado") == "editar_empresa":
                 self.editar_empresa(datos.get("contenido"))
+                self.actualizar_cambios()
 
             if datos.get("estado") == "lista_personas":
                 self.enviar(self.querys.lista_personas())
