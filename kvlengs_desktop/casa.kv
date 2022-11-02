@@ -174,15 +174,14 @@
                 MDStackLayout:
                     padding: dp(30)
                     spacing: dp(30)
-                    MDCard:
-                        elevation: 5
+                    MDCardPre:
                         size_hint: .5,.5
                         orientation: "vertical"
                         MDLabel:
-                            font_size: dp(45)
                             text: "Mi Cuenta"
                             halign: "center"
-                            size_hint_x: .1
+                            font_size: dp(35)
+                            size_hint_y: .1
                         ScrollView:
                             do_scroll_x: False
                             do_scroll_y: True
@@ -196,5 +195,5 @@
                                     hint_text: "Contraseña"
                                 MDTextField:
                                     hint_text: "Repetir Contraseña"
-                                MDRaisedButton:
+                                MDRoundFlatButton:
                                     text: "Editar"
