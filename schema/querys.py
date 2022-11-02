@@ -65,7 +65,7 @@ class Querys:
         '''.format(productos.nombre_producto, productos.descripcion, productos.cantidad, productos.id_local)
         return self.bd.insertar(querys)
 
-    def buscar_empresa_rut(self, rut) -> dict[str, RegistroEmpresas | bool] | dict[str, str | bool]:
+    def buscar_empresa_rut(self, rut):
         querys = """
         SELECT *
         FROM empresas
