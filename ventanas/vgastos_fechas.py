@@ -1,12 +1,4 @@
-import os
-
-from kivy.core.window import Window
-from kivy.metrics import dp
-from kivymd.toast import toast
-from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.pickers import MDDatePicker
-from kivymd.uix.textfield import MDTextField
-
 from core.herramientas import Herramientas as her
 from core.constantes import PROTOCOLOERROR
 from ventanas.widgets_predefinidos import MDScreenAbstrac, MenuEntidades, Notificacion, ItemContable, ControlArchivos
