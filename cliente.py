@@ -1,3 +1,4 @@
+import kivy
 from kivymd.app import MDApp
 from kivymd.uix.screenmanager import MDScreenManager
 from kivy.clock import Clock
@@ -7,13 +8,15 @@ from kivy.core.window import Window
 from ventanas.editar_empresa import EditarEmpresa
 from ventanas.vlistanotaspersonas import VListaNotasPersonas
 
-Window.maximize()
-
 from ventanas.vgastos_fechas import VGastosFechas
 from ventanas.vlistapersonas import VListasPersonas
 from ventanas.vserviciosmensuales import VServiciosMensuales
 
-Builder.load_file("kvlengs_desktop/root.kv")
+if kivy.utils.platform == 'android':
+    Builder.load_file("kvlengs/root.kv")
+else:
+    Window.maximize()
+    Builder.load_file("kvlengs_desktop/root.kv")
 
 from ventanas.vlistanotasempresas import VListaNotasEmpresas
 from ventanas.vdepartamentos import VDepartamentos
@@ -36,11 +39,11 @@ from ventanas.vserviciosdiarios import VServiciosDiarios
 
 class ControlEmpresas(MDApp):
     # Kastachaña: ordenar separar en idioma aymara
-    #nohup ./server &
+    # nohup ./server &
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        #self.theme_cls.theme_style = "Dark"
-        #self.theme_cls.primary_palette = "BlueGray"
+        # self.theme_cls.theme_style = "Dark"
+        # self.theme_cls.primary_palette = "BlueGray"
         self.network = ClienteNetwork()
         self.manejador = MDScreenManager()
         self.__cargar_ventanas()
