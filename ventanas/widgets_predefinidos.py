@@ -38,7 +38,9 @@ class ControlArchivos(MDFileManager):
         self.captura_archivo = NotificacionText("", "Nombre Archivo", aceptar=None if funcion is None else funcion)
 
     def file_manager_open(self):
+        self.show_hidden_files = False
         if kivy.utils.platform == "android":
+
             self.show_disks()
         else:
             self.show(os.path.expanduser("~"))  # output manager to the screen
