@@ -15,12 +15,12 @@
                     MDLabel:
                         text: "Solicitar Gastos Por Fechas"
                         font_size: dp(25)
-                    MDRaisedButton:
+                    MDRoundFlatButton:
                         text: "00/00/00 al 00/00/00"
                         id: rango_fechas
                         on_release:root.desplegar_fechas()
 
-                    MDRaisedButton:
+                    MDRoundFlatButton:
                         id: departamentos
                         text: "Departamento:"
                     MDBoxLayout:
@@ -37,7 +37,7 @@
                         style: "H5"
                         id: total_gastos
 
-                    MDRaisedButton:
+                    MDRoundFlatButton:
                         text: "Exportar Excel"
                         on_release: root.desplegar_archivos()
 
