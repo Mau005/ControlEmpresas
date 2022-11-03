@@ -1,6 +1,7 @@
 import os
 from abc import abstractmethod
 
+import kivy.utils
 from kivy.core.window import Window
 from kivy.metrics import dp
 from kivy.uix.modalview import ModalView
@@ -37,17 +38,13 @@ class ControlArchivos(MDFileManager):
         self.captura_archivo = NotificacionText("", "Nombre Archivo", aceptar=None if funcion is None else funcion)
 
     def file_manager_open(self):
-        self.show(os.path.expanduser("~"))  # output manager to the screen
+        if kivy.utils.platform == "android":
+            self.show_disks()
+        else:
+            self.show(os.path.expanduser("~"))  # output manager to the screen
         self.manager_open = True
 
     def select_path(self, path: str):
-        '''
-        It will be called when you click on the file name
-        or the catalog selection button.
-
-        :param path: path to the selected directory or file;
-        '''
-
         self.ruta = path
         self.captura_archivo.title = self.ruta
         self.captura_archivo.open()

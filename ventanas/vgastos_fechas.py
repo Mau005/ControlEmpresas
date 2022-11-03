@@ -78,6 +78,7 @@ class VGastosFechas(MDScreenAbstrac):
         return
 
     def desplegar_archivos(self):
+        print("intenta abrir desplegar el archivo")
         self.archivo.file_manager_open()
 
     def exportar(self, *args):
