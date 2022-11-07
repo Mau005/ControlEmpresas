@@ -26,7 +26,7 @@ class VGastosFechas(MDScreenAbstrac):
                                                      self.ids.departamentos)
         self.lista_datos = []
         self.gastototal = 0
-        self.columnas = ["ID", "Tipo", "Saldo", "Usuario", "Departamento", "Fecha Creación", "Total"]
+        self.columnas = ["ID", "Tipo", "Saldo", "Usuario", "Departamento", "Fecha Creación", "Descripción","Total"]
         self.fecha_inicio = None
         self.fecha_termino = None
 
@@ -67,7 +67,8 @@ class VGastosFechas(MDScreenAbstrac):
             for elementos in info.get("datos"):
                 self.lista_datos.append(elementos)
                 self.ids.contenedor_gastos.add_widget(
-                    ItemContable(elementos[0], elementos[1], elementos[2], elementos[3], elementos[4], elementos[5]))
+                    ItemContable(elementos[0], elementos[1], elementos[2], elementos[3], elementos[4], elementos[5],
+                                 elementos[6]))
                 self.gastototal += elementos[2]
 
             self.ids.total_gastos.text = f"Total Gasto: {self.gastototal}"
@@ -93,7 +94,7 @@ class VGastosFechas(MDScreenAbstrac):
             noti.open()
             return
 
-        self.lista_datos.append([None, None, None, None, None, None, self.gastototal])
+        self.lista_datos.append([None, None, None, None, None, None,None, self.gastototal])
         noti = Notificacion("Error", "Lo lamento esta funcion aun no esta integrada")
         her.generar_excel(self.archivo.ruta, self.archivo.captura_archivo.campo.text, self.lista_datos, self.columnas)
 

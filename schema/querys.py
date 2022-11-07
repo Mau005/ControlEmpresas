@@ -441,7 +441,8 @@ class Querys:
         print(f"inicio: {fecha_inicio} termino: {fecha_termino} departamento: {departamento}")
 
         sentencia = """
-        SELECT ga.id_gasto, eg.nombre, ga.saldo, cu.nombre_cuenta, dep.nombre_departamento, ga.fecha_creacion
+        SELECT ga.id_gasto, eg.nombre, ga.saldo, cu.nombre_cuenta, dep.nombre_departamento, ga.fecha_creacion,
+        ga.descripcion
         FROM gastos ga
         LEFT JOIN cuentas cu ON cu.id_cuenta = ga.id_cuenta
         LEFT JOIN departamentos dep ON dep.id_departamento = ga.id_departamento
@@ -612,7 +613,35 @@ class Querys:
     def buscar_servicios(self, trabajador: RegistroTrabajador):
         if trabajador is None:
             return {"estado": False}
+
+        # Sentencia Servicios Enteros
+        # querys = """
+        # SELECT ser.id_servicios, ser.nombre_servicio, ser.url_posicion, ser.ubicacion, ser.descripcion,
+        # pe.nombres, pe.apellidos, pe.celular, pe.telefono,
+        # est.nombre_estado
+        #
+        # FROM servicios ser
+        # INNER JOIN personas pe ON pe.rut_persona = ser.rut_usuario
+        # INNER JOIN estados est ON est.id_estado = ser.id_estado
+        # WHERE ser.id_departamento = {}
+        # """.format(trabajador.id_departamento)
+
         querys = """
+            SELECT ser.id_servicios, ser.nombre_servicio, ser.url_posicion, ser.ubicacion, ser.descripcion,
+            pe.nombres, pe.apellidos, pe.celular, pe.telefono,
+            est.nombre_estado
+            
+            FROM servicios ser
+            INNER JOIN personas pe ON pe.rut_persona = ser.rut_usuario
+            INNER JOIN estados est ON est.id_estado = ser.id_estado
+            INNER JOIN servicios_mensuales smen ON smen.id_servicios = ser.id_servicios
+            WHERE ser.id_departamento = {} AND
+            ser.id_estado = 1 OR ser.id_estado = 4 OR
+            ser.id_estado = 5
+        """.format(trabajador.id_departamento)
+        return self.bd.consultar(querys, all=True)
+
+    """
         SELECT ser.id_servicios, ser.nombre_servicio, ser.url_posicion, ser.ubicacion, ser.descripcion,
         pe.nombres, pe.apellidos, pe.celular, pe.telefono,
         est.nombre_estado
@@ -620,6 +649,8 @@ class Querys:
         FROM servicios ser
         INNER JOIN personas pe ON pe.rut_persona = ser.rut_usuario
         INNER JOIN estados est ON est.id_estado = ser.id_estado
-        WHERE ser.id_departamento = {}
-        """.format(trabajador.id_departamento)
-        return self.bd.consultar(querys, all=True)
+        INNER JOIN servicios_mensuales smen ON smen.id_servicios = ser.id_servicios
+        WHERE ser.id_departamento = 1 AND
+        ser.id_estado = 1 OR ser.id_estado = 4 OR
+		ser.id_estado = 5
+    """

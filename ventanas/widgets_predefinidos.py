@@ -40,7 +40,6 @@ class ControlArchivos(MDFileManager):
     def file_manager_open(self):
         self.show_hidden_files = False
         if kivy.utils.platform == "android":
-
             self.show_disks()
         else:
             self.show(os.path.expanduser("~"))  # output manager to the screen
@@ -69,8 +68,8 @@ class ControlArchivos(MDFileManager):
         return True
 
 
-class ItemContable(TwoLineListItem):
-    def __init__(self, id_producto, tipo, precio, usuario, departamento, fecha, boton=None, **kargs):
+class ItemContable(ThreeLineListItem):
+    def __init__(self, id_producto, tipo, precio, usuario, departamento, fecha, descripcion, boton=None, **kargs):
         # 1, 800000, 'admin', 'Transporte Hyndai', datetime.datetime(2022, 10, 12, 12, 3, 23)
         self.id_producto = id_producto
         self.tipo = tipo
@@ -81,7 +80,8 @@ class ItemContable(TwoLineListItem):
         self.boton = boton
         super().__init__(**kargs)
         self.text = f"ID: {self.id_producto} Tipo: {self.tipo} Precio: {self.precio}"
-        self.secondary_text = f"Creado: {self.usuario}, , Fecha: {self.fecha} Departamento: {self.departamento}"
+        self.secondary_text = f"Creado: {self.usuario}, Fecha: {self.fecha} Departamento: {self.departamento}"
+        self.tertiary_text = f"Descripcion: {descripcion}"
 
 
 class ItemProductos(MDBoxLayout):
