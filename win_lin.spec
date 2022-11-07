@@ -12,6 +12,11 @@ a = Analysis(
     ["main.py"],
     pathex=[path],
     hookspath=[kivymd_hooks_path],
+    hiddenimports=[
+             'openpyxl',
+             'xlrd',
+             'xlswriter'
+             ],
     win_no_prefer_redirects=False,
     win_private_assemblies=False,
     cipher=None,
