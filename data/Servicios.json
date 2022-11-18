@@ -1,0 +1,8 @@
+{
+
+  "Servicios_Diarios": {
+    "1": {"nombre":  "Limpieza"},
+    "2": {"nombre":  "Retiro"},
+    "3": {"nombre":  ""}
+  }
+}

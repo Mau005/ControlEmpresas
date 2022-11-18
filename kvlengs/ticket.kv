@@ -1,0 +1,33 @@
+
+
+<Ticket>:
+    id_ticket:id_ticket
+    id_servicios:id_servicios
+    fecha_creacion:fecha_creacion
+    fecha_termino:fecha_termino
+    id_estado_anterior:id_estado_anterior
+    id_estado_actualizar:id_estado_actualizar
+    descripcion:descripcion
+    MDCardPre:
+        size_hint: .9, .9
+        pos_hint: {"center_x":.5, "center_y":.5}
+        orientation: "vertical"
+        padding: dp(35)
+        spacing: dp(20)
+        MDTextField:
+            id: id_ticket
+            disabled: True
+        MDTextField:
+            id: id_servicios
+            disabled: True
+        MDTextField:
+            id: fecha_creacion
+            disabled: True
+        MDTextField:
+            id: id_estado_anterior
+            disabled: True
+        MDRoundFlatButton:
+            id: id_estado_actualizar
+            text: "Estado Nuevo:"
+        MDTextField:
+            id: descripcion

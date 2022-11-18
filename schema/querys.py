@@ -1,5 +1,6 @@
 from typing import Dict
 
+from entidades.abstracservicio import AbstracServicio
 from entidades.registrargastos import RegistrarGastos
 from entidades.registrarlocales import RegistrarLocales
 from entidades.registrocuentas import RegistroCuentas
@@ -609,6 +610,58 @@ class Querys:
                                       sueldo=datos[2],
                                       dia_pago=datos[3])
         return None
+
+    def buscar_servicio_id(self, id_servicio):
+        querys = """
+        SELECT *
+        FROM servicios
+        WHERE id_servicios = {}
+        """.format(id_servicio)
+        info = self.bd.consultar(querys)
+        if info.get("estado"):
+            datos = info.get("datos")
+            contenido = {"estado": True, "datos": AbstracServicio(id_servicio=datos[0],
+                                                                      nombre_servicio=datos[1],
+                                                                      id_estado=datos[2],
+                                                                      url_posicion=datos[3],
+                                                                      ubicacion=datos[4],
+                                                                      rut_usuario=datos[5],
+                                                                      descripcion=datos[6],
+                                                                      id_departamento=datos[7],
+                                                                      fecha_creacion=datos[8])}
+            return contenido
+        return info
+
+    def buscar_servicios_mensuales_id(self, id_servicio_mensual):
+        querys = """
+        SELECT *
+        FROM servicios ser
+        INNER JOIN servicios_mensuales serm ON serm.id_servicios = ser.id_servicios
+        WHERE ser.id_servicios = {}
+        """.format(id_servicio_mensual)
+        info = self.bd.consultar(querys)
+        if info.get("estado"):
+            datos = info.get("datos")
+            contenido = {"estado": True, "contenido": ServicioMensual(id_servicio=datos[0],
+                                                                      nombre_servicio=datos[1],
+                                                                      id_estado=datos[2],
+                                                                      url_posicion=datos[3],
+                                                                      ubicacion=datos[4],
+                                                                      rut_usuario=datos[5],
+                                                                      descripcion=datos[6],
+                                                                      id_departamento=datos[7],
+                                                                      fecha_creacion=datos[8],
+                                                                      fecha_inicio=datos[9],
+                                                                      fecha_termino=datos[10])}
+            return {"estado":True, "datos":contenido}
+
+    def buscar_servicios_diarios_id(self, id_servicio_diario):
+        querys = """
+        SELECT *
+        FROM servicios ser
+        INNER JOIN servicios_diarios serm ON serm.id_servicios = ser.id_servicios
+        WHERE ser.id_servicios = {}
+        """.format(id_servicio_diario)
 
     def buscar_servicios(self, trabajador: RegistroTrabajador):
         if trabajador is None:

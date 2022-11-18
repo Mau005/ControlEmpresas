@@ -1,0 +1,90 @@
+
+
+<GenTicketTrabajador>:
+    MDBoxLayout:
+        orientation: "horizontal"
+        MDNavigationRail:
+            anchor: "center"
+            size_hint_x: .1
+            elevation: .4
+            MDNavigationRailItem:
+                text: "Ticker Por Trabajo"
+                icon: "arrow-down-bold-hexagon-outline"
+                font_name: "nasalization-rg.ttf"
+
+            MDNavigationRailItem:
+                text: "Actualizar"
+                icon: "autorenew"
+                font_name: "nasalization-rg.ttf"
+
+
+            MDNavigationRailItem:
+                text: "Volver"
+                icon: "keyboard-return"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.siguiente()
+        ScrollView:
+            do_scroll_y: True
+            do_scroll_x: False
+            MDList:
+                MDCardPre:
+                    pos_hint: {"center_x": .5, "center_y": .5}
+                    padding: dp(45)
+                    orientation: "vertical"
+                    size_hint_y: None
+                    height: dp(350)
+                    ScrollView:
+                        do_scroll_y: True
+                        do_scroll_x: False
+                        MDList:
+                            MDLabel:
+                                text: "Datos Servicio:"
+                            MDTextField:
+                                hint_text: "ID Servicio"
+                                disabled: True
+                            MDTextField:
+                                hint_text: "Nombre Servicio"
+                                disabled: True
+                                id:nombre_servicio
+                            MDLabel:
+                                text: "estado:"
+                                id: nombre_estado
+                            GridLayout:
+                                spacing: dp(15)
+                                cols: 2
+                                rows: 2
+                                size_hint_y: None
+                                height: dp(160)
+                                MDTextField:
+                                    hint_text: "URL Posicion:"
+                                    disabled: True
+                                    id: url_posicion
+                                MDRoundFlatButton:
+                                    text: "Ir"
+                                MDTextField:
+                                    hint_text: "Ubicacion"
+                                    disabled: True
+                                    id: ubicacion
+                                MDRoundFlatButton:
+                                    text: "Copiar"
+                            MDCardPre:
+                                pos_hint: {"center_x": .5, "center_x": .5}
+                                size_hint_y: None
+                                height: dp(70)
+                                padding: dp(10)
+                                ScrollView:
+                                    do_scroll_y: True
+                                    do_scroll_x: False
+                                    MDList:
+                                        MDTextField:
+                                            id: descripcion_servicio
+                                            hint_text: "Descripcion"
+                                            disabled: True
+                                            multiline: True
+                MDRoundFlatButton:
+                    text: "Estado:"
+                    id:estado
+
+                MDTextField:
+                    hint_text: "Descripcion"
+                    multiline: True

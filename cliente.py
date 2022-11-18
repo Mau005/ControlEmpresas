@@ -11,6 +11,7 @@ from ventanas.vlistanotaspersonas import VListaNotasPersonas
 from ventanas.vgastos_fechas import VGastosFechas
 from ventanas.vlistapersonas import VListasPersonas
 from ventanas.vserviciosmensuales import VServiciosMensuales
+from ventanas.vtickettrabajadr import GenTicketTrabajador
 
 if kivy.utils.platform == 'android':
     from android.permissions import request_permissions, Permission
@@ -80,6 +81,7 @@ class ControlEmpresas(MDApp):
 
         self.vlistanotaspersonas = VListaNotasPersonas(self.network, self.manejador, "lista_notas_personas",
                                                        siguiente="casa")
+        self.vgenticket = GenTicketTrabajador(self.network, self.manejador, "gen_ticket_trabajador", siguiente="casa")
 
         self.manejador.add_widget(self.login)
         self.manejador.add_widget(self.casa)
@@ -102,6 +104,7 @@ class ControlEmpresas(MDApp):
         self.manejador.add_widget(self.vlistapersonas)
         self.manejador.add_widget(self.vlistanotaspersonas)
         self.manejador.add_widget(self.veditarempresa)
+        self.manejador.add_widget(self.vgenticket)
         self.login.activar()
 
     def actualizar(self, dt):
