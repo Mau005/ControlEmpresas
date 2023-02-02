@@ -1,8 +1,9 @@
-DROP TABLE IF EXISTS cuentas;
 DROP TABLE IF EXISTS personas;
+DROP TABLE IF EXISTS cuentas;
 DROP TABLE IF EXISTS empresas;
 DROP TABLE IF EXISTS locales;
 DROP TABLE IF EXISTS estados;
+DROP TABLE IF EXISTS estados_preparativos;
 DROP TABLE IF EXISTS trabajadores;
 DROP TABLE IF EXISTS departamentos;
 DROP TABLE IF EXISTS abonos_trabajadores;
@@ -59,6 +60,10 @@ telefono_local VARCHAR(12));
 
 CREATE TABLE estados (
 id_estado INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+nombre_estado VARCHAR(50) NOT NULL);
+
+CREATE TABLE estados_preparativos (
+id_estado_preparativo INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
 nombre_estado VARCHAR(50) NOT NULL);
 
 CREATE TABLE trabajadores (
@@ -119,12 +124,22 @@ CREATE TABLE servicios_diarios (
 id_servicios INT(11) PRIMARY KEY NOT NULL,
 dias_diarios VARCHAR(7) NOT NULL);
 
-CREATE TABLE tickets (
-id_ticket INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+CREATE TABLE orden_trabajos (
+id_orden INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
 id_servicios INT(11) NOT NULL,
 fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-fecha_termino DATETIME NOT NULL,
+fecha_termino DATETIME NULL,
 id_estado INT(11) NOT NULL,
+id_estados_preparativos INT(11) NOT NULL,
+id_departamento INT(11) NOT NULL,
+precio_ot INT(11) NOT NULL DEFAULT 0,
+descripcion TEXT(250));
+
+CREATE TABLE orden_trabajos_historia (
+id_orden INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
+fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+id_estado_preparativos_anterior INT(11) NOT NULL,
+id_estados_preparativos_nuevo INT(11) NOT NULL,
 descripcion TEXT(250));
 
 CREATE TABLE productos (
@@ -198,8 +213,6 @@ ALTER TABLE servicios ADD CONSTRAINT servicios_rut_usuario_personas_rut_persona 
 ALTER TABLE servicios ADD CONSTRAINT servicios_id_departamento_departamentos_id_departamento FOREIGN KEY (id_departamento) REFERENCES departamentos(id_departamento) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE servicios_mensuales ADD CONSTRAINT servicios_mensuales_id_servicios_servicios_id_servicios FOREIGN KEY (id_servicios) REFERENCES servicios(id_servicios) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE servicios_diarios ADD CONSTRAINT servicios_diarios_id_servicios_servicios_id_servicios FOREIGN KEY (id_servicios) REFERENCES servicios(id_servicios) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE tickets ADD CONSTRAINT tickets_id_servicios_servicios_id_servicios FOREIGN KEY (id_servicios) REFERENCES servicios(id_servicios) ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE tickets ADD CONSTRAINT tickets_id_estado_estados_id_estado FOREIGN KEY (id_estado) REFERENCES estados(id_estado) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE productos ADD CONSTRAINT productos_id_local_locales_id_local FOREIGN KEY (id_local) REFERENCES locales(id_local) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE facturas_productos ADD CONSTRAINT facturas_productos_folio_factura_facturas_folio_factura FOREIGN KEY (folio_factura) REFERENCES facturas(folio_factura) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE facturas_productos ADD CONSTRAINT facturas_productos_id_producto_productos_id_producto FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE CASCADE ON UPDATE CASCADE;
@@ -214,3 +227,8 @@ ALTER TABLE servicios_productos ADD CONSTRAINT servicios_productos_id_servicio_s
 ALTER TABLE gastos ADD CONSTRAINT gastos_id_departamento_departamentos_id_departamento FOREIGN KEY (id_departamento) REFERENCES departamentos(id_departamento) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE gastos ADD CONSTRAINT gastos_id_estado_gastos_estado_gastos_id_estado_gastos FOREIGN KEY (id_estado_gastos) REFERENCES estado_gastos(id_estado_gastos) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE gastos ADD CONSTRAINT gastos_id_cuenta_cuentas_id_cuenta FOREIGN KEY (id_cuenta) REFERENCES cuentas(id_cuenta) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE orden_trabajos ADD CONSTRAINT orden_trabajos_servicios_id FOREIGN KEY (id_servicios) REFERENCES servicios(id_servicios) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE orden_trabajos ADD CONSTRAINT orden_trabajos_id_estados_id FOREIGN KEY (id_estado) REFERENCES estados(id_estado) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE orden_trabajos ADD CONSTRAINT orden_trabajos_id_estados_preparativos_id FOREIGN KEY (id_estados_preparativos) REFERENCES estados_preparativos(id_estado_preparativo) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE orden_trabajos ADD CONSTRAINT orden_trabajos_id_departamentos_id FOREIGN KEY (id_departamento) REFERENCES departamentos(id_departamento) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE orden_trabajos_historia ADD CONSTRAINT orden_trabajos_historia_id_orden_ot FOREIGN KEY (id_orden) REFERENCES orden_trabajos(id_orden) ON DELETE CASCADE ON UPDATE CASCADE;
