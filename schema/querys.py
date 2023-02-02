@@ -70,7 +70,7 @@ class Querys:
         querys = """
         SELECT *
         FROM empresas
-        WHERE rut_empresa = "{}";
+        WHERE rut_empresa = {};
         """.format(rut)
         datos = self.bd.consultar(querys)
         if datos.get("estado"):
@@ -116,6 +116,7 @@ class Querys:
         check = self.buscar_empresa_rut(objeto.rut_empresa)
         if check.get("estado"):
             return {"estado": False, "condicion": "EMPRESA_EXISTE"}
+
 
         querys = '''
         INSERT INTO empresas(rut_empresa, nombre_empresa, giro_empresa, direccion_empresa, correo_empresa, 
