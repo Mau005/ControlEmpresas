@@ -57,7 +57,7 @@ class Server:
         try:
             self.socket = socket.socket()
             self.socket.bind((self.info["Servidor"]["ip"], self.info["Servidor"]["port"]))
-            self.socket.listen(0)
+            self.socket.listen(5)
         except OSError as error:
             print(error)
             input("Precione para continuar")
@@ -87,6 +87,7 @@ class Server:
 if __name__ == "__main__":
     iniciando = False
     print(sys.argv)
+
     if len(sys.argv) >= 2:
         if sys.argv[1] == "setup":
             iniciando = True
@@ -124,7 +125,9 @@ if __name__ == "__main__":
             querys.registrar_empresas(base_empresa)
             querys.registrar_estados("OPERATIVO")
             querys.registrar_estados("DETENIDO")
+            querys.registrar_estados("PENDIENTE")
             querys.registrar_estados("COMPLETADO")
+            querys.registrar_estados("MASTER")
 
             querys.registrar_estado_gastos("COMUNES")
             querys.registrar_estado_gastos("REMUNERACIONES")
