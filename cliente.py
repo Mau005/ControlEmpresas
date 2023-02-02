@@ -115,7 +115,7 @@ class ControlEmpresas(MDApp):
         self.network.cerrar()
 
     def build(self):
-        self.title = "Kastachaña Beta 0.2.1"
+        self.title = "Kastachana Beta 0.3.0"
         return self.manejador
 
 
