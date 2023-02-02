@@ -4,7 +4,7 @@
         MDNavigationRail:
             anchor: "center"
             size_hint_x: .1
-            elevation: .4
+            id:rail_principal
             MDNavigationRailItem:
                 text: "Casa"
                 icon: "home"
@@ -13,8 +13,8 @@
 
 
             MDNavigationRailItem:
-                text: "Herramientas"
-                icon: "tools"
+                text: "Administración"
+                icon: "security"
                 font_name: "nasalization-rg.ttf"
                 on_release: root.cambiar_screen("herramientas")
 
@@ -66,109 +66,101 @@
                 MDStackLayout:
                     padding: dp(30)
                     spacing: dp(30)
-                    MDCardPre:
-                        size_hint: .5,.5
-                        orientation: "vertical"
-                        radius: 45
-                        MDLabel:
-                            font_size: dp(45)
+                    MDBottomNavigation:
+
+                        MDBottomNavigationItem:
+                            name: "screen 1"
                             text: "Crear"
-                            halign: "center"
-                            size_hint_y: .1
-                        ScrollView:
-                            do_scroll_x: False
-                            do_scroll_y: True
-                            MDList:
-                                padding: dp(35)
-                                spacing: dp(20)
+                            icon: "pencil"
 
-                                TwoLineListItem:
-                                    text: "Crear Servicios Mensuales"
-                                    secondary_text: "Podra crear servicios de tipo mensual."
-                                    on_release: root.cambiar_ventanta("serviciosmensuales")
-                                OneLineListItem:
-                                    text: "Crear Servicios Diarios"
-                                    on_release: root.cambiar_ventanta("serviciosdiarios")
-                                OneLineListItem:
-                                    text: "Crear Usuarios"
-                                    on_release: root.cambiar_ventanta("personas")
-                                OneLineListItem:
-                                    text: "Crear Empresas"
-                                    on_release: root.cambiar_ventanta("empresas")
+                            ScrollView:
+                                do_scroll_x: False
+                                do_scroll_y: True
+                                MDList:
+                                    padding: dp(35)
+                                    spacing: dp(20)
 
-                                OneLineListItem:
-                                    text: "Crear Productos"
-                                    on_release: root.cambiar_ventanta("productos")
-                                OneLineListItem:
-                                    text: "Crear Locales"
-                                    on_release: root.cambiar_ventanta("locales")
-                                OneLineListItem:
-                                    text: "Crear Departamento"
-                                    on_release: root.cambiar_ventanta("departamentos")
-                                OneLineListItem:
-                                    text: "Crear Gastos"
-                                    on_release: root.cambiar_ventanta("gastos")
-                                OneLineListItem:
-                                    text: "Crear Ticket Trabajador"
-                                    on_release: root.cambiar_ventanta("gen_ticket_trabajador")
-                    MDCardPre:
-                        size_hint: .5,.5
-                        orientation: "vertical"
-                        radius: 45
-                        MDLabel:
-                            size_hint_y: .1
-                            font_size: dp(45)
-                            text: "Listados"
-                            halign: "center"
-                        ScrollView:
-                            do_scroll_x: False
-                            do_scroll_y: True
-                            MDList:
-                                padding: dp(35)
-                                spacing: dp(20)
+                                    TwoLineListItem:
+                                        text: "Crear Servicios Mensuales"
+                                        secondary_text: "Podra crear servicios de tipo mensual."
+                                        on_release: root.cambiar_ventanta("serviciosmensuales")
+                                    OneLineListItem:
+                                        text: "Crear Servicios Diarios"
+                                        on_release: root.cambiar_ventanta("serviciosdiarios")
+                                    OneLineListItem:
+                                        text: "Crear Usuarios"
+                                        on_release: root.cambiar_ventanta("personas")
+                                    OneLineListItem:
+                                        text: "Crear Empresas"
+                                        on_release: root.cambiar_ventanta("empresas")
 
-                                OneLineListItem:
-                                    text: "Listado De Empresas"
-                                    on_release: root.cambiar_ventanta("listaempresas")
-                                OneLineListItem:
-                                    text: "Listado De Personas"
-                                    on_release: root.cambiar_ventanta("lista_personas")
-                                OneLineListItem:
-                                    text: "Listado De Productos"
-                                    on_release: root.cambiar_ventanta("listaproductos")
-                                OneLineListItem:
-                                    text: "Listado De Registro de Empresas"
-                                    on_release: root.cambiar_ventanta("lista_menu_empresas")
-                                OneLineListItem:
-                                    text: "Listado De Registro de Notas"
-                                    on_release: root.cambiar_ventanta("lista_notas_personas")
-                                OneLineListItem:
-                                    text: "Listado De Gastos"
-                                    on_release: root.cambiar_ventanta("gastos_fechas")
-                    MDCardPre:
-                        size_hint: .5,.5
-                        orientation: "vertical"
-                        radius: 45
-                        MDLabel:
-                            size_hint_y: .1
-                            font_size: dp(45)
+                                    OneLineListItem:
+                                        text: "Crear Productos"
+                                        on_release: root.cambiar_ventanta("productos")
+                                    OneLineListItem:
+                                        text: "Crear Locales"
+                                        on_release: root.cambiar_ventanta("locales")
+                                    OneLineListItem:
+                                        text: "Crear Departamento"
+                                        on_release: root.cambiar_ventanta("departamentos")
+                                    OneLineListItem:
+                                        text: "Crear Gastos"
+                                        on_release: root.cambiar_ventanta("gastos")
+                                    OneLineListItem:
+                                        text: "Crear Ticket Trabajador"
+                                        on_release: root.cambiar_ventanta("gen_ticket_trabajador")
+
+                        MDBottomNavigationItem:
+                            name: "screen 2"
+                            text: "Buscar"
+                            icon: "tag-search-outline"
+
+                            ScrollView:
+                                do_scroll_x: False
+                                do_scroll_y: True
+                                MDList:
+                                    padding: dp(35)
+                                    spacing: dp(20)
+
+                                    OneLineListItem:
+                                        text: "Listado De Empresas"
+                                        on_release: root.cambiar_ventanta("listaempresas")
+                                    OneLineListItem:
+                                        text: "Listado De Personas"
+                                        on_release: root.cambiar_ventanta("lista_personas")
+                                    OneLineListItem:
+                                        text: "Listado De Productos"
+                                        on_release: root.cambiar_ventanta("listaproductos")
+                                    OneLineListItem:
+                                        text: "Listado De Registro de Empresas"
+                                        on_release: root.cambiar_ventanta("lista_menu_empresas")
+                                    OneLineListItem:
+                                        text: "Listado De Registro de Notas"
+                                        on_release: root.cambiar_ventanta("lista_notas_personas")
+                                    OneLineListItem:
+                                        text: "Listado De Gastos"
+                                        on_release: root.cambiar_ventanta("gastos_fechas")
+
+                        MDBottomNavigationItem:
+                            name: "screen 3"
                             text: "Asignar"
-                            halign: "center"
-                        ScrollView:
-                            do_scroll_x: False
-                            do_scroll_y: True
-                            MDList:
-                                padding: dp(35)
-                                spacing: dp(20)
-                                OneLineListItem:
-                                    text: "Asignar Notas Empresas"
-                                    on_release: root.cambiar_ventanta("notasempresas")
-                                OneLineListItem:
-                                    text: "Asignar Notas Personas"
-                                    on_release: root.cambiar_ventanta("notaspersonas")
-                                OneLineListItem:
-                                    text: "Asignar Trabajador"
-                                    on_release: root.cambiar_ventanta("trabajadores")
+                            icon: "clipboard-arrow-down-outline"
+
+                            ScrollView:
+                                do_scroll_x: False
+                                do_scroll_y: True
+                                MDList:
+                                    padding: dp(35)
+                                    spacing: dp(20)
+                                    OneLineListItem:
+                                        text: "Asignar Notas Empresas"
+                                        on_release: root.cambiar_ventanta("notasempresas")
+                                    OneLineListItem:
+                                        text: "Asignar Notas Personas"
+                                        on_release: root.cambiar_ventanta("notaspersonas")
+                                    OneLineListItem:
+                                        text: "Asignar Trabajador"
+                                        on_release: root.cambiar_ventanta("trabajadores")
 
             Screen:
                 name: "cuenta"

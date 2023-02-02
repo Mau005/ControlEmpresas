@@ -1,3 +1,4 @@
+from kivy.uix.screenmanager import FadeTransition
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelThreeLine, MDExpansionPanelOneLine
 
@@ -16,6 +17,7 @@ class Casa(MDScreenAbstrac):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
         self.mis_servicios = None
         self.mis_trabajos = None
+        self.ids.manejador_menus.transition = FadeTransition()
 
     def activar_servicios(self):
         self.network.enviar({"estado": "mis servicios"})
@@ -70,6 +72,7 @@ class Casa(MDScreenAbstrac):
 
     def cambiar_screen(self, name):
         self.ids.manejador_menus.current = name
+
 
     def crear_servicios(self):
         self.manager.current = "servicios"
