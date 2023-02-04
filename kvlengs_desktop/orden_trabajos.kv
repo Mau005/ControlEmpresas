@@ -1,7 +1,7 @@
 
 
 
-<VLocales>:
+<VOrden_Trabajos>:
     MDBoxLayout:
         orientation: "horizontal"
         MDNavigationRail:
@@ -45,17 +45,24 @@
                         padding: dp(30)
                         spacing: dp(25)
                         MDLabel:
-                            text: "Crear Ordenes de Trabajo"
+                            text: "OT"
                             font_size: dp(25)
+                        MDRectangleFlatButton:
+                            id: id_servicios
+                            text: "Servicio"
+                        MDRectangleFlatButton:
+                            id: fecha_termino_ot
+                            text: "Fecha Termino"
+                        MDRectangleFlatButton:
+                            id: id_estados_preparativos
+                            text: "Preparativos"
+                        MDRectangleFlatButton:
+                            id: id_departamento_ot
+                            text: "Departamentos"
                         MDTextField:
-                            hint_text: "Nombre Local"
-                            id:nombre_local
-                            helper_text: "max 100 caracteres"
+                            id: precio_ot
+                            hint_text: "Precio (Opcional)"
                         MDTextField:
-                            id: telefono
-                            hint_text: "Telefono: "
-                            helper_text: "max 12 caracteres"
-                        MDTextField:
-                            id: direccion
-                            hint_text: "Direccion"
-                            helper_text: "calle numero, comuna"
+                            id: descripcion_ot
+                            hint_text: "Descripción"
+                            multiline: True
