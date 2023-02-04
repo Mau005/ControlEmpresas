@@ -100,10 +100,8 @@ if __name__ == "__main__":
             import getpass
 
             try:
-                print("[PREPARANDO] Indicame la contraseña para el usuario admin: ")
-                contra = getpass.getpass()
-                print("[PREPARANDO] Indicame nuevamente la contraseña: ")
-                contra2 = getpass.getpass()
+                contra = getpass.getpass(prompt= "[PREPARANDO] Indicame la contraseña para el usuario admin: ")
+                contra2 = getpass.getpass(prompt="[PREPARANDO] Indicame nuevamente la contraseña: ")
                 if len(contra) >= 3 and contra == contra2:
                     querys.registrar_cuenta("admin", contra, acceso=5)
                     print("[OK] Usuario admin registrado con exito")
