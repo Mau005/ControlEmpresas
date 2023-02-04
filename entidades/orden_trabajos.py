@@ -12,6 +12,11 @@ class Orden_Trabajos:
         self.precio_ot = kargs.get("precio_ot")
         self.descripcion = kargs.get("descripcion")
 
+    def __str__(self):
+        return f"Id Orde: {self.id_orden}" \
+               f"Id Servicios: {self.id_servicios}" \
+               f"descripcion: {self.descripcion}"
+
 class Orden_Trabajos_Historia:
     def __init__(self, **kargs):
         self.id_orden = kargs.get("id_orden")
