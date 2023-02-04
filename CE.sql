@@ -41,6 +41,7 @@ telefono VARCHAR(12),
 celular VARCHAR(12) NOT NULL,
 correo VARCHAR(100) NOT NULL,
 id_cuenta INT(11) NOT NULL);
+ubicacion VARCHAR(100) NULL,
 
 CREATE TABLE empresas (
 rut_empresa VARCHAR(12) PRIMARY KEY NOT NULL,
