@@ -7,6 +7,7 @@ class RegistroNotas:
         self.fecha_creacion = kargs.get("fecha_creacion")
         self.rut_asociado = kargs.get("rut_asociado")
         self.rut_persona = kargs.get("rut_persona")
+        self.nombre_creado = kargs.get("nombre_creado")
         
     def preparar(self, registro) -> dict:
         return {"estado":registro, "contenido":self}
@@ -17,6 +18,6 @@ class RegistroNotas:
     nota: {}
     Fecha Creacion {}
     Rut Asociado: {}
-    ID Cuenta: {}
-    '''.format(self.id_registro, self.nota, self.fecha_creacion, self.rut_asociado, self.id_cuenta)
+    rut_persona: {}
+    '''.format(self.id_registro, self.nota, self.fecha_creacion, self.rut_asociado, self.rut_persona)
     
