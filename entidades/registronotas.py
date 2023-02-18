@@ -6,12 +6,12 @@ class RegistroNotas:
         self.nota = kargs.get("nota")
         self.fecha_creacion = kargs.get("fecha_creacion")
         self.rut_asociado = kargs.get("rut_asociado")
-        self.id_cuenta = kargs.get("id_cuenta")
+        self.rut_persona = kargs.get("rut_persona")
         
-    def preparar(self, registro):
+    def preparar(self, registro) -> dict:
         return {"estado":registro, "contenido":self}
     
-    def __str__(self):
+    def __str__(self) -> str:
         return '''
     ID Registro: {}
     nota: {}
