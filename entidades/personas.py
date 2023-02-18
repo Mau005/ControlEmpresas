@@ -1,4 +1,4 @@
-class RegistroPersonas:
+class Personas:
     # rut_persona	nombres	apellidos	telefono	celular	correo	id_cuenta
     def __init__(self, **kargs):
         self.rut_persona = kargs.get("rut_persona")
@@ -7,9 +7,7 @@ class RegistroPersonas:
         self.telefono = kargs.get("telefono")
         self.celular = kargs.get("celular")
         self.correo = kargs.get("correo")
-        self.id_cuenta = kargs.get("id_cuenta")
         self.rut_empresa = kargs.get("rut_empresa")
-        self.ubicacion = kargs.get("ubicacion")
     def __str__(self):
         return """
     Rut Persona: {}
@@ -18,17 +16,14 @@ class RegistroPersonas:
     Telefono: {}
     Celular: {}
     Correo: {}
-    Id Cuenta: {}
-    Ubicacion: {}
-    """.format(self.rut_persona, self.nombres, self.apellidos, self.telefono, self.celular, self.correo,
-               self.id_cuenta, self.ubicacion)
+    """.format(self.rut_persona, self.nombres, self.apellidos, self.telefono, self.celular, self.correo)
 
     def preparar(self):
         return {"estado": "registrar_persona", "contenido": self}
 
 
 if __name__ == "__main__":
-    test = RegistroPersonas(rut="18.881.495-x", nombres="Mauricio Andres", apellidos="Pino Gonzalez")
+    test = Personas(rut="18.881.495-x", nombres="Mauricio Andres", apellidos="Pino Gonzalez")
     preparado = test.preparar()
     print(preparado["estado"])
     print(preparado["contenido"].nombres)
