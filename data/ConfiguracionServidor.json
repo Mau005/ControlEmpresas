@@ -2,14 +2,14 @@
     "Mysql":{
         "usuario": "root",
         "password": "",
-        "bd": "controlempresas",
+        "bd": "kastachana",
         "host": "localhost",
         "port": 3306
     },
     "Servidor":{
         "MOTD": "Bienvenido a Kastachana",
         "Version": 0.1,
-        "ip": "192.168.100.4",
+        "ip": "127.0.0.1",
         "port": 7171,
         "paquetes": 2048,
         "TIEMPOACTUALIZAR": 1,
