@@ -31,7 +31,7 @@ CREATE TABLE cuentas (
 rut_persona VARCHAR(12) PRIMARY KEY NOT NULL UNIQUE,
 nombre_cuenta VARCHAR(55) NOT NULL UNIQUE,
 contraseña VARCHAR(50) NOT NULL,
-fecha_creacion DATETIME NOT NULL,
+fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 acceso INT(2) NOT NULL);
 
 CREATE TABLE personas (
@@ -40,7 +40,8 @@ nombres VARCHAR(100) NOT NULL,
 apellidos VARCHAR(100) NOT NULL,
 telefono VARCHAR(12),
 celular VARCHAR(12) NOT NULL,
-correo VARCHAR(100) NOT NULL);
+correo VARCHAR(100) NOT NULL,
+ubicacion VARCHAR(150));
 
 CREATE TABLE empresas (
 rut_empresa VARCHAR(12) PRIMARY KEY NOT NULL,
@@ -83,7 +84,7 @@ id_abono INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
 rut_persona VARCHAR(12) NOT NULL,
 abono INT(11) NOT NULL,
 descripcion TEXT(250),
-fecha_creacion DATETIME NOT NULL);
+fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
 
 CREATE TABLE empresas_personas (
 id_empresas_personas INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -93,7 +94,8 @@ rut_persona VARCHAR(12) NOT NULL);
 CREATE TABLE notas (
 id_nota INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
 nota TEXT(250) NOT NULL,
-fecha_creacion DATETIME NOT NULL);
+fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+rut_persona VARCHAR(12) NOT NULL);
 
 CREATE TABLE empresas_notas (
 id_nota INT(11) PRIMARY KEY NOT NULL,
@@ -111,7 +113,7 @@ url_posicion VARCHAR(250),
 ubicacion VARCHAR(250) NOT NULL,
 rut_usuario VARCHAR(12) NOT NULL,
 descripcion TEXT(250),
-fecha_creacion DATETIME NOT NULL);
+fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
 
 CREATE TABLE servicios_mensuales (
 id_servicios INT(11) PRIMARY KEY NOT NULL,
@@ -126,7 +128,7 @@ id_departamento INT(11) NOT NULL);
 CREATE TABLE orden_trabajo (
 id_orden INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
 id_servicios INT(11) NOT NULL,
-fecha_creacion DATETIME NOT NULL,
+fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 fecha_termino DATETIME NOT NULL,
 id_estado INT(11) NOT NULL,
 id_estado_pre INT(11) NOT NULL,
@@ -137,7 +139,7 @@ CREATE TABLE productos (
 id_producto INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
 nombre_producto VARCHAR(100) NOT NULL,
 descripcion TEXT(250),
-fecha_creacion DATETIME NOT NULL,
+fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 cantidad INT(11) NOT NULL,
 id_local INT(11) NOT NULL);
 
@@ -178,7 +180,7 @@ CREATE TABLE gastos (
 id_gasto INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
 descripcion TEXT(250),
 saldo INT(11) NOT NULL,
-fecha_creacion DATETIME NOT NULL,
+fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 id_departamento INT(11) NOT NULL,
 id_estado_gastos INT(11) NOT NULL,
 rut_persona VARCHAR(12) NOT NULL);
@@ -190,7 +192,7 @@ nombre VARCHAR(100) NOT NULL);
 CREATE TABLE ot_historia (
 id_ot_historia INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
 id_orden INT(11) NOT NULL,
-fecha_creacion DATETIME NOT NULL,
+fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 id_pre_anterior INT(11) NOT NULL,
 id_pre_nuevo INT(11) NOT NULL,
 descripcion TEXT(250));
@@ -202,6 +204,7 @@ ALTER TABLE departamentos ADD CONSTRAINT departamentos_id_local_locales_id_local
 ALTER TABLE abonos_trabajadores ADD CONSTRAINT abonos_trabajadores_rut_persona_trabajadores_rut_persona FOREIGN KEY (rut_persona) REFERENCES trabajadores(rut_persona) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE empresas_personas ADD CONSTRAINT empresas_personas_rut_empresa_empresas_rut_empresa FOREIGN KEY (rut_empresa) REFERENCES empresas(rut_empresa) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE empresas_personas ADD CONSTRAINT empresas_personas_rut_persona_personas_rut_persona FOREIGN KEY (rut_persona) REFERENCES personas(rut_persona) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE notas ADD CONSTRAINT notas_rut_persona_trabajadores_rut_persona FOREIGN KEY (rut_persona) REFERENCES trabajadores(rut_persona) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE empresas_notas ADD CONSTRAINT empresas_notas_id_nota_notas_id_nota FOREIGN KEY (id_nota) REFERENCES notas(id_nota) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE empresas_notas ADD CONSTRAINT empresas_notas_rut_empresa_empresas_rut_empresa FOREIGN KEY (rut_empresa) REFERENCES empresas(rut_empresa) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE personas_notas ADD CONSTRAINT personas_notas_id_nota_notas_id_nota FOREIGN KEY (id_nota) REFERENCES notas(id_nota) ON DELETE CASCADE ON UPDATE CASCADE;
