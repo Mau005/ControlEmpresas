@@ -100,27 +100,42 @@ if __name__ == "__main__":
             import getpass
 
             try:
-                contra = getpass.getpass(prompt= "[PREPARANDO] Indicame la contraseña para el usuario admin: ")
+                contra = getpass.getpass(prompt="[PREPARANDO] Indicame la contraseña para el usuario admin: ")
                 contra2 = getpass.getpass(prompt="[PREPARANDO] Indicame nuevamente la contraseña: ")
                 if len(contra) >= 3 and contra == contra2:
-                    querys.registrar_cuenta("admin", contra, acceso=5)
+                    from entidades.registroempresas import RegistroEmpresas
+                    from entidades.cuentas import Cuentas
+                    from entidades.personas import Personas
+
+                    rut_base = "11.111.111-1"
+                    base_string = "Persona Natural"
+                    empresa = querys.registrar_empresas(RegistroEmpresas(rut_empresa=rut_base,
+                                                                         nombre_empresa=base_string,
+                                                                         giro_empresa=base_string,
+                                                                         direccion_empresa=base_string,
+                                                                         telefono_empresa="",
+                                                                         correo_empresa=base_string,
+                                                                         correo_respaldo="",
+                                                                         celular_empresa=""))
+                    base_string_admin = "Admin User"
+                    persona = querys.registrar_persona_sin_cuenta(Personas(rut_persona=rut_base,
+                                                                  nombres=base_string_admin,
+                                                                  apellidos=base_string_admin,
+                                                                  celular=base_string_admin,
+                                                                  correo=base_string_admin,
+                                                                  rut_empresa=rut_base))
+                    cuenta = querys.registrar_cuenta(Cuentas(rut_persona=rut_base,
+                                                    nombre_cuenta="admin",
+                                                    contraseña=contra,
+                                                    acceso=5
+                                                    ))
+                    print(f"Cuenta: {cuenta}")
                     print("[OK] Usuario admin registrado con exito")
             except Exception as err:
                 print('ERROR:', err)
 
-            from entidades.registroempresas import RegistroEmpresas
-
             print("[PREPARANDO] Registrando tablas minimas para funcionar")
-            base_string = "Persona Natural"
-            base_empresa = RegistroEmpresas(rut_empresa="11.111.111-1",
-                                            nombre_empresa=base_string,
-                                            giro_empresa=base_string,
-                                            direccion_empresa=base_string,
-                                            telefono_empresa="",
-                                            correo_empresa=base_string,
-                                            correo_respaldo="",
-                                            celular_empresa="")
-            querys.registrar_empresas(base_empresa)
+
             querys.registrar_estados("OPERATIVO")
             querys.registrar_estados("DETENIDO")
             querys.registrar_estados("PENDIENTE")
