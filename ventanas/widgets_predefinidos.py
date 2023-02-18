@@ -15,14 +15,14 @@ from kivymd.uix.label import MDLabel
 
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.dialog import MDDialog
-from kivymd.uix.button import MDRoundFlatButton
+from kivymd.uix.button import MDRoundFlatButton, MDRaisedButton
 from kivymd.uix.list import TwoLineListItem, ThreeLineListItem, MDList
 from kivymd.uix.textfield import MDTextField
 
 from core.constantes import PROTOCOLOERROR
 from entidades.menuitems import MenuGlobal
 from entidades.registronotas import RegistroNotas
-from entidades.registropersonas import RegistroPersonas
+from entidades.personas import Personas
 from entidades.serviciosproductos import ServiciosProductos
 
 
@@ -319,8 +319,8 @@ class Notificacion(MDDialog):
         self.title = titulo
         self.text = mensaje
         self.auto_dismiss = True
-        self.aceptar = MDRoundFlatButton(text="Aceptar", on_release=self.salir)
-        self.cancelar = MDRoundFlatButton(text="Cancelar", on_release=self.salir)
+        self.aceptar = MDRaisedButton(text="Aceptar", on_release=self.salir)
+        self.cancelar = MDRaisedButton(text="Cancelar", on_release=self.salir)
         self.buttons = [self.aceptar, self.cancelar]
 
         if funcion_concurrente is not None:
@@ -337,14 +337,12 @@ class InformacionPersona(MDDialog):
         self.title = titulo
         self.network = network
         self.rut_principal = rut
-
-        self.contenedor_principal = MDBoxLayout(padding=dp(15))
-        self.scroll = ScrollView(do_scroll_x=False, do_scroll_y=True, size_hint=[None, None], width=dp(250),
-                                 height=dp(100))
+        self.contenedor_principal = MDBoxLayout(orientation = "vertical", spacing="12dp",
+                    size_hint_y=None,
+                    height="220dp")
+        self.scroll = ScrollView(do_scroll_x=False, do_scroll_y=True)
         self.contenedor = MDList()
 
-        self.scroll.add_widget(self.contenedor)
-        self.contenedor_principal.add_widget(self.scroll)
 
         self.maqueta = None
 
@@ -354,23 +352,25 @@ class InformacionPersona(MDDialog):
         self.telefono = MDTextField(hint_text="Telefono")
         self.celular = MDTextField(hint_text="Celular")
         self.correo = MDTextField(hint_text="Correo")
-        self.ubicacion = MDTextField(hint_text="ubicacion")
-        self.cuenta = MDTextField(hint_text="Cuenta", disabled=True)
         self.contenedor.add_widget(self.rut)
         self.contenedor.add_widget(self.nombres)
         self.contenedor.add_widget(self.apellidos)
         self.contenedor.add_widget(self.telefono)
         self.contenedor.add_widget(self.celular)
         self.contenedor.add_widget(self.correo)
-        self.contenedor.add_widget(self.ubicacion)
-        self.contenedor.add_widget(self.cuenta)
-        self.type = "custom"
+
+        #self.type = "custom"
+        self.scroll.add_widget(self.contenedor)
+        self.contenedor_principal.add_widget(self.scroll)
 
         self.editar = MDRoundFlatButton(text="Editar", on_release=self.chequear)
         self.cancelar = MDRoundFlatButton(text="Cerrar", on_release=self.salir)
-        self.buttons = [self.editar, self.cancelar]
-        super().__init__(**kwargs)
-        self.add_widget(self.contenedor_principal)
+
+
+        super().__init__(content_cls = self.contenedor_principal,
+                         buttons =[self.editar, self.cancelar],
+                         type = "custom", **kwargs)
+        #self.add_widget(self.contenedor_principal)
 
     def chequear(self, *args):
         noti = Notificacion("Error", "")
@@ -392,16 +392,14 @@ class InformacionPersona(MDDialog):
         self.network.enviar({"estado": "buscar_persona_rut", "rut": self.rut_principal})
         info = self.network.recibir()
         if info.get("estado"):
-            self.maqueta = RegistroPersonas()
+            self.maqueta = Personas()
             self.maqueta.__dict__ = info.get("datos").__dict__
             self.rut.text = self.maqueta.rut_persona
             self.nombres.text = self.maqueta.nombres
             self.apellidos.text = self.maqueta.apellidos
             self.telefono.text = self.maqueta.telefono if self.maqueta.telefono is not None else "No Asignado"
-            self.celular.text = self.maqueta.celular
+            self.celular.text = self.maqueta.celular if self.maqueta.celular is not None else "No Asignado"
             self.correo.text = self.maqueta.correo
-            self.ubicacion.text = self.maqueta.ubicacion if self.maqueta.ubicacion is not None else "No Asignado"
-            self.cuenta.text = self.maqueta.id_cuenta
             return
         noti = Notificacion("Error", PROTOCOLOERROR[info.get("condicion")])
         noti.open()
