@@ -1,4 +1,4 @@
-from entidades.registropersonas import RegistroPersonas
+from entidades.personas import Personas
 from ventanas.widgets_predefinidos import MDScreenAbstrac, Notificacion, MenuEntidades
 from core.herramientas import Herramientas as her
 from core.constantes import PROTOCOLOERROR
@@ -35,14 +35,13 @@ class VPersonas(MDScreenAbstrac):
             noti.text += rut_verificado[1]
 
         if estado:
-            objeto = RegistroPersonas(rut_persona=rut_verificado[1],
-                                      nombres=self.ids.nombres.text,
-                                      apellidos=self.ids.apellidos.text,
-                                      telefono=self.ids.telefono.text,
-                                      celular=self.ids.celular.text,
-                                      correo=self.ids.correo_sistema.text,
-                                      rut_empresa=self.colecciones_empresas.dato_guardar,
-                                      ubicacion=self.ids.ubicacion_persona.text)
+            objeto = Personas(rut_persona=rut_verificado[1],
+                              nombres=self.ids.nombres.text,
+                              apellidos=self.ids.apellidos.text,
+                              telefono=self.ids.telefono.text,
+                              celular=self.ids.celular.text,
+                              correo=self.ids.correo_sistema.text,
+                              rut_empresa=self.colecciones_empresas.dato_guardar)
             self.network.enviar(objeto.preparar())
             info = self.network.recibir()
             if info.get("estado"):
@@ -68,7 +67,6 @@ class VPersonas(MDScreenAbstrac):
         self.ids.apellidos.text = ""
         self.ids.telefono.text = ""
         self.ids.celular.text = ""
-        self.ids.ubicacion_persona.text = ""
         self.ids.correo_sistema.text = ""
         self.ids.boton_rut_empresas.text = "Empresa:"
         self.colecciones_empresas.dato_guardar = None
