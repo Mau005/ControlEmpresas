@@ -1,3 +1,4 @@
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
 <Casa>:
     MDBoxLayout:
         orientation: "horizontal"
@@ -5,6 +6,9 @@
             anchor: "center"
             size_hint_x: .1
             id:rail_principal
+            transition:
+                FadeTransition(duration=.2)
+
             MDNavigationRailItem:
                 text: "Casa"
                 icon: "home"
@@ -163,7 +167,7 @@
                     padding: dp(30)
                     spacing: dp(30)
                     MDCardPre:
-                        size_hint: .5,.5
+                        size_hint: .9,.9
                         orientation: "vertical"
                         MDLabel:
                             text: "Mi Cuenta"
