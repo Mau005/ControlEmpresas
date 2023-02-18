@@ -13,10 +13,10 @@ class RegistroEmpresas:
         self.correo_respaldo = kargs.get("correo_respaldo")
         self.celular_empresa = kargs.get("celular_empresa")
         
-    def preparar(self):
+    def preparar(self) -> dict:
         return {"estado": "registro_empresa", "contenido":self}
         
-    def __str__(self):
+    def __str__(self) -> str:
         return '''
     Rut_Empresa: {}
     Nombre_Empresa: {}
