@@ -4,7 +4,6 @@
         MDNavigationRail:
             anchor: "center"
             size_hint_x: .1
-            elevation: .4
             MDNavigationRailItem:
                 text: "Gastos por Fechas"
                 icon: "arrow-down-bold-hexagon-outline"
@@ -48,10 +47,10 @@
                         MDBoxLayout:
                             adaptive_size: True
                             pos_hint: {"center_x":.5, "center_y": .5}
-                            MDRoundFlatButton:
+                            MDRaisedButton:
                                 id: departamentos
                                 text: "Departamento:"
-                            MDRoundFlatButton:
+                            MDRaisedButton:
                                 text: "00/00/00 al 00/00/00"
                                 id: rango_fechas
                                 on_release:root.desplegar_fechas()
@@ -69,6 +68,6 @@
                             style: "H5"
                             id: total_gastos
 
-                        MDRoundFlatButton:
+                        MDRaisedButton:
                             text: "Exportar Excel"
                             on_release: root.desplegar_archivos()

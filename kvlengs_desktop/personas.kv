@@ -4,7 +4,6 @@
         MDNavigationRail:
             anchor: "center"
             size_hint_x: .1
-            elevation: .4
             MDNavigationRailItem:
                 text: "Crear Personas"
                 icon: "arrow-down-bold-hexagon-outline"
@@ -85,14 +84,8 @@
                             helper_text_mode: "on_error"
                             helper_text: "debe incluir una @"
 
-                        MDRoundFlatButton:
+                        MDRaisedButton:
                             text: "Empresa: "
                             id: boton_rut_empresas
-
-                        MDTextField:
-                            id: ubicacion_persona
-                            max_text_length: 100
-                            hint_text: "Ubicacion"
-                            helper_text: "maximo 100 caracteres"
 
             

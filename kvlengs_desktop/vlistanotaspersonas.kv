@@ -7,7 +7,6 @@
         MDNavigationRail:
             anchor: "center"
             size_hint_x: .1
-            elevation: .4
             MDNavigationRailItem:
                 text: "Notas de Personas"
                 icon: "arrow-down-bold-hexagon-outline"
@@ -24,7 +23,6 @@
                 icon: "autorenew"
                 font_name: "nasalization-rg.ttf"
                 on_release: root.formatear()
-
 
             MDNavigationRailItem:
                 text: "Volver"
@@ -43,7 +41,7 @@
                     pos_hint: {"center_x": .5, "center_y": .5}
                     MDLabel:
                         text: "Notas de Personas: "
-                    MDRoundFlatButton:
+                    MDRaisedButton:
                         text: "Rut Persona"
                         id: rut_persona
             ScrollView:

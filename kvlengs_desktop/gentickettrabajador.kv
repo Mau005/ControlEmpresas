@@ -6,7 +6,6 @@
         MDNavigationRail:
             anchor: "center"
             size_hint_x: .1
-            elevation: .4
             MDNavigationRailItem:
                 text: "Ticker Por Trabajo"
                 icon: "arrow-down-bold-hexagon-outline"
@@ -59,13 +58,13 @@
                                     hint_text: "URL Posicion:"
                                     disabled: True
                                     id: url_posicion
-                                MDRoundFlatButton:
+                                MDRaisedButton:
                                     text: "Ir"
                                 MDTextField:
                                     hint_text: "Ubicacion"
                                     disabled: True
                                     id: ubicacion
-                                MDRoundFlatButton:
+                                MDRaisedButton:
                                     text: "Copiar"
                             MDCardPre:
                                 pos_hint: {"center_x": .5, "center_x": .5}
@@ -81,7 +80,7 @@
                                             hint_text: "Descripcion"
                                             disabled: True
                                             multiline: True
-                MDRoundFlatButton:
+                MDRaisedButton:
                     text: "Estado:"
                     id:estado
 

@@ -23,7 +23,7 @@
                         MDTextField:
                             hint_text: "Ejemplo: 32"
 
-                        MDFlatButton:
+                        MDRaisedButton:
                             text: "Buscar"
         MDCardPre:
             orientation: "vertical"
@@ -34,12 +34,12 @@
                 adaptive_size: True
                 spacing: dp(12)
                 pos_hint: {"center_x": .5, "center_y": .5}
-                MDRoundFlatButton:
+                MDRaisedButton:
                     text: "Crear"
                     on_release: root.crear()
-                MDRoundFlatButton:
+                MDRaisedButton:
                     text: "Formatear"
                     on_release: root.formatear()
-                MDRoundFlatButton:
+                MDRaisedButton:
                     text: "Volver"
                     on_release: root.siguiente()

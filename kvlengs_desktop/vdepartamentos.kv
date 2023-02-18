@@ -4,7 +4,6 @@
         MDNavigationRail:
             anchor: "center"
             size_hint_x: .1
-            elevation: .4
             MDNavigationRailItem:
                 text: "Crear Departamentos"
                 icon: "arrow-down-bold-hexagon-outline"
@@ -35,7 +34,6 @@
             padding: dp(10)
             MDCardPre:
                 size_hint: .9, .9
-                elevation: 5
                 pos_hint: {"center_x": .5, "center_y": .5}
 
                 ScrollView:
@@ -57,6 +55,6 @@
                             hint_text: "Descripción: "
                             helper_text: "max 12 caracteres"
                             multiline: True
-                        MDRoundFlatButton:
+                        MDRaisedButton:
                             text: "Local:"
                             id: menu_local

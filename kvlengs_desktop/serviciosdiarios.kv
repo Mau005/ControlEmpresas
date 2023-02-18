@@ -6,7 +6,6 @@
         MDNavigationRail:
             anchor: "center"
             size_hint_x: .1
-            elevation: .4
             MDNavigationRailItem:
                 text: "Crear Servicios"
                 icon: "arrow-down-bold-hexagon-outline"
@@ -58,14 +57,14 @@
                             adaptive_size: True
                             spacing: dp(15)
                             pos_hint: {"center_x":.5, "center_y":.5}
-                            MDRoundFlatButton:
+                            MDRaisedButton:
                                 id: id_estado
                                 text: "Estados:"
                                 pos_hint: {"center_x": .5, "center_y": .5}
-                            MDRoundFlatButton:
+                            MDRaisedButton:
                                 text: "Rut Cliente:"
                                 id: boton_rut_cliente
-                            MDRoundFlatButton:
+                            MDRaisedButton:
                                 text: "Departamento:"
                                 id: boton_departamentos
                         MDTextField:
@@ -144,6 +143,6 @@
                                 text: "Total: "
                                 id: total_servicio_mensual
 
-                        MDRoundFlatButton:
+                        MDRaisedButton:
                             text: "Agregar Producto"
                             id:btn_agregar_productos
