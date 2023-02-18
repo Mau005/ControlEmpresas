@@ -11,7 +11,6 @@ class AbstracServicio:
         self.ubicacion = kargs.get("ubicacion")
         self.rut_usuario = kargs.get("rut_usuario")
         self.descripcion = kargs.get("descripcion")
-        self.id_departamento = kargs.get("id_departamento")
         self.fecha_creacion = kargs.get("fecha_creacion")
 
     @abstractmethod
@@ -28,8 +27,7 @@ class AbstracServicio:
         Ubicacion: {}
         Rut Usuario: {}
         Descripcion: {}
-        ID Departamento: {}
         Fecha Creacion: {}
         """.format(self.id_servicio, self.nombre_servicio, self.id_estado,
                    self.url_posicion, self.ubicacion, self.rut_usuario,
-                   self.descripcion, self.id_departamento, self.fecha_creacion)
+                   self.descripcionS, self.fecha_creacion)
