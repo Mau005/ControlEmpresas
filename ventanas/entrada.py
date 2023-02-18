@@ -3,7 +3,7 @@ from kivy.properties import ObjectProperty
 
 from core.constantes import PROTOCOLOERROR
 from core.herramientas import Herramientas as her
-from entidades.registrocuentas import RegistroCuentas
+from entidades.cuentas import Cuentas
 from ventanas.widgets_predefinidos import MDScreenAbstrac, NotificacionText
 from ventanas.widgets_predefinidos import Notificacion
 
@@ -97,7 +97,7 @@ class Entrada(MDScreenAbstrac):
             noti.open()
             return None
 
-        cuenta = RegistroCuentas(
+        cuenta = Cuentas(
             nombre_cuenta=nombre_usuario,
             contraseña=password
         )
