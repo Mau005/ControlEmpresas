@@ -1,45 +1,71 @@
-from kivy.lang import Builder
+from kivy.properties import ObjectProperty
 
 from kivymd.app import MDApp
-from kivymd.uix.button import MDFlatButton
-from kivymd.uix.dialog.dialog import MDDialog
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.button import MDIconButton
+from kivymd.uix.floatlayout import MDFloatLayout
+from kivymd.uix.tab import MDTabsBase, MDTabs
+from kivymd.icon_definitions import md_icons
+from kivymd.uix.toolbar import MDTopAppBar
 
-KV = '''
-MDFloatLayout:
+colors = {
+    "Teal": {
+        "200": "#212121",
+        "500": "#212121",
+        "700": "#212121",
+    },
+    "Red": {
+        "200": "#C25554",
+        "500": "#C25554",
+        "700": "#C25554",
+    },
+    "Light": {
+        "StatusBar": "E0E0E0",
+        "AppBar": "#202020",
+        "Background": "#2E3032",
+        "CardsDialogs": "#FFFFFF",
+        "FlatButtonDown": "#CCCCCC",
+    },
+}
 
-    MDFlatButton:
-        text: "ALERT DIALOG"
-        pos_hint: {'center_x': .5, 'center_y': .5}
-        on_release: app.show_alert_dialog()
-'''
 
+class Tab(MDFloatLayout, MDTabsBase):
+    '''Class implementing content for a tab.'''
 
-class CustomDialogBox(MDDialog):
-    def __init__(self, **kwargs):
-        self.title = 'Title'
-        self.text = 'Text'
-        self.auto_dismiss = False
-        self.accept = MDFlatButton(text='Accept', on_release=self.custom_dismiss)
-        self.cancel = MDFlatButton(text='Cancel', on_release=self.custom_dismiss)
-        self.buttons = [self.accept, self.cancel]
-        super().__init__(**kwargs)
-
-    def custom_dismiss(self, *Args):
-        self.dismiss()
+    icon = ObjectProperty()
 
 
 class Example(MDApp):
-    dialog = None
+    icons = list(md_icons.keys())[15:30]
 
     def build(self):
-        self.theme_cls.theme_style = "Dark"
-        self.theme_cls.primary_palette = "Orange"
-        return Builder.load_string(KV)
+        self.theme_cls.colors = colors
+        self.theme_cls.primary_palette = "Teal"
+        self.theme_cls.accent_palette = "Red"
 
-    def show_alert_dialog(self):
-        if not self.dialog:
-            self.dialog = CustomDialogBox()
-        self.dialog.open()
+        return (
+            MDBoxLayout(
+                MDTopAppBar(title="Custom theme"),
+                MDTabs(id="tabs"),
+                orientation="vertical",
+            )
+        )
+
+    def on_start(self):
+        for name_tab in self.icons:
+            self.root.ids.tabs.add_widget(
+                Tab(
+                    MDIconButton(
+                        icon=name_tab,
+                        icon_size="48sp",
+                        theme_icon_color="Custom",
+                        icon_color="white",
+                        pos_hint={"center_x": .5, "center_y": .5},
+                    ),
+                    title="This is " + name_tab,
+                    icon=name_tab,
+                )
+            )
 
 
 Example().run()
