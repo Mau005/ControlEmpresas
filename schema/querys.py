@@ -3,11 +3,11 @@ from typing import Dict
 from entidades.abstracservicio import AbstracServicio
 from entidades.registrargastos import RegistrarGastos
 from entidades.registrarlocales import RegistrarLocales
-from entidades.registrocuentas import RegistroCuentas
+from entidades.cuentas import Cuentas
 from entidades.registronotas import RegistroNotas
 from entidades.registroempresas import RegistroEmpresas
 from entidades.registrardepartamento import RegistrarDepartamento
-from entidades.registropersonas import RegistroPersonas
+from entidades.personas import Personas
 from entidades.registroproductos import RegistroProductos
 from entidades.serviciodiarios import ServicioDiarios
 from core.herramientas import Herramientas as her
@@ -21,29 +21,33 @@ class Querys:
     def __init__(self, bd):
         self.bd = bd
 
-    def existe_cuenta(self, nombre_cuenta):
+    def existe_cuenta(self, nombre_cuenta: str):
         """
         Methodo utilizado para gestionar si existe una cuenta
         """
         querys = f'SELECT nombre_cuenta FROM cuentas WHERE nombre_cuenta = "{nombre_cuenta}";'
         return self.bd.consultar(querys)
 
-    def existe_persona(self, rut):
+    def existe_persona(self, rut: str):
         """
         Methodo utilizado para gestionar si existe una persona
         """
+        rut = rut.replace('"', "")
         querys = f'SELECT rut_persona from personas WHERE rut_persona = "{rut}";'
         return self.bd.consultar(querys)
 
-    def registrar_cuenta(self, nombre_cuenta, contraseña, acceso=0):
+    def registrar_cuenta(self, cuenta: Cuentas) -> dict:
         """
         Methodo utilizado para registrar una cuenta
         """
-        querys = f'INSERT INTO cuentas(nombre_cuenta, contraseña, acceso) ' \
-                 f'VALUES("{nombre_cuenta}", SHA("{contraseña}"),{acceso});'
+        cuenta.__dict__ = her.recuperacion_sentencia(cuenta).__dict__
+        print(f"estao de cuenta antes de registrar: {cuenta.rut_persona}")
+        querys = f'INSERT INTO cuentas(rut_persona, nombre_cuenta, contraseña, acceso) ' \
+                 f'VALUES({cuenta.rut_persona},{cuenta.nombre_cuenta}, SHA({cuenta.contraseña}),{cuenta.acceso});'
+        print(f"Querys: {querys}")
         return self.bd.insertar(querys)
 
-    def consultar_cuenta(self, usuario, contraseña):
+    def consultar_cuenta(self, usuario: str, contraseña: str):
         """
         Methodo Utilizado para poder gestionar si el usuario ha escrito bien sus contraseñas
         y pueda iniciar seccion
@@ -51,6 +55,29 @@ class Querys:
         querys = f'SELECT * FROM cuentas WHERE nombre_cuenta = "{usuario}" AND contraseña = "{contraseña}";'
         datos = self.bd.consultar(querys)
         return datos
+
+    def registrar_persona_sin_cuenta(self, persona: Personas):
+        """
+        Methodo usado para registrar usuarios que no necesariamente necesiten cuenta
+        
+        """
+        persona.__dict__ = her.recuperacion_sentencia(persona).__dict__
+
+        rut_existe = self.existe_persona(persona.rut_persona)
+
+
+        if rut_existe.get("estado"):
+            print(f"Rut: Existe")
+            return {"estado": False, "condicion": "RUT_EXISTE"}
+        querys = '''
+        INSERT INTO personas(rut_persona, nombres, apellidos, telefono, celular, correo)
+        VALUES({}, {}, {}, {}, {}, {}); 
+        '''.format(persona.rut_persona, persona.nombres, persona.apellidos, persona.telefono,
+                   persona.celular,  persona.correo)
+        persona_status = self.bd.insertar(querys)
+        if persona_status.get("estado"):
+            self.registrar_personas_empresas(persona.rut_empresa, persona.rut_persona)
+        return persona_status
 
     def registrar_productos(self, objeto: RegistroProductos) -> dict:
         """
@@ -66,11 +93,12 @@ class Querys:
         '''.format(productos.nombre_producto, productos.descripcion, productos.cantidad, productos.id_local)
         return self.bd.insertar(querys)
 
-    def buscar_empresa_rut(self, rut):
+    def buscar_empresa_rut(self, rut : str):
+        print(f"Estado del rut en buscar empresa: {rut}")
         querys = """
         SELECT *
         FROM empresas
-        WHERE rut_empresa = {};
+        WHERE rut_empresa = "{}";
         """.format(rut)
         datos = self.bd.consultar(querys)
         if datos.get("estado"):
@@ -117,7 +145,6 @@ class Querys:
         if check.get("estado"):
             return {"estado": False, "condicion": "EMPRESA_EXISTE"}
 
-
         querys = '''
         INSERT INTO empresas(rut_empresa, nombre_empresa, giro_empresa, direccion_empresa, correo_empresa, 
         correo_respaldo, telefono_empresa, celular_empresa)
@@ -143,13 +170,17 @@ class Querys:
         WHERE se.id_departamento = {}
         """.format(cuenta.id_departamento)
 
-    def buscar_persona_id_cuenta(self, cuenta):
+    def buscar_persona_rut_persona(self, cuenta: Cuentas):
+        """
+        MEthodo para buscar rut de personas y retorna una persona completa
+        """
+        cuenta.__dict__ = her.recuperacion_sentencia(cuenta).__dict__
         querys = """
         SELECT pe.rut_persona, pe.nombres, pe.apellidos, pe.telefono, pe.celular, pe.correo
         FROM cuentas cu
-        INNER JOIN personas pe ON pe.id_cuenta = cu.id_cuenta
-        where cu.id_cuenta = {}
-        """.format(cuenta.id_cuenta)
+        INNER JOIN personas pe ON pe.rut_persona = cu.rut_persona
+        where cu.rut_persona = {};
+        """.format(cuenta.rut_persona)
         return self.bd.consultar(querys)
 
     def registrar_personas_empresas(self, rut_empresa, rut_persona):
@@ -173,13 +204,12 @@ class Querys:
         """.format(obj.nombre_departamento, obj.descripcion, obj.id_local)
         return self.bd.insertar(querys)
 
-    def registrar_personas(self, objeto):
+    def registrar_personas(self, personas: Personas):
         """
         Methodo utilizado para que gestione la creacion de usuarios nuevos
         comprobare si el correo existe, si no existe lo creara con default de password
+        TODO: Se registra usuario, y su cuenta con default, falta implementar sistema de avisos
         """
-        personas = RegistroPersonas()
-        personas.__dict__ = objeto.__dict__
 
         rut_existe = self.existe_persona(personas.rut_persona)
 
@@ -196,19 +226,21 @@ class Querys:
                 break
             contador += 1
 
-        cuenta = self.registrar_cuenta(nombre_cuenta, "12345")
+        personas.__dict__ = her.recuperacion_sentencia(personas).__dict__
+        querys = '''
+        INSERT INTO personas(rut_persona, nombres, apellidos, telefono, celular, correo)
+        VALUES({}, {}, {}, {}, {}, {}); 
+        '''.format(personas.rut_persona, personas.nombres, personas.apellidos, personas.telefono, personas.celular,
+                   personas.correo)
+        self.bd.insertar(querys)
 
-        if cuenta.get("estado"):
-            personas = her.recuperacion_sentencia(personas)
-            querys = '''
-            INSERT INTO personas(rut_persona, nombres, apellidos, telefono, celular, correo, id_cuenta,  ubicacion)
-            VALUES({}, {}, {}, {}, {}, {}, {}, {}); 
-            '''.format(personas.rut_persona, personas.nombres, personas.apellidos, personas.telefono, personas.celular,
-                       personas.correo, cuenta["ultimo_id"], personas.ubicacion)
-            self.bd.insertar(querys)
-            self.registrar_personas_empresas(personas.rut_empresa, personas.rut_persona)
-            return {"estado": True, "cuenta": nombre_cuenta}
-        return {"estado": False, "condicion": "REGISTRARCUENTA"}
+        self.registrar_personas_empresas(personas.rut_empresa, personas.rut_persona)
+
+
+
+        print(f"Estado de persona antes de registrar: {personas.rut_persona}")
+        cuenta = self.registrar_cuenta(Cuentas(nombre_cuenta=nombre_cuenta, contraseña="12345", rut_persona=personas.rut_persona.replace('"',"")))
+        return cuenta
 
     def actualizar_nota(self, datos):
         querys = '''
@@ -225,16 +257,15 @@ class Querys:
         querys = f'INSERT INTO estados(nombre_estado) VALUES("{nombre}")'
         self.bd.insertar(querys)
 
-    def registrar_notas(self, objeto, cuenta, objetivo="empresas"):
+    def registrar_notas(self, nota:RegistroNotas, cuenta:Cuentas, objetivo="empresas"):
         """
         Methodo utilizado para gestionar notas de empresas y personas
         """
-        nota = RegistroNotas()
-        nota.__dict__ = her.recuperacion_sentencia(objeto).__dict__
+        nota.__dict__ = her.recuperacion_sentencia(nota).__dict__
         querys = '''
-        INSERT INTO notas(nota, id_cuenta)
-        VALUES({}, {});
-        '''.format(nota.nota, cuenta.id_cuenta)
+        INSERT INTO notas(nota)
+        VALUES({});
+        '''.format(nota.nota)
         nota_resgistrada = self.bd.insertar(querys)
         if not nota_resgistrada.get("estado"):
             return {"estado": False, "condicion": "INSERCION"}
@@ -267,15 +298,15 @@ class Querys:
         querys = f'INSERT INTO estado_gastos(nombre) VALUES("{nombre}")'
         self.bd.insertar(querys)
 
-    def registrar_gasto(self, contenido, cuenta):
+    def registrar_gasto(self, contenido, persona: Personas):
         gastos = RegistrarGastos()
         gastos.__dict__ = her.recuperacion_sentencia(contenido).__dict__
 
         querys = """
-        INSERT INTO gastos(descripcion, saldo, fecha_creacion, id_departamento, id_estado_gastos, id_cuenta)
+        INSERT INTO gastos(descripcion, saldo, fecha_creacion, id_departamento, id_estado_gastos, rut_persona)
         VALUES({}, {}, {}, {}, {}, {});
         """.format(gastos.descripcion, gastos.saldo, gastos.fecha_creacion,
-                   gastos.id_departamento, gastos.id_estado_gastos, cuenta.id_cuenta)
+                   gastos.id_departamento, gastos.id_estado_gastos, persona.rut_persona)
         return self.bd.insertar(querys)
 
     def lista_menu_empresas(self):
@@ -485,24 +516,22 @@ class Querys:
 
     def buscar_persona_rut(self, datos):
         querys = '''
-        SELECT pe.rut_persona, pe.nombres, pe.apellidos, pe.telefono, pe.celular, pe.correo, pe.ubicacion, cu.nombre_cuenta
+        SELECT pe.rut_persona, pe.nombres, pe.apellidos, pe.telefono, pe.celular, pe.correo
         FROM personas pe
-        INNER JOIN cuentas cu ON cu.id_cuenta = pe.id_cuenta
+        INNER JOIN cuentas cu ON cu.rut_persona = pe.rut_persona
         WHERE pe.rut_persona = "{}"
         '''.format(datos.get("rut"))
         info = self.bd.consultar(querys)
         if info.get("estado"):
             if len(info.get("datos")) >= 1:
                 datos = info.get("datos")
-                maqueta = RegistroPersonas(
+                maqueta = Personas(
                     rut_persona=datos[0],
                     nombres=datos[1],
                     apellidos=datos[2],
                     telefono=datos[3],
                     celular=datos[4],
-                    correo=datos[5],
-                    ubicacion=datos[6],
-                    id_cuenta=datos[7]
+                    correo=datos[5]
                 )
                 return {"estado": True, "datos": maqueta}
             return {"estado": False, "condicion": "SIN_DATOS"}
@@ -542,7 +571,7 @@ class Querys:
         querys = """
         SELECT se.id_servicios, pe.rut_persona, se.nombre_servicio,  se.fecha_creacion, se.id_estado, es.nombre_estado
         FROM cuentas cu
-        INNER JOIN personas pe ON pe.id_cuenta = cu.id_cuenta
+        INNER JOIN personas pe ON pe.rut_persona = cu.rut_persona
         INNER JOIN servicios se ON se.rut_usuario = pe.rut_persona
         INNER JOIN estados es ON es.id_estado = se.id_estado
         WHERE pe.rut_persona = "{}"
@@ -622,14 +651,14 @@ class Querys:
         if info.get("estado"):
             datos = info.get("datos")
             contenido = {"estado": True, "datos": AbstracServicio(id_servicio=datos[0],
-                                                                      nombre_servicio=datos[1],
-                                                                      id_estado=datos[2],
-                                                                      url_posicion=datos[3],
-                                                                      ubicacion=datos[4],
-                                                                      rut_usuario=datos[5],
-                                                                      descripcion=datos[6],
-                                                                      id_departamento=datos[7],
-                                                                      fecha_creacion=datos[8])}
+                                                                  nombre_servicio=datos[1],
+                                                                  id_estado=datos[2],
+                                                                  url_posicion=datos[3],
+                                                                  ubicacion=datos[4],
+                                                                  rut_usuario=datos[5],
+                                                                  descripcion=datos[6],
+                                                                  id_departamento=datos[7],
+                                                                  fecha_creacion=datos[8])}
             return contenido
         return info
 
@@ -654,7 +683,7 @@ class Querys:
                                                                       fecha_creacion=datos[8],
                                                                       fecha_inicio=datos[9],
                                                                       fecha_termino=datos[10])}
-            return {"estado":True, "datos":contenido}
+            return {"estado": True, "datos": contenido}
 
     def buscar_servicios_diarios_id(self, id_servicio_diario):
         querys = """
