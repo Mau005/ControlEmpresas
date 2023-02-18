@@ -3,9 +3,8 @@
         orientation: "vertical"
         spacing: dp(20)
         padding: dp(10)
-        MDCard:
+        MDCardPre:
             size_hint: .9, .9
-            elevation: 5
             pos_hint: {"center_x": .5, "center_y": .5}
             ScrollView:
                 do_scroll_x: False
@@ -36,23 +35,22 @@
                         helper_text: "dias del mes entre 1 y 31"
                         input_filter: "int"
 
-        MDCard:
+        MDCardPre:
             orientation: "vertical"
             size_hint: .9, .1
-            elevation: 5
             pos_hint: {"center_x": .5, "center_y": .5}
             padding: dp(5)
             MDBoxLayout:
                 adaptive_size: True
                 spacing: dp(12)
                 pos_hint: {"center_x": .5, "center_y": .5}
-                MDRoundFlatButton:
+                MDRaisedButton:
                     text: "Crear"
                     on_release: root.crear()
-                MDRoundFlatButton:
+                MDRaisedButton:
                     text: "Formatear"
                     on_release: root.formatear()
-                MDRoundFlatButton:
+                MDRaisedButton:
                     text: "Volver"
                     on_release: root.siguiente()
 
