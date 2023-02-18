@@ -8,7 +8,6 @@
         MDNavigationRail:
             anchor: "center"
             size_hint_x: .1
-            elevation: .4
             MDNavigationRailItem:
                 text: "Gastos"
                 icon: "arrow-down-bold-hexagon-outline"
@@ -55,11 +54,11 @@
                             adaptive_size: True
                             spacing: dp(12)
                             pos_hint: {"center_x": .5, "center_y": .5}
-                            MDRoundFlatButton:
+                            MDRaisedButton:
                                 text: "Departamento:"
                                 id:departamento
 
-                            MDRoundFlatButton:
+                            MDRaisedButton:
                                 text: "Tipo Gasto:"
                                 id:estado_gasto
 
@@ -68,7 +67,7 @@
                             hint_text: "Saldo"
                             input_filter: 'int'
 
-                        MDRoundFlatButton:
+                        MDRaisedButton:
                             text: "Fecha Creación: 00/00/00"
                             id: fecha_creacion
                             on_release: root.abrir_fecha()
