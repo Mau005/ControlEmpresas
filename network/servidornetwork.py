@@ -1,8 +1,8 @@
 from threading import Thread
 from core.herramientas import Herramientas as her
-from entidades.registrocuentas import RegistroCuentas
+from entidades.cuentas import Cuentas
 from entidades.registroempresas import RegistroEmpresas
-from entidades.registropersonas import RegistroPersonas
+from entidades.personas import Personas
 from network.recuperacion_cuenta import RecuperacionCuenta
 from entidades.registrousaurios import RegistroUsuarios
 from servicios_correos.base_correos import Base_Correos
@@ -13,8 +13,8 @@ class ServidorNetwork(Thread):
     def __init__(self, cliente, direccion, querys, info, grupos, control_network, servicio_correos):
         Thread.__init__(self)
         self.__variable_usuarios()
-        self.cuenta = RegistroCuentas()
-        self.persona = RegistroPersonas()
+        self.cuenta = Cuentas()
+        self.persona = Personas()
         self.trabajador = None
         self.cliente = cliente
         self.direccion = direccion
@@ -54,7 +54,7 @@ class ServidorNetwork(Thread):
         return {"estado": "cierre_abrupto"}
 
     def login(self, datos):
-        self.cuenta = RegistroCuentas()
+        self.cuenta = Cuentas()
         self.cuenta.__dict__ = datos.__dict__
         # se suspende el sistema de recuperacion de cuenta
         # if self.control_network.buscar_control_recuperacion(self.usuario.nombre_cuenta):
@@ -67,29 +67,29 @@ class ServidorNetwork(Thread):
         info = self.querys.consultar_cuenta(self.cuenta.nombre_cuenta, self.cuenta.contraseña)
         if info.get("estado"):
             self.intentos = 0
-            self.cuenta = RegistroCuentas(id_cuenta=info["datos"][0],
-                                          nombre_cuenta=info["datos"][1],
-                                          contraseña=info["datos"][2],
-                                          fecha_creacion=info["datos"][3],
-                                          acceso=info["datos"][4],
-                                          serializacion=her.generar_numero_unico())
-
+            self.cuenta = Cuentas(rut_persona=info["datos"][0],
+                                  nombre_cuenta=info["datos"][1],
+                                  contraseña=info["datos"][2],
+                                  fecha_creacion=info["datos"][3],
+                                  acceso=info["datos"][4],
+                                  serializacion=her.generar_numero_unico())
             # pe.rut_persona, pe.nombres, pe.apellidos, pe.telefono, pe.celular, pe.correo
-            persona_temp = self.querys.buscar_persona_id_cuenta(self.cuenta)
+            print(f"Cuenta en login: {self.cuenta}")
+            persona_temp = self.querys.buscar_persona_rut_persona(self.cuenta)
             if persona_temp.get("estado"):
-                self.persona = RegistroPersonas(
+                self.persona = Personas(
                     rut_persona=persona_temp["datos"][0],
                     nombres=persona_temp["datos"][1],
                     apellidos=persona_temp["datos"][2],
                     telefono=persona_temp["datos"][3],
                     celular=persona_temp["datos"][4],
-                    correo=persona_temp["datos"][5],
+                    correo=persona_temp["datos"][5]
                 )
                 self.trabajador = self.querys.buscar_trabajador_rut(self.persona.rut_persona)
             info.update({"MOTD": self.info["Servidor"]["MOTD"], "condicion": "iniciando"})
             self.control_network.agregar_hilo(self)
             return self.enviar(info)
-        self.cuenta = RegistroCuentas()
+        self.cuenta = Cuentas()
         return self.enviar({"estado": False, "condicion": "CONTRASEÑAS"})
 
     def registrar_local(self, contenido):
@@ -101,7 +101,7 @@ class ServidorNetwork(Thread):
     def desconectar(self):
         self.control_network.hilos_cliente.pop(self.cuenta.nombre_cuenta)
         self.cuenta = RegistroUsuarios()
-        self.persona = RegistroPersonas()
+        self.persona = Personas()
 
     def registrar_empresas(self, empresa):
         if self.consultar_privilegios("CrearEmpresas"):
