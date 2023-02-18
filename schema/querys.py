@@ -134,16 +134,16 @@ class Querys:
                    empresa.correo_respaldo, empresa.rut_empresa)
         return self.bd.insertar(querys)
 
-    def registrar_empresas(self, objeto: RegistroEmpresas):
+    def registrar_empresas(self, empresa: RegistroEmpresas):
         """
         Methodo utilizado para gestionar registros de empresas
         objeto es tipo RegistroEmpresas()
         """
-        empresa = her.recuperacion_sentencia(objeto)
-
-        check = self.buscar_empresa_rut(objeto.rut_empresa)
+        check = self.buscar_empresa_rut(empresa.rut_empresa)
         if check.get("estado"):
             return {"estado": False, "condicion": "EMPRESA_EXISTE"}
+
+        empresa.__dict__ = her.recuperacion_sentencia(empresa).__dict__
 
         querys = '''
         INSERT INTO empresas(rut_empresa, nombre_empresa, giro_empresa, direccion_empresa, correo_empresa, 
@@ -598,23 +598,25 @@ class Querys:
         datos.update({"datos": lista_notas})
         return datos
 
-    def listado_notas_persona_especifica(self, contenido):
+    def listado_notas_persona_especifica(self, rut_persona):
         querys = """
             SELECT n.id_nota, pe.rut_persona, n.nota, n.fecha_creacion, cu.nombre_cuenta
             FROM notas n
             INNER JOIN personas_notas pe
                 ON pe.id_nota = n.id_nota
-            INNER JOIN cuentas cu
-                ON cu.id_cuenta = n.id_cuenta
+            INNER JOIN trabajadores tra
+                ON tra.rut_persona = n.rut_persona
+            INNER JOIN cuenta cu
+                ON cu.rut_persona = pe.rut_persona
             WHERE pe.rut_persona = "{}"
             GROUP BY n.fecha_creacion DESC;
-        """.format(contenido)
+        """.format(rut_persona)
         datos = self.bd.consultar(querys, all=True)
         lista_notas = []
         for nota in datos.get("datos"):
             lista_notas.append(RegistroNotas(id_registro=nota[0], rut_asociado=nota[1],
                                              nota=nota[2], fecha_creacion=nota[3],
-                                             id_cuenta=nota[4]))
+                                             nombre_creado=nota[4]))
         datos.update({"datos": lista_notas})
         return datos
 
