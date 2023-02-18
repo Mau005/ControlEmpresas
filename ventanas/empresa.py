@@ -31,7 +31,7 @@ class Empresa(MDBoxLayout):
             self.ids.giro_empresa.text = empresa.nombre_empresa
             self.ids.direccion_empresa.text = empresa.direccion_empresa
             self.ids.telefono_empresa.text = empresa.telefono_empresa if empresa.telefono_empresa is not None else ""
-            self.ids.celular_empresa.text = empresa.celular_empresa
+            self.ids.celular_empresa.text = empresa.celular_empresa if empresa.celular_empresa is not None else ""
             self.ids.correo_empresa.text = empresa.correo_empresa
             self.ids.correo_respaldo_empresa.text = empresa.correo_respaldo if empresa.correo_respaldo is not None else ""
 
