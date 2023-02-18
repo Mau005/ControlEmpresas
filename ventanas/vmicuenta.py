@@ -1,4 +1,4 @@
-from entidades.registrocuentas import RegistroCuentas
+from entidades.cuentas import Cuentas
 from ventanas.widgets_predefinidos import MDScreenAbstrac
 
 
@@ -13,7 +13,7 @@ class VMiCuenta(MDScreenAbstrac):
         self.ids.contra = ""
         self.ids.contra2 = ""
 
-    def set_cuenta(self, cuenta: RegistroCuentas):
+    def set_cuenta(self, cuenta: Cuentas):
         self.cuenta = cuenta
 
     def activar(self):
