@@ -86,8 +86,6 @@ class Server:
 
 if __name__ == "__main__":
     iniciando = False
-    print(sys.argv)
-
     if len(sys.argv) >= 2:
         if sys.argv[1] == "setup":
             iniciando = True
