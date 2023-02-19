@@ -25,6 +25,7 @@ class Server:
     # Kastachaña: ordenar separar en idioma aymara
 
     def __init__(self):
+        print(MOTD)
         self.tiempo_ejecucion = 0
         self.__tiempos()
         self.enfuncionamiento = True
@@ -33,6 +34,7 @@ class Server:
         self.__tiempos()
         self.tiempo = threading.Thread(target=self.actualizar)
         self.tiempo.start()
+
 
     def __tiempos(self):
         self.tiempo_inicial = time.time()
