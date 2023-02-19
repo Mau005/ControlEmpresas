@@ -11,7 +11,7 @@ class Empresa(MDBoxLayout):
 
     def generar_objeto(self, rut_verificado=None) -> RegistroEmpresas:
         return RegistroEmpresas(
-            rut_empresa=self.ids.rut_empresa.text if rut_verificado is not None else rut_verificado,
+            rut_empresa=rut_verificado if rut_verificado is not None else self.ids.rut_empresa.text,
             nombre_empresa=self.ids.nombre_empresa.text,
             giro_empresa=self.ids.giro_empresa.text,
             direccion_empresa=self.ids.direccion_empresa.text,
@@ -28,12 +28,15 @@ class Empresa(MDBoxLayout):
             self.ids.rut_empresa.text = empresa.rut_empresa
             self.ids.rut_empresa.disabled = True
             self.ids.nombre_empresa.text = empresa.nombre_empresa
-            self.ids.giro_empresa.text = empresa.nombre_empresa
+            self.ids.giro_empresa.text = empresa.giro_empresa
             self.ids.direccion_empresa.text = empresa.direccion_empresa
             self.ids.telefono_empresa.text = empresa.telefono_empresa if empresa.telefono_empresa is not None else ""
             self.ids.celular_empresa.text = empresa.celular_empresa if empresa.celular_empresa is not None else ""
             self.ids.correo_empresa.text = empresa.correo_empresa
             self.ids.correo_respaldo_empresa.text = empresa.correo_respaldo if empresa.correo_respaldo is not None else ""
+            return
+        self.editar = False
+        return
 
     def crear(self, *args):
         longitud = 1
