@@ -352,12 +352,14 @@ class InformacionPersona(MDDialog):
         self.telefono = MDTextField(hint_text="Telefono")
         self.celular = MDTextField(hint_text="Celular")
         self.correo = MDTextField(hint_text="Correo")
+        self.ubicacion = MDTextField(hint_text="Ubicación")
         self.contenedor.add_widget(self.rut)
         self.contenedor.add_widget(self.nombres)
         self.contenedor.add_widget(self.apellidos)
         self.contenedor.add_widget(self.telefono)
         self.contenedor.add_widget(self.celular)
         self.contenedor.add_widget(self.correo)
+        self.contenedor.add_widget(self.ubicacion)
 
         #self.type = "custom"
         self.scroll.add_widget(self.contenedor)
@@ -400,6 +402,7 @@ class InformacionPersona(MDDialog):
             self.telefono.text = self.maqueta.telefono if self.maqueta.telefono is not None else "No Asignado"
             self.celular.text = self.maqueta.celular if self.maqueta.celular is not None else "No Asignado"
             self.correo.text = self.maqueta.correo
+            self.ubicacion.text = self.maqueta.ubicacion if self.maqueta.ubicacion is not None else "No Asignado"
             return
         noti = Notificacion("Error", PROTOCOLOERROR[info.get("condicion")])
         noti.open()

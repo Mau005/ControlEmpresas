@@ -38,8 +38,8 @@ class Server:
         self.tiempo_inicial = time.time()
 
     def __iniciar_variables(self):
-        print(MOTD)
         self.info = her.cargar_json("data/ConfiguracionServidor.json")
+
         print("[OK] Se Cargan Variables")
         self.grupos = her.cargar_json("data/Grupos.json")["Grupos"]
         print("[OK] Se cargan los Grupos")
@@ -121,6 +121,7 @@ if __name__ == "__main__":
                                                                   apellidos=base_string_admin,
                                                                   celular=base_string_admin,
                                                                   correo=base_string_admin,
+                                                                  ubicacion="",
                                                                   rut_empresa=rut_base))
                     cuenta = querys.registrar_cuenta(Cuentas(rut_persona=rut_base,
                                                     nombre_cuenta="admin",
