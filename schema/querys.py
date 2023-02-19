@@ -50,7 +50,7 @@ class Querys:
         Methodo Utilizado para poder gestionar si el usuario ha escrito bien sus contraseñas
         y pueda iniciar seccion
         """
-        querys = f'SELECT * FROM cuentas WHERE nombre_cuenta = "{usuario}" AND contraseña = "{contraseña}";'
+        querys = f'SELECT rut_persona, nombre_cuenta, contraseña, fecha_creacion, acceso FROM cuentas WHERE nombre_cuenta = "{usuario}" AND contraseña = "{contraseña}";'
         datos = self.bd.consultar(querys)
         return datos
 
@@ -260,16 +260,16 @@ class Querys:
         """
         nota.__dict__ = her.recuperacion_sentencia(nota).__dict__
         querys = '''
-        INSERT INTO notas(nota)
-        VALUES({});
-        '''.format(nota.nota)
+        INSERT INTO notas(nota, rut_persona)
+        VALUES({}, {});
+        '''.format(nota.nota, cuenta.rut_persona)
         nota_resgistrada = self.bd.insertar(querys)
         if not nota_resgistrada.get("estado"):
             return {"estado": False, "condicion": "INSERCION"}
 
         if objetivo == "empresas":
             querys = '''
-                INSERT INTO empresas_notas(id_nota, rut_empresa)
+                INSERT INTO empresas_notas(id_nota, 3rut_empresa)
                 VALUES({},{});'''.format(nota_resgistrada.get("ultimo_id"), nota.rut_asociado)
             empresa_notas = self.bd.insertar(querys)
             if empresa_notas.get("estado"):
