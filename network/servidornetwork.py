@@ -83,7 +83,8 @@ class ServidorNetwork(Thread):
                     apellidos=persona_temp["datos"][2],
                     telefono=persona_temp["datos"][3],
                     celular=persona_temp["datos"][4],
-                    correo=persona_temp["datos"][5]
+                    correo=persona_temp["datos"][5],
+                    ubicacion=persona_temp["datos"][6]
                 )
                 self.trabajador = self.querys.buscar_trabajador_rut(self.persona.rut_persona)
             info.update({"MOTD": self.info["Servidor"]["MOTD"], "condicion": "iniciando"})
