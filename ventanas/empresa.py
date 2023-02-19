@@ -9,9 +9,9 @@ class Empresa(MDBoxLayout):
         super().__init__(**kargs)
         self.editar = False
 
-    def generar_objeto(self) -> RegistroEmpresas:
+    def generar_objeto(self, rut_verificado=None) -> RegistroEmpresas:
         return RegistroEmpresas(
-            rut_empresa=self.ids.rut_empresa.text,
+            rut_empresa=self.ids.rut_empresa.text if rut_verificado is not None else rut_verificado,
             nombre_empresa=self.ids.nombre_empresa.text,
             giro_empresa=self.ids.giro_empresa.text,
             direccion_empresa=self.ids.direccion_empresa.text,
