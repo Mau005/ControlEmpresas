@@ -7,6 +7,7 @@ class Personas:
         self.telefono = kargs.get("telefono")
         self.celular = kargs.get("celular")
         self.correo = kargs.get("correo")
+        self.ubicacion = kargs.get("ubicacion")
         self.rut_empresa = kargs.get("rut_empresa")
     def __str__(self):
         return """

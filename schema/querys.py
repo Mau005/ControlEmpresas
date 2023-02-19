@@ -173,7 +173,7 @@ class Querys:
         """
         cuenta.__dict__ = her.recuperacion_sentencia(cuenta).__dict__
         querys = """
-        SELECT pe.rut_persona, pe.nombres, pe.apellidos, pe.telefono, pe.celular, pe.correo
+        SELECT pe.rut_persona, pe.nombres, pe.apellidos, pe.telefono, pe.celular, pe.correo, pe.ubicacion
         FROM cuentas cu
         INNER JOIN personas pe ON pe.rut_persona = cu.rut_persona
         where cu.rut_persona = {};
@@ -225,10 +225,10 @@ class Querys:
 
         personas.__dict__ = her.recuperacion_sentencia(personas).__dict__
         querys = '''
-        INSERT INTO personas(rut_persona, nombres, apellidos, telefono, celular, correo)
-        VALUES({}, {}, {}, {}, {}, {}); 
+        INSERT INTO personas(rut_persona, nombres, apellidos, telefono, celular, correo, ubicacion)
+        VALUES({}, {}, {}, {}, {}, {}, {}); 
         '''.format(personas.rut_persona, personas.nombres, personas.apellidos, personas.telefono, personas.celular,
-                   personas.correo)
+                   personas.correo, personas.ubicacion)
         self.bd.insertar(querys)
 
         self.registrar_personas_empresas(personas.rut_empresa, personas.rut_persona)
@@ -513,7 +513,7 @@ class Querys:
 
     def buscar_persona_rut(self, datos):
         querys = '''
-        SELECT pe.rut_persona, pe.nombres, pe.apellidos, pe.telefono, pe.celular, pe.correo
+        SELECT pe.rut_persona, pe.nombres, pe.apellidos, pe.telefono, pe.celular, pe.correo, pe.ubicacion
         FROM personas pe
         INNER JOIN cuentas cu ON cu.rut_persona = pe.rut_persona
         WHERE pe.rut_persona = "{}"
@@ -528,7 +528,8 @@ class Querys:
                     apellidos=datos[2],
                     telefono=datos[3],
                     celular=datos[4],
-                    correo=datos[5]
+                    correo=datos[5],
+                    ubicacion=datos[6]
                 )
                 return {"estado": True, "datos": maqueta}
             return {"estado": False, "condicion": "SIN_DATOS"}
