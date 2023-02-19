@@ -41,10 +41,8 @@ class Querys:
         Methodo utilizado para registrar una cuenta
         """
         cuenta.__dict__ = her.recuperacion_sentencia(cuenta).__dict__
-        print(f"estao de cuenta antes de registrar: {cuenta.rut_persona}")
         querys = f'INSERT INTO cuentas(rut_persona, nombre_cuenta, contraseña, acceso) ' \
                  f'VALUES({cuenta.rut_persona},{cuenta.nombre_cuenta}, SHA({cuenta.contraseña}),{cuenta.acceso});'
-        print(f"Querys: {querys}")
         return self.bd.insertar(querys)
 
     def consultar_cuenta(self, usuario: str, contraseña: str):
@@ -67,7 +65,6 @@ class Querys:
 
 
         if rut_existe.get("estado"):
-            print(f"Rut: Existe")
             return {"estado": False, "condicion": "RUT_EXISTE"}
         querys = '''
         INSERT INTO personas(rut_persona, nombres, apellidos, telefono, celular, correo)
