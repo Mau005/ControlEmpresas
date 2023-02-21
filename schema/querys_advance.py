@@ -15,4 +15,4 @@ class Querys_Advance:
         from {}
         WHERE {} = {}
         """.format(consult_atribute, table, consult_atribute, id_atribute)
-        return bool(self.bd.consultar(querys)["datos"])
+        return bool(self.bd.consultar(querys)["datos"][0])
