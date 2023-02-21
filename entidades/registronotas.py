@@ -19,5 +19,6 @@ class RegistroNotas:
     Fecha Creacion {}
     Rut Asociado: {}
     rut_persona: {}
-    '''.format(self.id_registro, self.nota, self.fecha_creacion, self.rut_asociado, self.rut_persona)
+    Nombre Creado: {}
+    '''.format(self.id_registro, self.nota, self.fecha_creacion, self.rut_asociado, self.rut_persona, self.nombre_creado)
     
