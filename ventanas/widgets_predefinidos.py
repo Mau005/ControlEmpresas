@@ -467,8 +467,7 @@ class ItemCard(MDCard):
         super().__init__(**kargs)
         self.orientation = 'vertical'
         self.style = "outlined"
-        self.line_color = [.2, .2, .2, 1]
-        self.md_bg_color = "#f8f5f4"
+        self.line_color = [.5, .5, .5, 1]
         self.size_hint_y = None
         self.height = dp(420)
         self.padding = dp(20)
