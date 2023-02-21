@@ -20,6 +20,9 @@ class Casa(MDScreenAbstrac):
         self.ids.manejador_menus.transition = FadeTransition()
 
     def activar_servicios(self):
+        """
+        TODO: desabilitado hasta tener los sitema de ordenes de trabajo
+        """
         self.network.enviar({"estado": "mis servicios"})
         info = self.network.recibir()
 
@@ -43,6 +46,9 @@ class Casa(MDScreenAbstrac):
                     )
 
     def activar_servicios_trabajador(self):
+        """
+        TODO: desabilitado el sistema de trabajadores, para poder gestionar mejor las ordenes de trabajo
+        """
         self.network.enviar({"estado": "mis trabajos"})
         info = self.network.recibir()
 
@@ -67,8 +73,8 @@ class Casa(MDScreenAbstrac):
 
     def activar(self):
         self.ids.contenedor_notificaciones.clear_widgets()
-        self.activar_servicios()
-        self.activar_servicios_trabajador()
+        #self.activar_servicios()
+        #self.activar_servicios_trabajador()
 
     def cambiar_screen(self, name):
         self.ids.manejador_menus.current = name
