@@ -489,7 +489,7 @@ class ItemNotas(ItemCard):
                                        mode="fill")
         self.nota = MDTextField(hint_text="Nota", text=self.maqueta.nota, multiline=True)
         self.rut_empresa = MDTextField(hint_text="Rut:", text=self.maqueta.rut_asociado, disabled=True)
-        self.correo = MDTextField(hint_text="Usuario", text=self.maqueta.id_cuenta, disabled=True)
+        self.correo = MDTextField(hint_text="Usuario", text=self.maqueta.nombre_creado, disabled=True)
         self.fecha_creacion = MDTextField(hint_text="Fecha Creación", text=str(self.maqueta.fecha_creacion),
                                           disabled=True)
         self.editar = MDRoundFlatButton(text="Editar", on_release=self.editar_nota)
