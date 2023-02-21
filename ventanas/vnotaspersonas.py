@@ -36,7 +36,7 @@ class VNotasPersonas(MDScreenAbstrac):
             noti.open()
             return
 
-        noti = Notificacion("Error", PROTOCOLOERROR(info.get("condicion")))
+        noti = Notificacion("Error", PROTOCOLOERROR[info.get("condicion")])
         noti.open()
         return
 

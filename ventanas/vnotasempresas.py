@@ -31,6 +31,7 @@ class VNotasEmpresas(MDScreenAbstrac):
 
         self.network.enviar(objeto.preparar("registro_notas_empresas"))
         info = self.network.recibir()
+        print(f"Info de informacion recivida: {info}")
         if info.get("estado"):
             noti = Notificacion("Exito",
                                 f"Se ha registrado una nota  a la empresa: {self.coleccion_empresas.dato_guardar}")
@@ -38,7 +39,7 @@ class VNotasEmpresas(MDScreenAbstrac):
             self.formatear()
             return
 
-        noti = Notificacion("Error", PROTOCOLOERROR(info.get("condicion")))
+        noti = Notificacion("Error", PROTOCOLOERROR[info.get("condicion")])
         noti.open()
         return
 
