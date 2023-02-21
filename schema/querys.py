@@ -14,12 +14,14 @@ from core.herramientas import Herramientas as her
 from entidades.registrotrabajador import RegistroTrabajador
 from entidades.serviciomensual import ServicioMensual
 from entidades.serviciosproductos import ServiciosProductos
+from schema.querys_advance import Querys_Advance
 
 
 class Querys:
 
     def __init__(self, bd):
         self.bd = bd
+        self.querys_advance = Querys_Advance(self.bd)
 
     def existe_cuenta(self, nombre_cuenta: str):
         """
@@ -157,7 +159,7 @@ class Querys:
         FROM personas
         WHERE rut_persona = "{}"
         """.format(rut)
-        return self.bd.consultar(rut)
+        return self.bd.consultar(querys)
 
     def buscar_mis_rutas_id_departamento(self, cuenta):
         querys = """
@@ -259,6 +261,11 @@ class Querys:
         Methodo utilizado para gestionar notas de empresas y personas
         """
         nota.__dict__ = her.recuperacion_sentencia(nota).__dict__
+
+        if self.querys_advance.Check_Exist_Content("trabajadores","rut_persona",cuenta.rut_persona):
+            return {"estado": False, "condicion":"NOTRABAJADOR"}
+
+
         querys = '''
         INSERT INTO notas(nota, rut_persona)
         VALUES({}, {});
@@ -269,7 +276,7 @@ class Querys:
 
         if objetivo == "empresas":
             querys = '''
-                INSERT INTO empresas_notas(id_nota, 3rut_empresa)
+                INSERT INTO empresas_notas(id_nota, rut_empresa)
                 VALUES({},{});'''.format(nota_resgistrada.get("ultimo_id"), nota.rut_asociado)
             empresa_notas = self.bd.insertar(querys)
             if empresa_notas.get("estado"):
@@ -578,12 +585,14 @@ class Querys:
 
     def listado_notas_empresa_especifica(self, contenido):
         querys = """
-            SELECT n.id_nota, en.rut_empresa, n.nota, n.fecha_creacion, cu.nombre_cuenta
+            SELECT n.id_nota, en.rut_empresa, n.nota, n.fecha_creacion, CONCAT(pe.nombres, " ", pe.apellidos)
             FROM notas n
             INNER JOIN empresas_notas en
                 ON en.id_nota = n.id_nota
-            INNER JOIN cuentas cu
-                ON cu.id_cuenta = n.id_cuenta
+            INNER JOIN trabajadores tra
+            	ON n.rut_persona = tra.rut_persona
+            INNER JOIN personas pe
+            	ON pe.rut_persona = tra.rut_persona
             WHERE en.rut_empresa = "{}"
             GROUP BY n.fecha_creacion DESC;
         """.format(contenido)
@@ -592,20 +601,20 @@ class Querys:
         for nota in datos.get("datos"):
             lista_notas.append(RegistroNotas(id_registro=nota[0], rut_asociado=nota[1],
                                              nota=nota[2], fecha_creacion=nota[3],
-                                             id_cuenta=nota[4]))
+                                             nombre_creado=nota[4]))
         datos.update({"datos": lista_notas})
         return datos
 
     def listado_notas_persona_especifica(self, rut_persona):
         querys = """
-            SELECT n.id_nota, pe.rut_persona, n.nota, n.fecha_creacion, cu.nombre_cuenta
+            SELECT n.id_nota, pen.rut_persona, n.nota, n.fecha_creacion, CONCAT(pe.nombres, " ", pe.apellidos)
             FROM notas n
-            INNER JOIN personas_notas pe
-                ON pe.id_nota = n.id_nota
+            INNER JOIN personas_notas pen
+                ON pen.id_nota = n.id_nota
             INNER JOIN trabajadores tra
                 ON tra.rut_persona = n.rut_persona
-            INNER JOIN cuenta cu
-                ON cu.rut_persona = pe.rut_persona
+            INNER JOIN personas pe
+            	ON pe.rut_persona = tra.rut_persona
             WHERE pe.rut_persona = "{}"
             GROUP BY n.fecha_creacion DESC;
         """.format(rut_persona)
