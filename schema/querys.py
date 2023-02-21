@@ -262,7 +262,7 @@ class Querys:
         """
         nota.__dict__ = her.recuperacion_sentencia(nota).__dict__
 
-        if self.querys_advance.Check_Exist_Content("trabajadores","rut_persona",cuenta.rut_persona):
+        if not self.querys_advance.Check_Exist_Content("trabajadores","rut_persona",cuenta.rut_persona):
             return {"estado": False, "condicion":"NOTRABAJADOR"}
 
 
@@ -302,15 +302,22 @@ class Querys:
         querys = f'INSERT INTO estado_gastos(nombre) VALUES("{nombre}")'
         self.bd.insertar(querys)
 
-    def registrar_gasto(self, contenido, persona: Personas):
-        gastos = RegistrarGastos()
-        gastos.__dict__ = her.recuperacion_sentencia(contenido).__dict__
+    def registrar_gasto(self, gastos: RegistrarGastos, cuenta: Cuentas):
+        """
+        MEthodo para gestionar el registro de los gastos
+        TODO: Problemas de inicialziar la hora minuntos y segundos procesar para despues
+        """
+
+        if not self.querys_advance.Check_Exist_Content("trabajadores","rut_persona",cuenta.rut_persona):
+            return {"estado": False, "condicion": "NOTRABAJADOR"}
+
+        gastos.__dict__ = her.recuperacion_sentencia(gastos).__dict__
 
         querys = """
         INSERT INTO gastos(descripcion, saldo, fecha_creacion, id_departamento, id_estado_gastos, rut_persona)
         VALUES({}, {}, {}, {}, {}, {});
         """.format(gastos.descripcion, gastos.saldo, gastos.fecha_creacion,
-                   gastos.id_departamento, gastos.id_estado_gastos, persona.rut_persona)
+                   gastos.id_departamento, gastos.id_estado_gastos, cuenta.rut_persona)
         return self.bd.insertar(querys)
 
     def lista_menu_empresas(self):
@@ -481,7 +488,7 @@ class Querys:
         SELECT ga.id_gasto, eg.nombre, ga.saldo, cu.nombre_cuenta, dep.nombre_departamento, ga.fecha_creacion,
         ga.descripcion
         FROM gastos ga
-        LEFT JOIN cuentas cu ON cu.id_cuenta = ga.id_cuenta
+        LEFT JOIN cuentas cu ON cu.rut_persona = ga.rut_persona
         LEFT JOIN departamentos dep ON dep.id_departamento = ga.id_departamento
         LEFT JOIN estado_gastos eg ON eg.id_estado_gastos = ga.id_estado_gastos
         """
