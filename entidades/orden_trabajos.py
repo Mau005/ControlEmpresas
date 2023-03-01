@@ -1,5 +1,5 @@
 
-class Orden_Trabajos:
+class OrdenTrabajos:
 
     def __init__(self, **kargs):
         self.id_orden = kargs.get("id_orden")
