@@ -14,12 +14,13 @@ from core.herramientas import Herramientas as her
 from entidades.registrotrabajador import RegistroTrabajador
 from entidades.serviciomensual import ServicioMensual
 from entidades.serviciosproductos import ServiciosProductos
+from schema.basedatos import BaseDatos
 from schema.querys_advance import Querys_Advance
 
 
 class Querys:
 
-    def __init__(self, bd):
+    def __init__(self, bd:BaseDatos):
         self.bd = bd
         self.querys_advance = Querys_Advance(self.bd)
 
@@ -30,6 +31,9 @@ class Querys:
         querys = f'SELECT nombre_cuenta FROM cuentas WHERE nombre_cuenta = "{nombre_cuenta}";'
         return self.bd.consultar(querys)
 
+    def get_list_status(self, table: str, id_table_name:str, name_table: str) ->dict:
+        querys = f"SELECT {id_table_name}, {name_table} FROM {table};"
+        return self.bd.consultar(querys, all=True)
     def existe_persona(self, rut: str):
         """
         Methodo utilizado para gestionar si existe una persona
@@ -249,11 +253,14 @@ class Querys:
         '''.format(datos["nota"], datos["id"])
         return self.bd.insertar(querys)
 
-    def registrar_estados(self, nombre):
+    def registrar_estados(self, id_estado, nombre):
         """
         Methodo Utilizado para ingresar los estados
         """
-        querys = f'INSERT INTO estados(nombre_estado) VALUES("{nombre}")'
+        querys = f'INSERT INTO estados(id_estado, nombre_estado) VALUES({id_estado},"{nombre}")'
+        self.bd.insertar(querys)
+    def registrar_estados_preparativos(self, id_estado, nombre):
+        querys = f'INSERT INTO estados_preparativos(id_estado, nombre_estado) VALUES({id_estado}, "{nombre}")'
         self.bd.insertar(querys)
 
     def registrar_notas(self, nota:RegistroNotas, cuenta:Cuentas, objetivo="empresas"):
@@ -295,11 +302,11 @@ class Querys:
 
         return {"estado": False, "condicion": "SINSELECCION"}
 
-    def registrar_estado_gastos(self, nombre):
+    def registrar_estado_gastos(self, id_estado_gastos, nombre):
         """
         Methodo utilizado para ingresar los estados de los gastos
         """
-        querys = f'INSERT INTO estado_gastos(nombre) VALUES("{nombre}")'
+        querys = f'INSERT INTO estado_gastos(id_estado_gastos, nombre) VALUES({id_estado_gastos} "{nombre}")'
         self.bd.insertar(querys)
 
     def registrar_gasto(self, gastos: RegistrarGastos, cuenta: Cuentas):
@@ -376,20 +383,38 @@ class Querys:
         querys = f'SELECT * FROM ESTADOS;'
         return self.bd.consultar(querys, all=True)
 
-    def registrar_servicios(self, datos):
-        return
-        objeto = RegistroServicios()
-        objeto.__dict__ = her.recuperacion_sentencia(datos).__dict__
-        print(objeto)
-        querys = f'''
-        INSERT INTO SERVICIOS(NOMBRE_SERVICIO, DESCRIPCION, FECHA_INICIO, FECHA_TERMINO, 
-        ID_ESTADO, RUT_TRABAJADOR, RUT_PERSONA)
-        VALUES({objeto.nombre}, {objeto.descr}, {objeto.fecha_inicio}, {objeto.fecha_termino},
-        {objeto.id_estado}, {objeto.rut_trabajador}, {objeto.rut_persona})
-        '''
-        print(querys)
+    def registrar_servicios(self, servicio: ServicioMensual, cuenta : Cuentas):
+        servicio.__dict__ = her.recuperacion_sentencia(servicio).__dict__
 
-        return self.bd.insertar(querys)
+        querys = f'''
+        INSERT INTO servicios(nombre_servicio,id_estado, url_posicion, ubicacion, rut_usuario, 
+        descripcion, fecha_creacion)
+        VALUES({servicio.nombre_servicio}, {servicio.id_estado}, {servicio.url_posicion}, {servicio.ubicacion},
+        {servicio.rut_usuario}, {servicio.descripcion}, {servicio.fecha_creacion})
+        '''
+        ser = self.bd.insertar(querys)
+
+        if not ser.get("estado"):
+            return {"estado":False, "condicion":"INSERCION"}
+
+        querys = """
+        INSERT INTO servicios_mensuales(id_servicio, fecha_inicio, fecha_termino)
+        VALUES ({}, {}, {})
+        """.format(ser.get("ultimo_id"), servicio.fecha_inicio, servicio.fecha_termino)
+        ser_men = self.bd.insertar(querys)
+
+        ot = OrdenTrabajos(
+            id_servicios = ser.get("ultimo_id"),
+            fecha_termino = servicio.fecha_inicio,
+            id_estado = 1,
+            id_preparativos = ,
+
+
+
+        )
+
+        return
+
 
     def solicitar_listado_servicios(self):
         querys = f'SELECT ID_SERVICIO, NOMBRE_SERVICIO FROM SERVICIOS;'
