@@ -306,7 +306,7 @@ class Querys:
         """
         Methodo utilizado para ingresar los estados de los gastos
         """
-        querys = f'INSERT INTO estado_gastos(id_estado_gastos, nombre) VALUES({id_estado_gastos} "{nombre}")'
+        querys = f'INSERT INTO estado_gastos(id_estado_gastos, nombre) VALUES({id_estado_gastos} ,"{nombre}")'
         self.bd.insertar(querys)
 
     def registrar_gasto(self, gastos: RegistrarGastos, cuenta: Cuentas):
@@ -402,18 +402,8 @@ class Querys:
         VALUES ({}, {}, {})
         """.format(ser.get("ultimo_id"), servicio.fecha_inicio, servicio.fecha_termino)
         ser_men = self.bd.insertar(querys)
+        return None
 
-        ot = OrdenTrabajos(
-            id_servicios = ser.get("ultimo_id"),
-            fecha_termino = servicio.fecha_inicio,
-            id_estado = 1,
-            id_preparativos = ,
-
-
-
-        )
-
-        return
 
 
     def solicitar_listado_servicios(self):
