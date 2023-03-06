@@ -1,4 +1,4 @@
-from entidades.orden_trabajos import Orden_Trabajos
+from entidades.orden_trabajos import OrdenTrabajos
 from ventanas.widgets_predefinidos import MDScreenAbstrac, MenuEntidades
 
 
@@ -6,7 +6,7 @@ class VOrden_Trabajos(MDScreenAbstrac):
 
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
-        self.orden_trabajo = Orden_Trabajos()
+        self.orden_trabajo = OrdenTrabajos()
         self.coleccion_departamento = MenuEntidades(self.network, "Departamento:",
                                                     "Departamento:", self.ids.id_departamento_ot, filtro="int")
         self.coleccion_servicios = MenuEntidades(self.network, "Servicios:",
