@@ -5,6 +5,7 @@ class OrdenTrabajos:
         self.id_orden = kargs.get("id_orden")
         self.id_servicios = kargs.get("id_servicios")
         self.fecha_creacion = kargs.get("fecha_creacion")
+        self.fecha_inicio = kargs.get("fecha_inicio")
         self.fecha_termino = kargs.get("fecha_termino")
         self.id_estado = kargs.get("id_estado")
         self.id_estados_preparativos = kargs.get("id_preparativos")

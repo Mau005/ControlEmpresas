@@ -1,6 +1,7 @@
 from typing import Dict
 
 from entidades.abstracservicio import AbstracServicio
+from entidades.orden_trabajos import OrdenTrabajos
 from entidades.registrargastos import RegistrarGastos
 from entidades.registrarlocales import RegistrarLocales
 from entidades.cuentas import Cuentas
@@ -391,7 +392,6 @@ class Querys:
         VALUES({servicio.nombre_servicio}, {servicio.id_estado}, {servicio.url_posicion}, {servicio.ubicacion},
         {servicio.rut_usuario}, {servicio.descripcion}, {servicio.id_departamento})
         '''
-        print(querys)
         ser = self.bd.insertar(querys)
 
         if not ser.get("estado"):
@@ -416,6 +416,11 @@ class Querys:
         """
         Methodo para registrar servicios mensuales.
         """
+        ot = OrdenTrabajos(fecha_inicio=servicio.fecha_inicio,
+                           precio_ot=0,
+                           descripcion=servicio.descripcion,
+                           id_estado=1,
+                           id_preparativos=1)
         servicio.__dict__ = her.recuperacion_sentencia(servicio).__dict__
 
         estado_servicio = self.registrar_servicios(servicio)
@@ -443,7 +448,22 @@ class Querys:
             if not qr_productos.get("estado"):
                 return {"estado": False, "condicion": "INSERCION"}
 
+        ot.id_servicios= estado_servicio.get("ultimo_id") #actualizamos el id de la orden al momento de crearla
+        ot_proceso = self.registrar_orden_trabajo(ot)
+        if not ot_proceso.get("estado"):
+            return {"estado": False, "condicion": "INSERCION"}
+
         return {"estado": True}
+
+    def registrar_orden_trabajo(self, ot:OrdenTrabajos):
+        #	id_ot_historia	id_orden	fecha_creacion	id_pre_anterior	id_pre_nuevo, descripcion
+        ot.__dict__ = her.recuperacion_sentencia(ot).__dict__
+        querys = """
+        INSERT INTO orden_trabajo(id_servicios, fecha_inicio, fecha_termino, id_estado, id_estado_pre, precio_ot, descripcion)
+        VALUES({}, {}, {}, {}, {}, {}, {}) 
+        """.format(ot.id_servicios, ot.fecha_inicio, ot.fecha_termino, ot.id_estado, ot.id_estados_preparativos, ot.precio_ot, ot.descripcion)
+        return self.bd.insertar(querys)
+
 
     def registrar_servicio_diario(self, datos):
 
