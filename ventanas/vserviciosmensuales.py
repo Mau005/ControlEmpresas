@@ -11,7 +11,6 @@ class VServiciosMensuales(MDScreenAbstrac):
         self.fecha_inicio = None
         self.fecha_termino = None
         self.total = 0
-        self.colecciones_estado = MenuEntidades(self.network, "Estados:", "Estados:", self.ids.id_estado, filtro="int")
         self.colecciones_rut_cliente = MenuEntidades(self.network, "Rut Cliente:", "Rut Cliente:",
                                                      self.ids.boton_rut_cliente)
         self.colecciones_departamentos = MenuEntidades(self.network, "Departamento:", "Departamento:",
@@ -49,11 +48,11 @@ class VServiciosMensuales(MDScreenAbstrac):
         if self.fecha_inicio is None:
             noti.text += "Alemenos debe indicar la fecha de inicio.\n"
 
+        if self.fecha_termino is None:
+            noti.text += "Tiene que tener una fecha de Termino.\n"
+
         if len(self.ids.nombre.text) <= 3:
             noti.text += "Tiene que indicar un nombre del servicio.\n"
-
-        if self.ids.id_estado.text == "Estados:":
-            noti.text += "Tiene que indicar un estado del servicio.\n"
 
         if self.ids.boton_rut_cliente.text == "Rut Cliente:":
             noti.text += "Tiene que indicar un cliente.\n"
@@ -80,7 +79,7 @@ class VServiciosMensuales(MDScreenAbstrac):
             nombre_servicio=self.ids.nombre.text,
             url_posicion=self.ids.url_posicion.text,
             ubicacion=self.ids.ubicacion.text,
-            id_estado=self.colecciones_estado.dato_guardar,
+            id_estado=1,
             rut_usuario=self.colecciones_rut_cliente.dato_guardar,
             descripcion=self.ids.descr.text,
             id_departamento=self.colecciones_departamentos.dato_guardar,
@@ -111,18 +110,16 @@ class VServiciosMensuales(MDScreenAbstrac):
         self.fecha_inicio = None
         self.fecha_termino = None
         self.ids.nombre.text = ""
-        self.ids.id_estado.text = "Estados:"
         self.ids.descr.text = ""
+        self.ids.ubicacion.text = ""
         self.ids.btn_fecha.text = "00/00/00 al 00/00/00"
         self.ids.boton_rut_cliente.text = "Rut Cliente:"
         self.ids.boton_departamentos.text = "Departamento:"
         self.colecciones_departamentos.dato_guardar = None
         self.colecciones_rut_cliente.dato_guardar = None
-        self.colecciones_estado.dato_guardar = None
         self.ids.contenedor_objetos.clear_widgets()
 
     def activar(self):
-        self.colecciones_estado.generar_consulta("menu_estado")
         self.colecciones_rut_cliente.generar_consulta("menu_personas")
         self.colecciones_departamentos.generar_consulta("menu_departamentos")
         self.colecciones_productos.generar_consulta("listadoproductos")
