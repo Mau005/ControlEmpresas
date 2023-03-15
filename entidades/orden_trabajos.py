@@ -11,6 +11,7 @@ class OrdenTrabajos:
         self.id_estados_preparativos = kargs.get("id_preparativos")
         self.precio_ot = kargs.get("precio_ot")
         self.descripcion = kargs.get("descripcion")
+        self.id_departamento = kargs.get("id_departamento")
 
     def __str__(self) -> str:
         return f"Id Orde: {self.id_orden}" \
