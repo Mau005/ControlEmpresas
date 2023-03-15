@@ -49,7 +49,6 @@ class ServidorNetwork(Thread):
 
         if datos != b'':
             paquete = her.desenpaquetar(datos)
-            print("Paquete enviado", paquete)
             return paquete
         return {"estado": "cierre_abrupto"}
 
@@ -74,7 +73,6 @@ class ServidorNetwork(Thread):
                                   acceso=info["datos"][4],
                                   serializacion=her.generar_numero_unico())
             # pe.rut_persona, pe.nombres, pe.apellidos, pe.telefono, pe.celular, pe.correo
-            print(f"Cuenta en login: {self.cuenta}")
             persona_temp = self.querys.buscar_persona_rut_persona(self.cuenta)
             if persona_temp.get("estado"):
                 self.persona = Personas(
@@ -120,7 +118,7 @@ class ServidorNetwork(Thread):
 
     def registrar_servicio_mensual(self, contenido):
         if self.consultar_privilegios("CrearServicioMensual"):
-            return self.enviar(self.querys.registrar_servicio_mensual(contenido))
+            return self.enviar(self.querys.registrar_servicio_mensual(contenido.get("contenido"),contenido.get("productos")))
         return self.enviar({"estado": False, "condicion": "PRIVILEGIOS"})
 
     def actualizar_cambios(self):
@@ -129,6 +127,7 @@ class ServidorNetwork(Thread):
     def run(self):
         while self.enfuncionamiento:
             datos = self.recibir()
+
             if not datos.get("estado") == "actualizar":
                 print(f"Recibo de datos del servidor: {datos}")
 

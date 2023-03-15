@@ -12,6 +12,10 @@ class AbstracServicio:
         self.rut_usuario = kargs.get("rut_usuario")
         self.descripcion = kargs.get("descripcion")
         self.fecha_creacion = kargs.get("fecha_creacion")
+        self.id_departamento = kargs.get("id_departamento") #Variable utilizada para generar la orden de trabajo
+        #no la utiliza como tal el sistema abstracto de servicios
+        #es una variable auxiliar para la entrega de informacion entre cliente y servidor
+        #para gestionar toda la informacion correspondiente
 
     @abstractmethod
     def preparar(self):

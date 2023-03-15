@@ -76,7 +76,6 @@ class VServiciosMensuales(MDScreenAbstrac):
         if not noti.text == "":
             noti.open()
             return
-        print(f"Fecha INicio: {self.fecha_inicio} final: {self.fecha_termino}")
         obj = ServicioMensual(
             nombre_servicio=self.ids.nombre.text,
             url_posicion=self.ids.url_posicion.text,

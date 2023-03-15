@@ -239,8 +239,6 @@ class Querys:
 
         self.registrar_personas_empresas(personas.rut_empresa, personas.rut_persona)
 
-
-
         print(f"Estado de persona antes de registrar: {personas.rut_persona}")
         cuenta = self.registrar_cuenta(Cuentas(nombre_cuenta=nombre_cuenta, contraseña="12345", rut_persona=personas.rut_persona.replace('"',"")))
         return cuenta
@@ -383,26 +381,22 @@ class Querys:
         querys = f'SELECT * FROM ESTADOS;'
         return self.bd.consultar(querys, all=True)
 
-    def registrar_servicios(self, servicio: ServicioMensual, cuenta : Cuentas):
-        servicio.__dict__ = her.recuperacion_sentencia(servicio).__dict__
-
+    def registrar_servicios(self, servicio: AbstracServicio):
+        """
+        TODO: registor de servicio siempre se ingresa como activo
+        """
         querys = f'''
-        INSERT INTO servicios(nombre_servicio,id_estado, url_posicion, ubicacion, rut_usuario, 
-        descripcion, fecha_creacion)
+        INSERT INTO servicios(nombre_servicio, id_estado, url_posicion, ubicacion, rut_usuario, 
+        descripcion, id_departamento)
         VALUES({servicio.nombre_servicio}, {servicio.id_estado}, {servicio.url_posicion}, {servicio.ubicacion},
-        {servicio.rut_usuario}, {servicio.descripcion}, {servicio.fecha_creacion})
+        {servicio.rut_usuario}, {servicio.descripcion}, {servicio.id_departamento})
         '''
+        print(querys)
         ser = self.bd.insertar(querys)
 
         if not ser.get("estado"):
             return {"estado":False, "condicion":"INSERCION"}
-
-        querys = """
-        INSERT INTO servicios_mensuales(id_servicio, fecha_inicio, fecha_termino)
-        VALUES ({}, {}, {})
-        """.format(ser.get("ultimo_id"), servicio.fecha_inicio, servicio.fecha_termino)
-        ser_men = self.bd.insertar(querys)
-        return None
+        return ser
 
 
 
@@ -418,38 +412,33 @@ class Querys:
         querys = f'SELECT ID_PRODUCTO, NOMBRE_PRODUCTO, CANTIDAD FROM productos;'
         return self.bd.consultar(querys, all=True)
 
-    def registrar_servicio_mensual(self, datos):
-        servicio = ServicioMensual()
-        servicio.__dict__ = her.recuperacion_sentencia(datos.get("contenido")).__dict__
+    def registrar_servicio_mensual(self, servicio:ServicioMensual, productos:list):
+        """
+        Methodo para registrar servicios mensuales.
+        """
+        servicio.__dict__ = her.recuperacion_sentencia(servicio).__dict__
 
-        # id_servicios	nombre_servicio	id_estado	url_posicion
-        # ubicacion	rut_usuario	descripcion	id_departamento	fecha_creacion
-        querys_servicio = f'INSERT INTO servicios(nombre_servicio, id_estado, url_posicion,' \
-                          f'ubicacion, rut_usuario, descripcion, id_departamento)' \
-                          f'VALUES({servicio.nombre_servicio}, {servicio.id_estado}, {servicio.url_posicion},' \
-                          f'{servicio.ubicacion}, {servicio.rut_usuario}, {servicio.descripcion}, ' \
-                          f'{servicio.id_departamento});'
-        qr_servicio = self.bd.insertar(querys_servicio)
+        estado_servicio = self.registrar_servicios(servicio)
 
-        if not qr_servicio.get("estado"):
+        if not estado_servicio.get("estado"):
             return {"estado": False, "condicion": "INSERCION"}
 
         querys_servicio_mensual = f'INSERT INTO servicios_mensuales(id_servicios, fecha_inicio, fecha_termino)' \
-                                  f'VALUES({qr_servicio.get("ultimo_id")}, {servicio.fecha_inicio}, ' \
+                                  f'VALUES({estado_servicio.get("ultimo_id")}, {servicio.fecha_inicio}, ' \
                                   f'{servicio.fecha_termino});'
 
         qr_servicio_mensual = self.bd.insertar(querys_servicio_mensual)
+
         if not qr_servicio_mensual.get("estado"):
             return {"estado": False, "condicion": "INSERCION"}
 
-        productos = datos.get("productos")
-
         base_producto = ServiciosProductos()
+
         for prod in productos:
             base_producto.__dict__ = her.recuperacion_sentencia(prod).__dict__
             querys_productos = f'INSERT INTO servicios_productos(id_producto, cantidad, precio, id_servicio)' \
                                f'VALUES({base_producto.id_producto}, {base_producto.cantidad},' \
-                               f'{base_producto.precio}, {qr_servicio.get("ultimo_id")});'
+                               f'{base_producto.precio}, {estado_servicio.get("ultimo_id")});'
             qr_productos = self.bd.insertar(querys_productos)
             if not qr_productos.get("estado"):
                 return {"estado": False, "condicion": "INSERCION"}
@@ -457,6 +446,7 @@ class Querys:
         return {"estado": True}
 
     def registrar_servicio_diario(self, datos):
+
         servicio = ServicioDiarios()
         servicio.__dict__ = her.recuperacion_sentencia(datos.get("contenido")).__dict__
 
@@ -467,6 +457,7 @@ class Querys:
                           f'VALUES({servicio.nombre_servicio}, {servicio.id_estado}, {servicio.url_posicion},' \
                           f'{servicio.ubicacion}, {servicio.rut_usuario}, {servicio.descripcion}, ' \
                           f'{servicio.id_departamento});'
+
         qr_servicio = self.bd.insertar(querys_servicio)
 
         if not qr_servicio.get("estado"):
