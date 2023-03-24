@@ -42,8 +42,8 @@ class Control_Network():
             self.pendientes_desconexion.append(key)
 
     def agregar_hilo(self, hilo):
-        if self.hilos_cliente.get(hilo.cuenta.nombre_cuenta) is None:
-            self.hilos_cliente.update({hilo.cuenta.nombre_cuenta: hilo})
+        if self.hilos_cliente.get(hilo.control_usuarios.cuenta.nombre_cuenta) is None:
+            self.hilos_cliente.update({hilo.control_usuarios.cuenta.nombre_cuenta: hilo})
             return True
         return False
 
