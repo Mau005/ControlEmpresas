@@ -11,12 +11,14 @@ from kivymd.uix.bottomsheet import MDListBottomSheet
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.card import MDCard
 from kivymd.uix.filemanager import MDFileManager
+from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.label import MDLabel
 
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDRoundFlatButton, MDRaisedButton
 from kivymd.uix.list import TwoLineListItem, ThreeLineListItem, MDList
+from kivymd.uix.selectioncontrol import MDSwitch, MDCheckbox
 from kivymd.uix.textfield import MDTextField
 
 from core.constantes import PROTOCOLOERROR
@@ -411,6 +413,63 @@ class InformacionPersona(MDDialog):
     def salir(self, *Arg):
         self.dismiss()
 
+
+class MDDialogCheck(MDDialog):
+    def __init__(self, **kargs):
+
+        self.contenedor_principal = MDGridLayout(padding="12dp",
+                                                size_hint_y=None,
+                                                height="320dp",
+                                                 cols=2)
+        self.scroll = ScrollView(do_scroll_x=False, do_scroll_y=True)
+        self.contenedor = MDGridLayout(cols=2)
+
+        self._Preparando_Widgets()
+        self.scroll.add_widget(self.contenedor)
+        self.contenedor_principal.add_widget(self.scroll)
+
+        self.editar = MDRoundFlatButton(text="Aceptar", on_release=self.salir)
+        self.cancelar = MDRoundFlatButton(text="Cerrar", on_release=self.salir)
+
+        super().__init__(content_cls=self.contenedor_principal,
+                         buttons=[self.editar, self.cancelar],
+                         type="custom", **kargs)
+
+    def _Preparando_Widgets(self):
+        self.contenedor.add_widget(MDLabel(text="Activos"))
+        self.switchActivo = MDCheckbox(active=True)
+        self.contenedor.add_widget(self.switchActivo)
+
+        self.contenedor.add_widget(MDLabel(text="Detenidos"))
+        self.switchDetenido = MDCheckbox()
+        self.contenedor.add_widget(self.switchDetenido)
+
+        self.contenedor.add_widget(MDLabel(text="Pendientes"))
+        self.switchPendiente = MDCheckbox()
+        self.contenedor.add_widget(self.switchPendiente)
+
+        self.contenedor.add_widget(MDLabel(text="Completados"))
+        self.switchCompletados = MDCheckbox()
+        self.contenedor.add_widget(self.switchCompletados)
+
+        self.contenedor.add_widget(MDLabel(text="Ascendente"))
+        self.switchAscendente = MDCheckbox()
+        self.contenedor.add_widget(self.switchAscendente)
+
+
+    def Generar_Activos(self) ->dict:
+        """
+        El cliente determina que numero enviar, segun stados en la bd sera recepcionado como busqueda
+        """
+        default = 0
+        return {"activos":1 if self.switchActivo.active == True else default,
+                "detenidos":2 if self.switchDetenido.active == True else default,
+                "pendientes":3 if self.switchPendiente.active == True else default,
+                "completados":4 if self.switchCompletados.active == True else default,
+                "ascendente":self.switchAscendente.active}
+
+    def salir(self, *Arg):
+        self.dismiss()
 
 class MDScreenAbstrac(MDScreen):
 
