@@ -113,7 +113,7 @@ url_posicion VARCHAR(250),
 ubicacion VARCHAR(250) NOT NULL,
 rut_usuario VARCHAR(12) NOT NULL,
 descripcion TEXT(250),
-fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP);
+fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP);
 
 CREATE TABLE servicios_mensuales (
 id_servicios INT(11) PRIMARY KEY NOT NULL,
@@ -128,12 +128,14 @@ id_departamento INT(11) NOT NULL);
 CREATE TABLE orden_trabajo (
 id_orden INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
 id_servicios INT(11) NOT NULL,
-fecha_creacion DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-fecha_termino DATETIME NOT NULL,
+fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+fecha_termino DATETIME,
 id_estado INT(11) NOT NULL,
+fecha_inicio DATE NOT NULL,
 id_estado_pre INT(11) NOT NULL,
-precio_ot INT(11) NOT NULL,
-descripcion TEXT(250));
+precio_ot INT(11),
+descripcion TEXT(250),
+id_departamento INT(11) NOT NULL);
 
 CREATE TABLE productos (
 id_producto INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
@@ -217,6 +219,7 @@ ALTER TABLE servicios_diarios ADD CONSTRAINT servicios_diarios_id_departamento_d
 ALTER TABLE orden_trabajo ADD CONSTRAINT orden_trabajo_id_servicios_servicios_id_servicios FOREIGN KEY (id_servicios) REFERENCES servicios(id_servicios) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE orden_trabajo ADD CONSTRAINT orden_trabajo_id_estado_estados_id_estado FOREIGN KEY (id_estado) REFERENCES estados(id_estado) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE orden_trabajo ADD CONSTRAINT orden_trabajo_id_estado_pre_estados_preparativos_id_estado FOREIGN KEY (id_estado_pre) REFERENCES estados_preparativos(id_estado) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE orden_trabajo ADD CONSTRAINT orden_trabajo_id_departamento_departamentos_id_departamento FOREIGN KEY (id_departamento) REFERENCES departamentos(id_departamento) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE facturas_productos ADD CONSTRAINT facturas_productos_folio_factura_facturas_folio_factura FOREIGN KEY (folio_factura) REFERENCES facturas(folio_factura) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE facturas_productos ADD CONSTRAINT facturas_productos_id_producto_productos_id_producto FOREIGN KEY (id_producto) REFERENCES productos(id_producto) ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE empresas_facturas ADD CONSTRAINT empresas_facturas_folio_factura_facturas_folio_factura FOREIGN KEY (folio_factura) REFERENCES facturas(folio_factura) ON DELETE CASCADE ON UPDATE CASCADE;
