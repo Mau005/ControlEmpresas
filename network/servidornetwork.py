@@ -3,6 +3,7 @@ from core.herramientas import Herramientas as her
 from entidades.cuentas import Cuentas
 from entidades.registroempresas import RegistroEmpresas
 from entidades.personas import Personas
+from network.control_usuarios import ControlUsuarios
 from network.recuperacion_cuenta import RecuperacionCuenta
 from entidades.registrousaurios import RegistroUsuarios
 from servicios_correos.base_correos import Base_Correos
@@ -13,17 +14,14 @@ class ServidorNetwork(Thread):
     def __init__(self, cliente, direccion, querys, info, grupos, control_network, servicio_correos):
         Thread.__init__(self)
         self.__variable_usuarios()
-        self.cuenta = Cuentas()
-        self.persona = Personas()
-        self.trabajador = None
         self.cliente = cliente
-        self.direccion = direccion
         self.querys = querys
         self.info = info
         self.grupos = grupos
         self.control_network = control_network
         self.base_correo = Base_Correos(servicio_correos)
         self.recuperacion_cuenta = RecuperacionCuenta(servicio_correos, self.control_network)
+        self.control_usuarios = ControlUsuarios(querys=self.querys)
 
     def __variable_usuarios(self):
         self.ventana_actual = "entrada"
@@ -36,7 +34,7 @@ class ServidorNetwork(Thread):
             self.tiempo_actividad += 1
 
         if self.recuperacion_cuenta.activo:
-            self.recuperacion_cuenta.actuaactualizar()
+            self.recuperacion_cuenta.actualizar()
 
     def enviar(self, datos):
         return self.cliente.send(her.empaquetar(datos))
@@ -52,30 +50,29 @@ class ServidorNetwork(Thread):
             return paquete
         return {"estado": "cierre_abrupto"}
 
-    def login(self, datos):
-        self.cuenta = Cuentas()
-        self.cuenta.__dict__ = datos.__dict__
+    def login(self, cuenta: Cuentas):
         # se suspende el sistema de recuperacion de cuenta
         # if self.control_network.buscar_control_recuperacion(self.usuario.nombre_cuenta):
         #    return self.enviar({"estado": False, "condicion": "RECUPERACION"})
 
-        if self.control_network.comprobar_control_hilos(self.cuenta.nombre_cuenta):
+        if self.control_network.comprobar_control_hilos(cuenta.nombre_cuenta):
             self.desconectar()
             return self.enviar({"estado": False, "condicion": "USUARIOACTIVO"})
 
-        info = self.querys.consultar_cuenta(self.cuenta.nombre_cuenta, self.cuenta.contraseña)
+        info = self.querys.consultar_cuenta(cuenta.nombre_cuenta, cuenta.contraseña)
         if info.get("estado"):
             self.intentos = 0
-            self.cuenta = Cuentas(rut_persona=info["datos"][0],
+            cuenta_procesada = Cuentas(rut_persona=info["datos"][0],
                                   nombre_cuenta=info["datos"][1],
                                   contraseña=info["datos"][2],
                                   fecha_creacion=info["datos"][3],
                                   acceso=info["datos"][4],
                                   serializacion=her.generar_numero_unico())
+            self.control_usuarios.cuenta = cuenta_procesada
             # pe.rut_persona, pe.nombres, pe.apellidos, pe.telefono, pe.celular, pe.correo
-            persona_temp = self.querys.buscar_persona_rut_persona(self.cuenta)
+            persona_temp = self.querys.buscar_persona_rut_persona(cuenta_procesada)
             if persona_temp.get("estado"):
-                self.persona = Personas(
+                persona_procesada = Personas(
                     rut_persona=persona_temp["datos"][0],
                     nombres=persona_temp["datos"][1],
                     apellidos=persona_temp["datos"][2],
@@ -84,11 +81,12 @@ class ServidorNetwork(Thread):
                     correo=persona_temp["datos"][5],
                     ubicacion=persona_temp["datos"][6]
                 )
-                self.trabajador = self.querys.buscar_trabajador_rut(self.persona.rut_persona)
+                self.control_usuarios.persona = persona_procesada
+                self.control_usuarios.trabajador = self.querys.buscar_trabajador_rut(persona_procesada.rut_persona)
             info.update({"MOTD": self.info["Servidor"]["MOTD"], "condicion": "iniciando"})
             self.control_network.agregar_hilo(self)
             return self.enviar(info)
-        self.cuenta = Cuentas()
+        self.control_usuarios.cuenta=Cuentas()
         return self.enviar({"estado": False, "condicion": "CONTRASEÑAS"})
 
     def registrar_local(self, contenido):
@@ -98,9 +96,9 @@ class ServidorNetwork(Thread):
         return self.enviar({"estado": False, "condicion": "PRIVILEGIOS"})
 
     def desconectar(self):
-        self.control_network.hilos_cliente.pop(self.cuenta.nombre_cuenta)
-        self.cuenta = RegistroUsuarios()
-        self.persona = Personas()
+        self.control_network.hilos_cliente.pop(self.control_usuarios.cuenta.nombre_cuenta)
+        self.control_usuarios.cuenta = Cuentas()
+        self.control_usuarios.persona = Personas()
 
     def registrar_empresas(self, empresa):
         if self.consultar_privilegios("CrearEmpresas"):
@@ -129,7 +127,8 @@ class ServidorNetwork(Thread):
             datos = self.recibir()
 
             if not datos.get("estado") == "actualizar":
-                print(f"Recibo de datos del servidor: {datos}")
+                pass
+                #print(f"Recibo de datos del servidor: {datos}")
 
             if datos.get("estado") == "saludo":
                 self.saludo()
@@ -193,7 +192,7 @@ class ServidorNetwork(Thread):
 
             if datos.get("estado") == "registrar_gasto":
                 if self.consultar_privilegios("CrearGastos"):
-                    self.enviar(self.querys.registrar_gasto(datos.get("contenido"), self.cuenta))
+                    self.enviar(self.querys.registrar_gasto(datos.get("contenido"), self.control_usuarios.cuenta))
                     self.actualizar_cambios()
                 else:
                     self.enviar({"estado": False, "condicion": "PRIVILEGIOS"})
@@ -241,7 +240,7 @@ class ServidorNetwork(Thread):
                 self.actualizar_cambios()
 
             if datos.get("estado") == "mis servicios":
-                self.enviar(self.querys.mis_servicios(self.persona))
+                self.enviar(self.querys.mis_servicios(self.control_usuarios.persona))
 
             if datos.get("estado") == "listado_notas_empresa_especifica":
                 self.enviar(self.querys.listado_notas_empresa_especifica(datos.get("contenido")))
@@ -267,11 +266,11 @@ class ServidorNetwork(Thread):
                 self.enviar(self.querys.lista_personas())
 
             if datos.get("estado") == "mis trabajos":
-                self.enviar(self.querys.buscar_servicios(self.trabajador))
+                self.enviar(self.querys.buscar_servicios(self.control_usuarios.trabajador))
 
             if datos.get("estado") == "cierre_abrupto":
-                print(f"Se Desconecta usuario: {self.cuenta.nombre_cuenta}")
-                self.control_network.pendientes_desconexion.append(self.cuenta.nombre_cuenta)
+                print(f"Se Desconecta usuario: {self.control_usuarios.cuenta.nombre_cuenta}")
+                self.control_network.pendientes_desconexion.append(self.control_usuarios.cuenta.nombre_cuenta)
                 break
             # else:
             #    self.enviar({"estado": False, "condicion": "datos"})
@@ -326,7 +325,7 @@ class ServidorNetwork(Thread):
         self.enviar({"estado": True, "condicion": "Se ha enviado un correo electronico."})
 
     def recuperacion_digito(self, contenido):
-        condicion = self.control_network.comprobar_control_recuperacion(self.cuenta.correo, contenido)
+        condicion = self.control_network.comprobar_control_recuperacion(self.control_usuarios.cuenta.correo, contenido)
 
         if condicion:
             self.enviar({"estado": True, "condicion": "desde recuperacion_digito"})
@@ -334,7 +333,7 @@ class ServidorNetwork(Thread):
             self.enviar({"estado": False, "condicion": "desde recuperacion_digito"})
 
     def nueva_contraseña(self, contraseña_nueva):
-        info = self.querys.nueva_contraseña(self.cuenta.correo, contraseña_nueva)
+        info = self.querys.nueva_contraseña(self.control_usuarios.cuenta.correo, contraseña_nueva)
         if info.get("estado"):
             self.enviar({"estado": True})
         else:
@@ -349,12 +348,12 @@ class ServidorNetwork(Thread):
 
     def registro_notas_empresas(self, contenido):
         if self.consultar_privilegios("CrearNotaEmpresa"):
-            return self.enviar(self.querys.registrar_notas(contenido, self.cuenta, objetivo="empresas"))
+            return self.enviar(self.querys.registrar_notas(contenido, self.control_usuarios.cuenta, objetivo="empresas"))
         return self.enviar({"estado": False, "condicion": "privilegios"})
 
     def registro_notas_personas(self, contenido):
         if self.consultar_privilegios("CrearNotaPersona"):
-            return self.enviar(self.querys.registrar_notas(contenido, self.cuenta, objetivo="personas"))
+            return self.enviar(self.querys.registrar_notas(contenido, self.control_usuarios.cuenta, objetivo="personas"))
         return self.enviar({"estado": False, "condicion": "PRIVILEGIOS"})
 
     def registrar_persona(self, datos):
@@ -375,7 +374,7 @@ class ServidorNetwork(Thread):
     def actualizar_ventanas(self, contenido):
         if self.tiempo_actividad >= 60 * self.info["Servidor"]["TIMEPOESPERAUSUARIO"]:
             self.enviar({"estado": False, "condicion": "EXPIRACION"})
-            self.control_network.agregar_pendiente_hilos(self.cuenta.nombre_cuenta)
+            self.control_network.agregar_pendiente_hilos(self.control_usuarios.cuenta.nombre_cuenta)
         if self.ventana_actual == contenido:
             self.enviar({"estado": True})
         else:
@@ -384,7 +383,7 @@ class ServidorNetwork(Thread):
             self.enviar({"estado": True})
 
     def consultar_privilegios(self, consulta):
-        consulta = self.grupos.get(str(self.cuenta.acceso)).get(consulta)
+        consulta = self.grupos.get(str(self.control_usuarios.cuenta.acceso)).get(consulta)
         if consulta is not None or "TodoPoderoso":
             return True
         return False
