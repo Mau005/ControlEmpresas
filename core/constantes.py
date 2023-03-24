@@ -18,3 +18,5 @@ PROTOCOLOERROR = {"USUARIOACTIVO": "Usuario ya se encuentra activo en el sistema
                   "NOTRABAJADOR": "Usted no pertenece al equipo de trabajo de esta empresa"}
 
 DIA_SEMANA = {1: "Lunes", 2: "Martes", 3: "Miercoles", 4: "Jueves", 5: "Viernes", 6: "Sabado", 7: "Domingo"}
+
+CONFIGURATION_WARNING = {"Usuario": {"correo": "", "contraseña": "", "boton": False}, "Cliente": {"version": 1.3}, "Servidor": {"ip": "www.ainhosoft.cl", "port": 7171}}
