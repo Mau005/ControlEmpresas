@@ -1,4 +1,4 @@
-from core.constantes import TAMANIO_PAQUETE
+from core.constantes import TAMANIO_PAQUETE, CONFIGURATION_WARNING
 from core.herramientas import Herramientas as her
 from kivy.logger import Logger
 import socket
@@ -16,6 +16,9 @@ class ClienteNetwork:
 
     def cargar_json(self, actualizar=False):
         configuracion = her.cargar_json("data/ConfiguracionCliente.json")
+        if configuracion is None:
+            return CONFIGURATION_WARNING
+
         if actualizar:
             configuracion["Servidor"]["ip"] = self.ip
             configuracion["Servidor"]["port"] = self.port
