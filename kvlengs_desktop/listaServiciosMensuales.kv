@@ -1,0 +1,57 @@
+<VListaServiciosMensuales>:
+    contenedor:contenedor
+    MDBoxLayout:
+        orientation: "horizontal"
+        MDNavigationRail:
+            anchor: "center"
+            size_hint_x: .1
+            MDNavigationRailItem:
+                text: "Lista Servicios"
+                icon: "arrow-down-bold-hexagon-outline"
+                font_name: "nasalization-rg.ttf"
+
+            MDNavigationRailItem:
+                text: "Limpiar"
+                icon: "autorenew"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.formatear()
+
+            MDNavigationRailItem:
+                text: "Volver"
+                icon: "keyboard-return"
+                font_name: "nasalization-rg.ttf"
+                on_release: root.siguiente()
+
+        MDBoxLayout:
+            orientation: "vertical"
+            spacing: dp(20)
+            padding: dp(10)
+            MDGridLayout:
+                cols:2
+                spacing: dp(10)
+                padding: dp(10)
+                size_hint_y: None
+                height: dp(110)
+                MDRaisedButton:
+                    text: "Buscar"
+                    on_release: root.crear()
+                MDTextField:
+                    hint_text: "Buscar"
+                    input_filter: "int"
+                    id: buscador
+
+                MDRaisedButton:
+                    text: "Editar Busqueda"
+                    on_release: root.abrir_buscador()
+
+            MDCard:
+                size_hint_x: .9
+                pos_hint: {"center_x": .5, "center_y": .5}
+
+                ScrollView:
+                    do_scroll_y: True
+                    do_scroll_x: False
+
+                    MDList:
+                        id: contenedor
+                        padding: dp(30)
