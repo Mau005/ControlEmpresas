@@ -10,6 +10,7 @@ from ventanas.vlistanotaspersonas import VListaNotasPersonas
 
 from ventanas.vgastos_fechas import VGastosFechas
 from ventanas.vlistapersonas import VListasPersonas
+from ventanas.vlistaserviciosmensuales import VListaServiciosMensuales
 from ventanas.vorden_trabajo import VOrden_Trabajos
 from ventanas.vserviciosmensuales import VServiciosMensuales
 from ventanas.vtickettrabajadr import GenTicketTrabajador
@@ -85,6 +86,7 @@ class ControlEmpresas(MDApp):
                                                        siguiente="casa")
         self.vgenticket = GenTicketTrabajador(self.network, self.manejador, "gen_ticket_trabajador", siguiente="casa")
         self.vot = VOrden_Trabajos(self.network, self.manejador, "orden_trabajo", siguiente="casa")
+        self.vlistaServiciosMensuales = VListaServiciosMensuales(self.network, self.manejador, "vlista_servicios_mensuales", siguiente="casa")
 
         self.manejador.add_widget(self.login)
         self.manejador.add_widget(self.casa)
@@ -109,6 +111,7 @@ class ControlEmpresas(MDApp):
         self.manejador.add_widget(self.veditarempresa)
         self.manejador.add_widget(self.vgenticket)
         self.manejador.add_widget(self.vot)
+        self.manejador.add_widget(self.vlistaServiciosMensuales)
         self.login.activar()
 
     def actualizar(self, dt):
