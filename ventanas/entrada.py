@@ -1,7 +1,7 @@
 import sys
 from kivy.properties import ObjectProperty
 
-from core.constantes import PROTOCOLOERROR
+from core.constantes import PROTOCOLOERROR, CONFIGURATION_WARNING
 from core.herramientas import Herramientas as her
 from entidades.cuentas import Cuentas
 from ventanas.widgets_predefinidos import MDScreenAbstrac, NotificacionText
@@ -15,6 +15,8 @@ class Entrada(MDScreenAbstrac):
     def __init__(self, network, manejador, nombre, siguiente=None, volver=None, **kw):
         super().__init__(network, manejador, nombre, siguiente, volver, **kw)
         self.contenido_usuario = her.cargar_json("data/ConfiguracionCliente.json")
+        if self.contenido_usuario is None:
+            self.contenido_usuario = CONFIGURATION_WARNING
         self.noti_network = NotificacionText("Configuración de IP y Puerto", "Ejemplo: 127.0.0.1:7171",
                                              aceptar=self.func_concurrente_notificacion)
 
